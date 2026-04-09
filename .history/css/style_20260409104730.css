@@ -1196,17 +1196,6 @@ ul {
     }
 }
 
-.disclaimer {
-  margin-top: 20px;
-  font-size: 13px;
-  color: #777;
-  text-align: center;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.5;
-}
-
 .security {
     background: var(--green-dark);
     padding: 90px 32px;
@@ -1910,7 +1899,7 @@ ul {
 }
 
 .footer-brand p {
-  font-size: 15px;
+  font-size: 13.5px;
   color: rgba(255, 255, 255, 0.45);
   line-height: 1.75;
   max-width: 260px;
@@ -1957,7 +1946,7 @@ ul {
 }
 
 .footer-links-group a {
-  font-size: 15px;
+  font-size: 13.5px;
   color: rgba(255, 255, 255, 0.45);
   transition: color 0.2s ease;
 }
