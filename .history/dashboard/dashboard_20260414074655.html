@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — YMG Funds</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body>
+
+  <!-- ── SIDEBAR ────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/logo.jpeg" alt="YMG Funds" class="sidebar-logo-img">
+      <span>YMG<strong>Funds</strong></span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item active">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="deposit.html" class="nav-item">
+        <i class="fa-solid fa-download"></i>
+        <span>Deposit</span>
+      </a>
+      <a href="investments.html" class="nav-item">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>Investments</span>
+      </a>
+      <a href="withdraw.html" class="nav-item">
+        <i class="fa-solid fa-money-bill-transfer"></i>
+        <span>Withdraw</span>
+      </a>
+      <a href="transactions.html" class="nav-item">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>Transactions</span>
+      </a>
+      <a href="referrals.html" class="nav-item">
+        <i class="fa-solid fa-users"></i>
+        <span>Referrals</span>
+      </a>
+      <a href="settings.html" class="nav-item">
+        <i class="fa-solid fa-gear"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a href="#" class="nav-item logout" id="logoutBtn">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ── MAIN WRAPPER ───────────────────────── -->
+  <div class="main-wrapper">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="topbar-greeting">
+          <h2>Hi, <span id="userName">User</span> 👋</h2>
+          <p>Welcome back to your dashboard</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" id="notifBtn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-badge" id="notifCount">0</span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar">KM</div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2"><i class="fa-solid fa-arrow-right-from-bracket"></i>
+              Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <main class="content">
+
+      <!-- Balance Cards -->
+      <div class="balance-cards">
+        <div class="balance-card primary">
+          <div class="balance-card-top">
+            <span>Total Balance</span>
+            <div class="balance-card-icon"><i class="fa-solid fa-wallet"></i></div>
+          </div>
+          <h3 id="totalBalance">GHS 0.00</h3>
+          <p class="balance-change positive"><i class="fa-solid fa-arrow-trend-up"></i> +2.4% this month</p>
+        </div>
+        <div class="balance-card">
+          <div class="balance-card-top">
+            <span>Invested Amount</span>
+            <div class="balance-card-icon gold"><i class="fa-solid fa-piggy-bank"></i></div>
+          </div>
+          <h3 id="investedBalance">GHS 0.00</h3>
+          <p class="balance-change"><i class="fa-solid fa-layer-group"></i> 3 active plans</p>
+        </div>
+        <div class="balance-card">
+          <div class="balance-card-top">
+            <span>Total Profit</span>
+            <div class="balance-card-icon green"><i class="fa-solid fa-arrow-trend-up"></i></div>
+          </div>
+          <h3 id="profitBalance">GHS 0.00</h3>
+          <p class="balance-change positive"><i class="fa-solid fa-circle-check"></i> All time earnings</p>
+        </div>
+        <div class="balance-card">
+          <div class="balance-card-top">
+            <span>Available Balance</span>
+            <div class="balance-card-icon blue"><i class="fa-solid fa-coins"></i></div>
+          </div>
+          <h3 id="availableBalance">GHS 0.00</h3>
+          <p class="balance-change"><i class="fa-solid fa-circle-info"></i> Ready to withdraw</p>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="quick-stats">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <div class="stat-info">
+            <span>Active Investments</span>
+            <strong id="activeInvestments">0</strong>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-download"></i></div>
+          <div class="stat-info">
+            <span>Total Deposits</span>
+            <strong id="totalDeposits">GHS 0</strong>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
+          <div class="stat-info">
+            <span>Total Withdrawals</span>
+            <strong id="totalWithdrawals">GHS 0</strong>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+          <div class="stat-info">
+            <span>Referrals</span>
+            <strong id="referrals">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart + Recent Transactions -->
+      <div class="dashboard-grid">
+
+        <!-- Chart -->
+        <div class="card chart-card">
+          <div class="card-header">
+            <h4>Portfolio Growth</h4>
+            <div class="chart-filters">
+              <button class="filter-btn active" data-period="7">7D</button>
+              <button class="filter-btn" data-period="30">30D</button>
+              <button class="filter-btn" data-period="90">3M</button>
+            </div>
+          </div>
+          <canvas id="growthChart"></canvas>
+        </div>
+
+        <!-- Active Plans -->
+        <div class="card active-plans-card">
+          <div class="card-header">
+            <h4>Active Plans</h4>
+            <a href="investments.html" class="card-link">View all</a>
+          </div>
+          <div class="active-plans-list">
+            <div class="active-plan-item">
+              <div class="plan-badge green">FD</div>
+              <div class="plan-item-info">
+                <strong>Fixed Deposit</strong>
+                <span>GHS 3,000 · 30 days</span>
+              </div>
+              <div class="plan-item-right">
+                <span class="plan-profit">+GHS 180</span>
+                <span class="plan-status active">Active</span>
+              </div>
+            </div>
+            <div class="active-plan-item">
+              <div class="plan-badge gold">SS</div>
+              <div class="plan-item-info">
+                <strong>Starter Savings</strong>
+                <span>GHS 2,000 · Flexible</span>
+              </div>
+              <div class="plan-item-right">
+                <span class="plan-profit">+GHS 60</span>
+                <span class="plan-status active">Active</span>
+              </div>
+            </div>
+            <div class="active-plan-item">
+              <div class="plan-badge teal">GP</div>
+              <div class="plan-item-info">
+                <strong>Growth Plus</strong>
+                <span>GHS 3,000 · Monthly</span>
+              </div>
+              <div class="plan-item-right">
+                <span class="plan-profit">+GHS 240</span>
+                <span class="plan-status active">Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="card">
+        <div class="card-header">
+          <h4>Recent Transactions</h4>
+          <a href="transactions.html" class="card-link">View all</a>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="transactionTable">
+              <tr>
+                <td colspan="4">Loading transactions...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Sidebar overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/charts.js"></script>
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+
+</html>

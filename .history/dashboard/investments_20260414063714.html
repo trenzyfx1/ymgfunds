@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Investments — YMG Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><img src="../images/logo.jpeg" alt="YMG Funds" class="sidebar-logo-img"><span>YMG<strong>Funds</strong></span></div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-arrow-down-to-bracket"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item active"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+    </nav>
+    <div class="sidebar-bottom"><a href="../pages/login.html" class="nav-item logout"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span></a></div>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting"><h2>Investments</h2><p>Choose and manage your investment plans</p></div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn"><i class="fa-solid fa-bell"></i><span class="notif-badge">3</span></button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar">KM</div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="../pages/login.html" class="dropdown-logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="page-header">
+        <h1>Investment Plans</h1>
+        <p>Select a plan to start growing your money steadily.</p>
+      </div>
+
+      <div class="invest-plans-grid">
+        <div class="invest-plan-card">
+          <div class="invest-plan-icon"><i class="fa-solid fa-seedling"></i></div>
+          <h3>Starter Savings</h3>
+          <p>Perfect for beginners starting their savings journey.</p>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Min. Deposit</span><strong>GHS 50</strong></div>
+            <div class="invest-detail"><span>Duration</span><strong>Flexible</strong></div>
+            <div class="invest-detail"><span>Growth</span><strong>Monthly</strong></div>
+            <div class="invest-detail"><span>Withdrawal</span><strong>Anytime</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="Starter Savings" data-min="50">Invest Now</button>
+        </div>
+
+        <div class="invest-plan-card featured">
+          <div class="invest-plan-badge">POPULAR</div>
+          <div class="invest-plan-icon featured-icon"><i class="fa-solid fa-vault"></i></div>
+          <h3>Fixed Deposit</h3>
+          <p>Higher returns with a fixed 30-day commitment period.</p>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Min. Deposit</span><strong>GHS 100</strong></div>
+            <div class="invest-detail"><span>Duration</span><strong>30 Days</strong></div>
+            <div class="invest-detail"><span>Growth</span><strong>Fixed Return</strong></div>
+            <div class="invest-detail"><span>Withdrawal</span><strong>After Maturity</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="Fixed Deposit" data-min="100">Invest Now</button>
+        </div>
+
+        <div class="invest-plan-card">
+          <div class="invest-plan-icon"><i class="fa-solid fa-rocket"></i></div>
+          <h3>Growth Plus</h3>
+          <p>Compound growth for serious investors seeking maximum returns.</p>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Min. Deposit</span><strong>GHS 200</strong></div>
+            <div class="invest-detail"><span>Duration</span><strong>Weekly/Monthly</strong></div>
+            <div class="invest-detail"><span>Growth</span><strong>Compound</strong></div>
+            <div class="invest-detail"><span>Withdrawal</span><strong>Per Cycle</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="Growth Plus" data-min="200">Invest Now</button>
+        </div>
+      </div>
+
+      <!-- Invest Modal -->
+      <div class="modal-overlay" id="investModal">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h3 id="modalPlanName">Invest in Fixed Deposit</h3>
+            <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <div class="form-group">
+            <label>Amount to Invest</label>
+            <div class="input-prefix">
+              <span class="prefix-label">GHS</span>
+              <input type="number" id="investAmount" placeholder="Enter amount" />
+            </div>
+            <span class="form-note" id="investMinNote">Minimum: GHS 100</span>
+          </div>
+          <button class="btn-primary" id="confirmInvestBtn">Confirm Investment</button>
+          <div class="form-success" id="investSuccess">
+            <i class="fa-solid fa-circle-check"></i> Investment confirmed! Your plan is now active.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h4>Active Investments</h4></div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead><tr><th>Plan</th><th>Amount</th><th>Start Date</th><th>Maturity</th><th>Expected Profit</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Fixed Deposit</strong></td><td>GHS 3,000.00</td><td>01 Apr 2026</td><td>01 May 2026</td><td class="tx-amount positive">+GHS 180.00</td><td><span class="status-badge success">Active</span></td></tr>
+              <tr><td><strong>Starter Savings</strong></td><td>GHS 2,000.00</td><td>15 Mar 2026</td><td>Flexible</td><td class="tx-amount positive">+GHS 60.00</td><td><span class="status-badge success">Active</span></td></tr>
+              <tr><td><strong>Growth Plus</strong></td><td>GHS 3,000.00</td><td>01 Mar 2026</td><td>01 Apr 2026</td><td class="tx-amount positive">+GHS 240.00</td><td><span class="status-badge success">Active</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <script src="js/dashboard.js"></script>
+  <script src="js/investments.js"></script>
+</body>
+</html>

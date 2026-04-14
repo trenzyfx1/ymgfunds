@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Transactions — YMG Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><img src="../images/logo.jpeg" alt="YMG Funds" class="sidebar-logo-img"><span>YMG<strong>Funds</strong></span></div>
+    <nav class="sidebar-nav">
+      <a href="" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item active"><i class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+    </nav>
+    <div class="sidebar-bottom"><a href="../pages/login.html" class="nav-item logout"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span></a></div>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting"><h2>Transactions</h2><p>Full history of all your account activity</p></div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn"><i class="fa-solid fa-bell"></i><span class="notif-badge">3</span></button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar">KM</div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="../pages/login.html" class="dropdown-logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="tx-filters">
+        <button class="filter-chip active" data-filter="all">All</button>
+        <button class="filter-chip" data-filter="deposit">Deposits</button>
+        <button class="filter-chip" data-filter="withdrawal">Withdrawals</button>
+        <button class="filter-chip" data-filter="profit">Profits</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h4>All Transactions</h4>
+          <span class="tx-count">12 records</span>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table" id="txTable">
+            <thead><tr><th>Reference</th><th>Type</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr data-type="deposit"><td>#DEP-0012</td><td><span class="tx-type deposit"><i class="fa-solid fa-arrow-down"></i> Deposit</span></td><td class="tx-amount positive">+GHS 2,000.00</td><td>12 Apr 2026</td><td><span class="status-badge success">Success</span></td></tr>
+              <tr data-type="profit"><td>#PRF-0010</td><td><span class="tx-type profit"><i class="fa-solid fa-arrow-trend-up"></i> Profit</span></td><td class="tx-amount positive">+GHS 180.00</td><td>10 Apr 2026</td><td><span class="status-badge success">Success</span></td></tr>
+              <tr data-type="withdrawal"><td>#WTH-0008</td><td><span class="tx-type withdrawal"><i class="fa-solid fa-arrow-up"></i> Withdrawal</span></td><td class="tx-amount negative">-GHS 500.00</td><td>08 Apr 2026</td><td><span class="status-badge pending">Pending</span></td></tr>
+              <tr data-type="deposit"><td>#DEP-0011</td><td><span class="tx-type deposit"><i class="fa-solid fa-arrow-down"></i> Deposit</span></td><td class="tx-amount positive">+GHS 5,000.00</td><td>05 Apr 2026</td><td><span class="status-badge success">Success</span></td></tr>
+              <tr data-type="withdrawal"><td>#WTH-0007</td><td><span class="tx-type withdrawal"><i class="fa-solid fa-arrow-up"></i> Withdrawal</span></td><td class="tx-amount negative">-GHS 1,000.00</td><td>01 Apr 2026</td><td><span class="status-badge failed">Failed</span></td></tr>
+              <tr data-type="profit"><td>#PRF-0009</td><td><span class="tx-type profit"><i class="fa-solid fa-arrow-trend-up"></i> Profit</span></td><td class="tx-amount positive">+GHS 60.00</td><td>30 Mar 2026</td><td><span class="status-badge success">Success</span></td></tr>
+              <tr data-type="deposit"><td>#DEP-0010</td><td><span class="tx-type deposit"><i class="fa-solid fa-arrow-down"></i> Deposit</span></td><td class="tx-amount positive">+GHS 500.00</td><td>28 Mar 2026</td><td><span class="status-badge pending">Pending</span></td></tr>
+              <tr data-type="withdrawal"><td>#WTH-0006</td><td><span class="tx-type withdrawal"><i class="fa-solid fa-arrow-up"></i> Withdrawal</span></td><td class="tx-amount negative">-GHS 2,000.00</td><td>20 Mar 2026</td><td><span class="status-badge completed">Completed</span></td></tr>
+              <tr data-type="deposit"><td>#DEP-0009</td><td><span class="tx-type deposit"><i class="fa-solid fa-arrow-down"></i> Deposit</span></td><td class="tx-amount positive">+GHS 1,000.00</td><td>15 Mar 2026</td><td><span class="status-badge success">Success</span></td></tr>
+              <tr data-type="profit"><td>#PRF-0008</td><td><span class="tx-type profit"><i class="fa-solid fa-arrow-trend-up"></i> Profit</span></td><td class="tx-amount positive">+GHS 240.00</td><td>01 Mar 2026</td><td><span class="status-badge success">Success</span></td></tr>
+              <tr data-type="deposit"><td>#DEP-0008</td><td><span class="tx-type deposit"><i class="fa-solid fa-arrow-down"></i> Deposit</span></td><td class="tx-amount positive">+GHS 3,000.00</td><td>01 Mar 2026</td><td><span class="status-badge failed">Failed</span></td></tr>
+              <tr data-type="withdrawal"><td>#WTH-0005</td><td><span class="tx-type withdrawal"><i class="fa-solid fa-arrow-up"></i> Withdrawal</span></td><td class="tx-amount negative">-GHS 500.00</td><td>15 Feb 2026</td><td><span class="status-badge completed">Completed</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <script src="js/dashboard.js"></script>
+  <script src="js/transactions.js"></script>
+</body>
+</html>
