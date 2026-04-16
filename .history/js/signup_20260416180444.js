@@ -129,6 +129,10 @@ document.getElementById('createBtn').addEventListener('click', () => {
           email,
           phone,
           balance: 0,
+          invested: 0,
+          profit: 0,
+          activePlans: 0,
+          referrals: 0,
           createdAt: new Date()
         });
 

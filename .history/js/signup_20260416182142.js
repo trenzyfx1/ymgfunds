@@ -125,12 +125,12 @@ document.getElementById('createBtn').addEventListener('click', () => {
 
       try {
         await setDoc(doc(db, "users", user.uid), {
-          name,
-          email,
-          phone,
-          balance: 0,
-          createdAt: new Date()
-        });
+  name,
+  email,
+  phone,
+  balance: 0,
+  createdAt: new Date()
+});
 
         console.log("✅ User saved to Firestore");
 

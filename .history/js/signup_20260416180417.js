@@ -1,4 +1,4 @@
-import { auth, db } from "./firebase.js";
+import { auth, db } from ".firebase.js";
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -129,6 +129,10 @@ document.getElementById('createBtn').addEventListener('click', () => {
           email,
           phone,
           balance: 0,
+          invested: 0,
+          profit: 0,
+          activePlans: 0,
+          referrals: 0,
           createdAt: new Date()
         });
 

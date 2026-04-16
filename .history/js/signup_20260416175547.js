@@ -1,4 +1,4 @@
-import { auth, db } from "./firebase.js";
+
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -118,35 +118,40 @@ document.getElementById('createBtn').addEventListener('click', () => {
   setTimeout(() => {
     if (btn.disabled) text.textContent = 'Almost done...';
   }, 3000);
+
   createUserWithEmailAndPassword(auth, email, pw)
-    .then(async (userCredential) => {
+    .then((userCredential) => {
 
       const user = userCredential.user;
 
-      try {
-        await setDoc(doc(db, "users", user.uid), {
-          name,
-          email,
-          phone,
-          balance: 0,
-          createdAt: new Date()
-        });
-
-        console.log("✅ User saved to Firestore");
-
-      } catch (err) {
-        console.error("❌ Firestore save failed:", err);
-        alert("Account created but failed to save data.");
-        return;
-      }
-
-      // 🔥 Show success AFTER save
+      // 🔥 Show success IMMEDIATELY
       btn.style.display = 'none';
       document.getElementById('formSuccess').classList.add('visible');
 
+      // 🔥 Save user data (DON'T block UI)
+      setDoc(doc(db, "users", user.uid), {
+        name,
+        email,
+        phone,
+        balance: 0,
+        createdAt: new Date()
+      });
+
+      // 🔥 Redirect smoothly
       setTimeout(() => {
         window.location.href = "login.html";
       }, 1200);
 
     })
+    .catch((error) => {
+      btn.disabled = false;
+      text.textContent = "Create Account";
+      icon.className = "fa-solid fa-arrow-right";
+
+      if (error.code === "auth/email-already-in-use") {
+        showError('email', 'emailError', 'Email already exists');
+      } else {
+        alert(error.message);
+      }
+    });
 });

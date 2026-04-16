@@ -1,4 +1,4 @@
-import { auth, db } from "./firebase.js";
+import { auth, db } from "../dashboard/js/firebase.js";
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -118,10 +118,15 @@ document.getElementById('createBtn').addEventListener('click', () => {
   setTimeout(() => {
     if (btn.disabled) text.textContent = 'Almost done...';
   }, 3000);
+
   createUserWithEmailAndPassword(auth, email, pw)
-    .then(async (userCredential) => {
+    .then((userCredential) => {
 
       const user = userCredential.user;
+
+      // 🔥 Show success IMMEDIATELY
+      btn.style.display = 'none';
+      document.getElementById('formSuccess').classList.add('visible');
 
       try {
         await setDoc(doc(db, "users", user.uid), {
@@ -129,24 +134,34 @@ document.getElementById('createBtn').addEventListener('click', () => {
           email,
           phone,
           balance: 0,
+          invested: 0,
+          profit: 0,
+          activePlans: 0,
+          referrals: 0,
           createdAt: new Date()
         });
 
         console.log("✅ User saved to Firestore");
 
       } catch (err) {
-        console.error("❌ Firestore save failed:", err);
-        alert("Account created but failed to save data.");
-        return;
+        console.error("❌ Firestore error:", err);
       }
 
-      // 🔥 Show success AFTER save
-      btn.style.display = 'none';
-      document.getElementById('formSuccess').classList.add('visible');
-
+      // 🔥 Redirect smoothly
       setTimeout(() => {
         window.location.href = "login.html";
       }, 1200);
 
     })
+    .catch((error) => {
+      btn.disabled = false;
+      text.textContent = "Create Account";
+      icon.className = "fa-solid fa-arrow-right";
+
+      if (error.code === "auth/email-already-in-use") {
+        showError('email', 'emailError', 'Email already exists');
+      } else {
+        alert(error.message);
+      }
+    });
 });
