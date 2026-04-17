@@ -287,10 +287,10 @@ otpBoxes.forEach((box, i) => {
 
 // Resend timer
 let resendInterval;
-let resendSeconds = 90;
+let resendSeconds = 60;
 
 function startResendTimer() {
-  resendSeconds = 90;
+  resendSeconds = 60;
   const resendBtn = document.getElementById("resendOtpBtn");
   const timerEl = document.getElementById("resendTimer");
   resendBtn.disabled = true;
@@ -307,37 +307,7 @@ function startResendTimer() {
   }, 1000);
 }
 
-document.getElementById("resendOtpBtn").addEventListener("click", async () => {
-  const phone = document.getElementById("settingsPhone").value.trim();
 
-  try {
-    // 🔥 FULL RESET
-    if (recaptchaVerifier) {
-      recaptchaVerifier.clear();
-    }
-
-    recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-      size: "invisible"
-    });
-
-    await recaptchaVerifier.render();
-
-    // 🔥 RESEND
-    confirmationResult = await signInWithPhoneNumber(auth, phone, recaptchaVerifier);
-
-    showToast("New OTP sent to your phone.", "success");
-    startResendTimer();
-
-  } catch (err) {
-    console.error(err);
-
-    if (err.code === "auth/too-many-requests") {
-      showToast("Too many attempts. Wait a few minutes.", "error");
-    } else {
-      showToast("Failed to resend OTP.", "error");
-    }
-  }
-});
 
 // ── Confirm OTP — Real Firebase verification ───
 document.getElementById("confirmOtpBtn").addEventListener("click", async () => {

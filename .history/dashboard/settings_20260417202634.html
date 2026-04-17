@@ -68,7 +68,7 @@
             <label>Phone Number</label>
             <input type="tel" id="settingsPhone" placeholder="+233 24 000 0000" />
             <div class="verify-row">
-              <span id="phoneStatus" class="verify-status unverified">Not Verified</span>
+              <span id="phoneStatus" class="verify-status unverified">✗ Not Verified</span>
               <button class="btn-secondary" id="verifyPhoneBtn">Verify Now</button>
             </div>
             <p class="verify-note" id="phoneVerifyNote">
@@ -80,7 +80,7 @@
             <label>Email Address</label>
             <input type="email" id="settingsEmail" disabled />
             <div class="verify-row">
-              <span id="emailStatus" class="verify-status unverified">Not Verified</span>
+              <span id="emailStatus" class="verify-status unverified">✗ Not Verified</span>
               <button class="btn-secondary" id="verifyEmailBtn">Send Verification Email</button>
             </div>
             <span class="form-note" style="margin-top: 5px;">Email cannot be changed, If you don’t see the code in your inbox, please check your spam folder.</span>
@@ -209,7 +209,6 @@
 
   <!-- Toast -->
   <div class="settings-toast" id="settingsToast"></div>
-  <div id="recaptcha-container"></div>
 
   <script type="module" src="./js/dashboard.js"></script>
   <script type="module" src="../js/firebase.js"></script>

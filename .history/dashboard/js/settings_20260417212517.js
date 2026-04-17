@@ -287,10 +287,10 @@ otpBoxes.forEach((box, i) => {
 
 // Resend timer
 let resendInterval;
-let resendSeconds = 90;
+let resendSeconds = 60;
 
 function startResendTimer() {
-  resendSeconds = 90;
+  resendSeconds = 60;
   const resendBtn = document.getElementById("resendOtpBtn");
   const timerEl = document.getElementById("resendTimer");
   resendBtn.disabled = true;

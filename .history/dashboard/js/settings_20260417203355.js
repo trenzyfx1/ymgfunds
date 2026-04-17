@@ -14,7 +14,6 @@ import {
   getDoc,
   updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 let currentUser = null;
 let verifiedPhone = null;
@@ -230,7 +229,8 @@ document.getElementById("verifyPhoneBtn").addEventListener("click", async () => 
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
 
   try {
-    confirmationResult = await signInWithPhoneNumber(auth, phone, recaptchaVerifier);
+    const provider = new PhoneAuthProvider(auth);
+    confirmationResult = await provider.verifyPhoneNumber(phone, recaptchaVerifier);
     openOtpModal(phone);
     showToast("OTP sent to " + phone, "success");
   } catch (err) {
@@ -287,10 +287,10 @@ otpBoxes.forEach((box, i) => {
 
 // Resend timer
 let resendInterval;
-let resendSeconds = 90;
+let resendSeconds = 60;
 
 function startResendTimer() {
-  resendSeconds = 90;
+  resendSeconds = 60;
   const resendBtn = document.getElementById("resendOtpBtn");
   const timerEl = document.getElementById("resendTimer");
   resendBtn.disabled = true;
@@ -309,33 +309,17 @@ function startResendTimer() {
 
 document.getElementById("resendOtpBtn").addEventListener("click", async () => {
   const phone = document.getElementById("settingsPhone").value.trim();
-
   try {
-    // 🔥 FULL RESET
-    if (recaptchaVerifier) {
-      recaptchaVerifier.clear();
-    }
-
-    recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-      size: "invisible"
-    });
-
-    await recaptchaVerifier.render();
-
-    // 🔥 RESEND
-    confirmationResult = await signInWithPhoneNumber(auth, phone, recaptchaVerifier);
-
+    recaptchaVerifier.clear();
+    recaptchaVerifier = null;
+    setupRecaptcha();
+    const provider = new PhoneAuthProvider(auth);
+    confirmationResult = await provider.verifyPhoneNumber(phone, recaptchaVerifier);
     showToast("New OTP sent to your phone.", "success");
     startResendTimer();
-
   } catch (err) {
     console.error(err);
-
-    if (err.code === "auth/too-many-requests") {
-      showToast("Too many attempts. Wait a few minutes.", "error");
-    } else {
-      showToast("Failed to resend OTP.", "error");
-    }
+    showToast("Failed to resend OTP. Try again.", "error");
   }
 });
 
@@ -359,7 +343,9 @@ document.getElementById("confirmOtpBtn").addEventListener("click", async () => {
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying...';
 
   try {
-    await confirmationResult.confirm(otp);
+    const credential = PhoneAuthProvider.credential(confirmationResult, otp);
+    // Link phone to the current user's Firebase account
+    await currentUser.linkWithCredential(credential);
 
     await updateDoc(doc(db, "users", currentUser.uid), {
       phone,
