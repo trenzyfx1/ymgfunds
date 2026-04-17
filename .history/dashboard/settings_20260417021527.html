@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — YMG Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><img src="../images/logo.jpeg" alt="YMG Funds"
+        class="sidebar-logo-img"><span>YMG<strong>Funds</strong></span></div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i
+          class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item active"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+    </nav>
+    <div class="sidebar-bottom"><a href="../pages/login.html" class="nav-item logout"><i
+          class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span></a></div>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting">
+          <h2>Settings</h2>
+          <p>Manage your account and preferences</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn"><i class="fa-solid fa-bell"></i><span class="notif-badge">3</span></button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="../pages/login.html" class="dropdown-logout"><i class="fa-solid fa-arrow-right-from-bracket"></i>
+              Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <div class="settings-grid">
+
+        <div class="form-card">
+          <h3><i class="fa-solid fa-user"></i> Profile Information</h3>
+
+          <div class="profile-avatar-section">
+            <div class="profile-avatar" id="settingsAvatar"></div>
+            <div>
+              <strong><span id="userName"></span></strong><br>
+              <span id="userEmail"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="settingsPhone" placeholder="+233 24 000 0000" />
+            <div class="verify-row">
+              <span id="phoneStatus" class="verify-status unverified">✗ Not Verified</span>
+              <button class="btn-secondary" id="verifyPhoneBtn">Verify Now</button>
+            </div>
+            <p class="verify-note"><i class="fa-solid fa-circle-exclamation"></i> Please verify your phone number to enable withdrawals.</p>
+          </div>
+
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="settingsEmail" disabled />
+            <div class="verify-row">
+              <span id="emailStatus" class="verify-status unverified">✗ Not Verified</span>
+              <button class="btn-secondary" id="verifyEmailBtn">Send Verification Email</button>
+            </div>
+            <p class="verify-note"><i class="fa-solid fa-circle-exclamation"></i> Please verify your email address to enable transactions.</p>
+            <span class="form-note">Email cannot be changed.</span>
+          </div>
+
+          <div class="form-group">
+            <label>Country</label>
+            <select id="settingsCountry">
+              <option value="Ghana">🇬🇭 Ghana</option>
+              <option value="Nigeria">🇳🇬 Nigeria</option>
+              <option value="Kenya">🇰🇪 Kenya</option>
+            </select>
+          </div>
+
+          <button class="btn-primary" id="saveProfileBtn">
+            <i class="fa-solid fa-floppy-disk"></i> Save Changes
+          </button>
+
+          <div class="form-success" id="profileSuccess">
+            <i class="fa-solid fa-circle-check"></i> Profile updated successfully.
+          </div>
+        </div>
+
+        <div class="settings-right-col">
+          <div class="form-card">
+            <h3><i class="fa-solid fa-lock"></i> Change Password</h3>
+            <div class="form-group">
+              <label>Current Password</label>
+              <input type="password" id="currentPw" placeholder="Enter current password" />
+            </div>
+            <div class="form-group">
+              <label>New Password</label>
+              <input type="password" id="newPw" placeholder="Enter new password (min. 8 chars)" />
+            </div>
+            <div class="form-group">
+              <label>Confirm New Password</label>
+              <input type="password" id="confirmPw" placeholder="Re-enter new password" />
+            </div>
+            <span class="field-error" id="pwError"></span>
+            <button class="btn-primary" id="changePwBtn"><i class="fa-solid fa-key"></i> Update Password</button>
+            <div class="form-success" id="pwSuccess"><i class="fa-solid fa-circle-check"></i> Password updated successfully.</div>
+          </div>
+
+          <div class="form-card">
+            <h3><i class="fa-solid fa-bell"></i> Notification Preferences</h3>
+            <div class="toggle-row">
+              <div><strong>Deposit Alerts</strong><span>Notify me on successful deposits</span></div>
+              <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div><strong>Withdrawal Updates</strong><span>Notify me on withdrawal status changes</span></div>
+              <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div><strong>Profit Alerts</strong><span>Notify me when profit is added</span></div>
+              <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div><strong>Referral Rewards</strong><span>Notify me when referral earns</span></div>
+              <label class="toggle-switch"><input type="checkbox" /><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ── OTP Modal ──────────────────────────────── -->
+  <div class="otp-modal-overlay" id="otpModal">
+    <div class="otp-modal">
+      <button class="otp-modal-close" id="otpModalClose"><i class="fa-solid fa-xmark"></i></button>
+      <div class="otp-modal-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+      <h3>Verify Phone Number</h3>
+      <p>A 6-digit code has been sent to<br><strong id="otpPhoneDisplay"></strong></p>
+      <div class="otp-boxes">
+        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" />
+        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" />
+        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" />
+        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" />
+        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" />
+        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" />
+      </div>
+      <p class="otp-error" id="otpError"></p>
+      <div class="otp-resend">
+        <button id="resendOtpBtn">Resend Code</button>
+        <span id="resendTimer"></span>
+      </div>
+      <button class="btn-confirm-otp" id="confirmOtpBtn">
+        <i class="fa-solid fa-check"></i> Confirm
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Toast ──────────────────────────────────── -->
+  <div class="settings-toast" id="settingsToast"></div>
+
+  <script type="module" src="./js/dashboard.js"></script>
+  <script type="module" src="../js/firebase.js"></script>
+  <script type="module" src="./js/settings.js"></script>
+  <script type="module" src="./js/sidebar.js"></script>
+</body>
+
+</html>
