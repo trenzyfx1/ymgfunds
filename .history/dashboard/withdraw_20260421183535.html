@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Withdraw — YMG Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><img src="../images/logo.jpeg" alt="YMG Funds"
+        class="sidebar-logo-img"><span>YMG<strong>Funds</strong></span></div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item active"><i
+          class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i
+          class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+    </nav>
+    <div class="sidebar-bottom"><a href="../pages/login.html" class="nav-item logout"><i
+          class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span></a></div>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting">
+          <h2>Withdraw Funds</h2>
+          <p>Request a withdrawal from your available balance</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" id="notifBtn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-badge" id="notifCount">0</span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2"><i class="fa-solid fa-arrow-right-from-bracket"></i>
+              Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="deposit-grid">
+        <div class="form-card">
+          <h3><i class="fa-solid fa-money-bill-transfer"></i> Request Withdrawal</h3>
+
+          <div class="balance-info-bar">
+            <div>
+              <span>Available Balance</span>
+              <strong id="availableBalance">GHS 0.00</strong>
+            </div>
+            <div>
+              <span>Withdrawal Fee</span>
+              <strong class="fee-note">GHS 5.00</strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Withdrawal Amount</label>
+            <div class="input-prefix">
+              <span class="prefix-label">GHS</span>
+              <input type="number" id="withdrawAmount" placeholder="Enter amount to withdraw" min="10" />
+            </div>
+            <span class="form-note">A flat fee of GHS 5.00 will be deducted from your withdrawal.</span>
+          </div>
+
+          <div class="form-group">
+            <label>Withdrawal Method</label>
+            <select id="withdrawMethod">
+              <option value="">Select withdrawal method</option>
+              <option value="mobile_money">📱 Mobile Money (MTN / Vodafone / AirtelTigo)</option>
+              <option value="bank">🏦 Bank Transfer</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Account Number / Mobile Number</label>
+            <input type="text" id="withdrawAccount" placeholder="Enter your account or mobile number" />
+          </div>
+
+          <div class="withdraw-summary" id="withdrawSummary" style="display:none">
+            <div class="summary-row"><span>Withdrawal Amount</span><strong id="sumAmount">GHS 0.00</strong></div>
+            <div class="summary-row"><span>Fee</span><strong class="fee-note">- GHS 5.00</strong></div>
+            <div class="summary-row total"><span>You will receive</span><strong id="sumReceive">GHS 0.00</strong></div>
+          </div>
+
+          <button class="btn-primary" id="withdrawBtn"><i class="fa-solid fa-paper-plane"></i> Request
+            Withdrawal</button>
+
+          <div class="form-success" id="withdrawSuccess">
+            <i class="fa-solid fa-circle-check"></i>
+            Withdrawal request submitted. It will be reviewed and processed within 24–48 hours.
+          </div>
+        </div>
+
+        <div class="deposit-info-col">
+          <div class="card info-card">
+            <h4><i class="fa-solid fa-circle-info"></i> Withdrawal Rules</h4>
+            <ul class="info-list">
+              <li><i class="fa-solid fa-circle-check"></i> Only available balance can be withdrawn</li>
+              <li><i class="fa-solid fa-circle-check"></i> Fixed deposit plans require waiting until maturity</li>
+              <li><i class="fa-solid fa-circle-check"></i> A flat fee of GHS 5.00 applies to all withdrawals</li>
+              <li><i class="fa-solid fa-circle-check"></i> All withdrawals require admin approval</li>
+              <li><i class="fa-solid fa-circle-check"></i> Processing time: 24–48 hours</li>
+            </ul>
+          </div>
+          <div class="card info-card warning-card">
+            <h4><i class="fa-solid fa-triangle-exclamation"></i> Important</h4>
+            <p>Ensure your account details are correct before submitting. Withdrawals sent to incorrect accounts cannot
+              be reversed.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h4>Withdrawal History</h4>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Reference</th>
+                <th>Amount</th>
+                <th>Method</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="withdrawTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <script type="module" src="./js/globaluser.js"></script>
+  <script type="module" src="./js/withdraw.js"></script>
+  <script type="module" src="./js/dashboard.js"></script>
+  <script type="module" src="./js/sidebar.js"></script>
+</body>
+
+</html>

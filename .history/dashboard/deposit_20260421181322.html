@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Deposit — YMG Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/logo.jpeg" alt="YMG Funds" class="sidebar-logo-img">
+      <span>YMG<strong>Funds</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item active"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="../pages/login.html" class="nav-item logout"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting">
+          <h2>Deposit Funds</h2>
+          <p>Add money to your YMG Funds wallet</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" id="notifBtn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-badge" id="notifCount">0</span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2"><i class="fa-solid fa-arrow-right-from-bracket"></i>
+              Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="deposit-grid">
+
+        <div class="form-card">
+          <h3><i class="fa-solid fa-download"></i> Make a Deposit</h3>
+
+          <div class="balance-info-bar">
+            <div>
+              <span>Current Balance</span>
+              <strong>GHS 12,500.00</strong>
+            </div>
+            <div>
+              <span>Available Balance</span>
+              <strong>GHS 4,500.00</strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Deposit Amount</label>
+            <div class="input-prefix">
+              <span class="prefix-label">GHS</span>
+              <input type="number" id="depositAmount" placeholder="Enter amount (min. GHS 50)" min="50" />
+            </div>
+            <span class="form-note">Minimum deposit: GHS 50.00</span>
+          </div>
+
+          <div class="form-group">
+            <label>Payment Method</label>
+            <select id="paymentMethod">
+              <option value="">Select payment method</option>
+              <option value="mobile_money">📱 Mobile Money (MTN / Vodafone / AirtelTigo)</option>
+              <option value="bank">🏦 Bank Transfer</option>
+              <option value="card">💳 Debit/Credit Card (Paystack)</option>
+            </select>
+          </div>
+
+          <div class="quick-amounts">
+            <p class="form-note">Quick select:</p>
+            <div class="quick-amount-btns">
+              <button class="quick-amt" data-amount="50">GHS 50</button>
+              <button class="quick-amt" data-amount="100">GHS 100</button>
+              <button class="quick-amt" data-amount="500">GHS 500</button>
+              <button class="quick-amt" data-amount="1000">GHS 1,000</button>
+              <button class="quick-amt" data-amount="5000">GHS 5,000</button>
+            </div>
+          </div>
+
+          <button class="btn-primary" id="depositBtn">
+            <i class="fa-solid fa-lock"></i> Deposit Now
+          </button>
+
+          <div class="form-success" id="depositSuccess">
+            <i class="fa-solid fa-circle-check"></i>
+            Deposit of GHS <span id="depositedAmt">0</span> submitted successfully. Your balance will update shortly.
+          </div>
+        </div>
+
+        <div class="deposit-info-col">
+          <div class="card info-card">
+            <h4><i class="fa-solid fa-circle-info"></i> How Deposits Work</h4>
+            <ul class="info-list">
+              <li><i class="fa-solid fa-circle-check"></i> Select your deposit amount and payment method</li>
+              <li><i class="fa-solid fa-circle-check"></i> Complete payment through your chosen channel</li>
+              <li><i class="fa-solid fa-circle-check"></i> Funds reflect in your wallet within minutes</li>
+              <li><i class="fa-solid fa-circle-check"></i> Deposit is recorded in your transaction history</li>
+            </ul>
+          </div>
+
+          <div class="card info-card warning-card">
+            <h4><i class="fa-solid fa-triangle-exclamation"></i> Important Note</h4>
+            <p>Ensure all payment details are accurate before submitting. YMG Funds is not responsible for deposits made to incorrect accounts or payment references.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h4>Deposit History</h4>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr><th>Reference</th><th>Amount</th><th>Method</th><th>Date</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>#DEP-0012</td><td class="tx-amount positive">+GHS 2,000.00</td><td>Mobile Money</td><td>12 Apr 2026</td><td><span class="status-badge success">Success</span></td></tr>
+              <tr><td>#DEP-0011</td><td class="tx-amount positive">+GHS 5,000.00</td><td>Bank Transfer</td><td>05 Apr 2026</td><td><span class="status-badge success">Success</span></td></tr>
+              <tr><td>#DEP-0010</td><td class="tx-amount positive">+GHS 500.00</td><td>Mobile Money</td><td>28 Mar 2026</td><td><span class="status-badge pending">Pending</span></td></tr>
+              <tr><td>#DEP-0009</td><td class="tx-amount positive">+GHS 1,000.00</td><td>Card</td><td>20 Mar 2026</td><td><span class="status-badge success">Success</span></td></tr>
+              <tr><td>#DEP-0008</td><td class="tx-amount positive">+GHS 3,000.00</td><td>Bank Transfer</td><td>10 Mar 2026</td><td><span class="status-badge failed">Failed</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <script type="module" src="./js/dashboard.js"></script>
+  <script type="module" src="./js/deposit.js"></script>
+  <script type="module" src="./"></script>
+  <script type="module" src="./js/sidebar.js"></script>
+</body>
+</html>
