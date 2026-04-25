@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Investments — YMG Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><img src="../images/logo.jpeg" alt="YMG Funds" class="sidebar-logo-img"><span>YMG<strong>Funds</strong></span></div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item active"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="../pages/login.html" class="nav-item logout"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting">
+          <h2>Investments</h2>
+          <p>Choose and manage your investment plans</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" id="notifBtn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-badge" id="notifCount">0</span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- ── STANDARD PLANS ───────────────────── -->
+      <div class="plans-section-header">
+        <div>
+          <h2 class="plans-section-title"><i class="fa-solid fa-star"></i> YMG Standard Plans</h2>
+          <p class="plans-section-sub">Activate once for GHS 500 and unlock all standard plans.</p>
+        </div>
+        <div class="activation-status-badge" id="standardStatusBadge">
+          <i class="fa-solid fa-lock"></i> Locked
+        </div>
+      </div>
+
+      <div class="invest-plans-grid" id="standardPlansGrid">
+
+        <!-- Starter Savings -->
+        <div class="invest-plan-card plan-lockable" id="card-starter">
+          <div class="plan-lock-overlay" id="lock-starter">
+            <i class="fa-solid fa-lock"></i>
+            <span>Activate Standard Plan</span>
+          </div>
+          <div class="invest-plan-icon"><i class="fa-solid fa-seedling"></i></div>
+          <h3>Starter Savings</h3>
+          <p>Flexible savings for beginners. Earn weekly growth with no lock-in period.</p>
+          <div class="invest-plan-rate">
+            <span class="rate-badge">Weekly Growth</span>
+            <span class="rate-daily">0.5% / week · 1% / month</span>
+          </div>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Min. Deposit</span><strong>GHS 50</strong></div>
+            <div class="invest-detail"><span>Duration</span><strong>Flexible</strong></div>
+            <div class="invest-detail"><span>Withdrawal</span><strong>Anytime</strong></div>
+            <div class="invest-detail"><span>Lock-in</span><strong>None</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="Starter Savings" data-tier="standard">Invest Now</button>
+        </div>
+
+        <!-- Fixed Deposit -->
+        <div class="invest-plan-card featured plan-lockable" id="card-fixed">
+          <div class="plan-lock-overlay" id="lock-fixed">
+            <i class="fa-solid fa-lock"></i>
+            <span>Activate Standard Plan</span>
+          </div>
+          <div class="invest-plan-badge">POPULAR</div>
+          <div class="invest-plan-icon featured-icon"><i class="fa-solid fa-vault"></i></div>
+          <h3>Fixed Deposit</h3>
+          <p>Higher returns with a structured 90-day commitment for serious savers.</p>
+          <div class="invest-plan-rate">
+            <span class="rate-badge featured-rate">9.50% return</span>
+            <span class="rate-daily">90 Days · Fixed Return</span>
+          </div>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Min. Deposit</span><strong>GHS 500</strong></div>
+            <div class="invest-detail"><span>Duration</span><strong>90 Days</strong></div>
+            <div class="invest-detail"><span>Withdrawal</span><strong>After Maturity</strong></div>
+            <div class="invest-detail"><span>Lock-in</span><strong>90 Days</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="Fixed Deposit" data-tier="standard">Invest Now</button>
+        </div>
+
+        <!-- Growth Plus -->
+        <div class="invest-plan-card plan-lockable" id="card-growth">
+          <div class="plan-lock-overlay" id="lock-growth">
+            <i class="fa-solid fa-lock"></i>
+            <span>Activate Standard Plan</span>
+          </div>
+          <div class="invest-plan-icon"><i class="fa-solid fa-rocket"></i></div>
+          <h3>Growth Plus</h3>
+          <p>Compound growth for medium-term investors with periodic payout cycles.</p>
+          <div class="invest-plan-rate">
+            <span class="rate-badge">12.50% return</span>
+            <span class="rate-daily">182 Days · Compound Growth</span>
+          </div>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Min. Deposit</span><strong>GHS 1,000</strong></div>
+            <div class="invest-detail"><span>Duration</span><strong>182 Days</strong></div>
+            <div class="invest-detail"><span>Withdrawal</span><strong>Per Cycle</strong></div>
+            <div class="invest-detail"><span>Lock-in</span><strong>Flexible</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="Growth Plus" data-tier="standard">Invest Now</button>
+        </div>
+
+        <!-- Standard Loan -->
+        <div class="invest-plan-card loan-card plan-lockable" id="card-std-loan">
+          <div class="plan-lock-overlay" id="lock-std-loan">
+            <i class="fa-solid fa-lock"></i>
+            <span>Activate Standard Plan</span>
+          </div>
+          <div class="invest-plan-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+          <h3>Standard Loan</h3>
+          <p>Access instant loan facilities to support your financial needs.</p>
+          <div class="invest-plan-rate">
+            <span class="rate-badge loan-rate">6% interest</span>
+            <span class="rate-daily">182 Days duration</span>
+          </div>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Range</span><strong>GHS 500 – 5,000</strong></div>
+            <div class="invest-detail"><span>Duration</span><strong>182 Days</strong></div>
+            <div class="invest-detail"><span>Interest</span><strong>6%</strong></div>
+            <div class="invest-detail"><span>Repayment</span><strong>End of Term</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="Standard Loan" data-tier="standard">Apply Now</button>
+        </div>
+
+      </div>
+
+      <!-- Standard Activation Banner -->
+      <div class="activation-banner" id="standardActivationBanner">
+        <div class="activation-banner-text">
+          <i class="fa-solid fa-lock"></i>
+          <span><strong>Unlock All Standard Plans:</strong> One-time Activation Fee: <strong>GHS 500</strong></span>
+        </div>
+        <button class="btn-activate" id="activateStandardBtn">
+          Activate Now <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+      <div class="plan-disclaimer" id="standardDisclaimer" style="display:none;">
+  <i class="fa-solid fa-circle-info"></i>
+  All investments carry risk. Returns are not guaranteed and may vary based on market performance.
+</div>
+
+      <!-- ── PREMIUM PLANS ─────────────────────── -->
+      <div class="plans-section-header" style="margin-top: 40px;">
+        <div>
+          <h2 class="plans-section-title premium-title"><i class="fa-solid fa-crown"></i> YMG Premium Plans</h2>
+          <p class="plans-section-sub">Activate once for GHS 1,000 and unlock all premium plans + 10% referral bonus.</p>
+        </div>
+        <div class="activation-status-badge premium-badge" id="premiumStatusBadge">
+          <i class="fa-solid fa-lock"></i> Locked
+        </div>
+      </div>
+
+      <div class="invest-plans-grid" id="premiumPlansGrid">
+
+        <!-- 182-Day Growth Tool -->
+        <div class="invest-plan-card premium-card plan-lockable" id="card-p182">
+          <div class="plan-lock-overlay premium-overlay" id="lock-p182">
+            <i class="fa-solid fa-crown"></i>
+            <span>Activate Premium Plan</span>
+          </div>
+          <div class="invest-plan-badge premium-badge-card">PREMIUM</div>
+          <div class="invest-plan-icon premium-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <h3>182-Day Growth Tool</h3>
+          <p>Steady mid-term investment with projected performance up to 15%.</p>
+          <div class="invest-plan-rate">
+            <span class="rate-badge premium-rate">Up to 15%</span>
+            <span class="rate-daily">182 Days · End of cycle payout</span>
+          </div>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Min. Amount</span><strong>GHS 1,000</strong></div>
+            <div class="invest-detail"><span>Duration</span><strong>182 Days</strong></div>
+            <div class="invest-detail"><span>Projected</span><strong>Up to 15%</strong></div>
+            <div class="invest-detail"><span>Payout</span><strong>End of Cycle</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="182-Day Growth Tool" data-tier="premium">Invest Now</button>
+        </div>
+
+        <!-- 365-Day Premium Tool -->
+        <div class="invest-plan-card premium-card plan-lockable" id="card-p365">
+          <div class="plan-lock-overlay premium-overlay" id="lock-p365">
+            <i class="fa-solid fa-crown"></i>
+            <span>Activate Premium Plan</span>
+          </div>
+          <div class="invest-plan-badge premium-badge-card">PREMIUM</div>
+          <div class="invest-plan-icon premium-icon"><i class="fa-solid fa-gem"></i></div>
+          <h3>365-Day Premium Tool</h3>
+          <p>Long-term investment with projected performance up to 25%.</p>
+          <div class="invest-plan-rate">
+            <span class="rate-badge premium-rate">Up to 25%</span>
+            <span class="rate-daily">365 Days · End of cycle payout</span>
+          </div>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Min. Amount</span><strong>GHS 2,000</strong></div>
+            <div class="invest-detail"><span>Duration</span><strong>365 Days</strong></div>
+            <div class="invest-detail"><span>Projected</span><strong>Up to 25%</strong></div>
+            <div class="invest-detail"><span>Payout</span><strong>End of Cycle</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="365-Day Premium Tool" data-tier="premium">Invest Now</button>
+        </div>
+
+        <!-- 3-Year Wealth Builder -->
+        <div class="invest-plan-card premium-card plan-lockable" id="card-p3yr">
+          <div class="plan-lock-overlay premium-overlay" id="lock-p3yr">
+            <i class="fa-solid fa-crown"></i>
+            <span>Activate Premium Plan</span>
+          </div>
+          <div class="invest-plan-badge premium-badge-card">PREMIUM</div>
+          <div class="invest-plan-icon premium-icon"><i class="fa-solid fa-building-columns"></i></div>
+          <h3>3-Year Wealth Builder</h3>
+          <p>Maximum long-term returns with up to 35% annually over 3 years.</p>
+          <div class="invest-plan-rate">
+            <span class="rate-badge premium-rate">Up to 35% / year</span>
+            <span class="rate-daily">3 Years · Cycle-based payout</span>
+          </div>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Min. Amount</span><strong>GHS 500</strong></div>
+            <div class="invest-detail"><span>Duration</span><strong>3 Years</strong></div>
+            <div class="invest-detail"><span>Projected</span><strong>Up to 35%/yr</strong></div>
+            <div class="invest-detail"><span>Payout</span><strong>Per Cycle</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="3-Year Wealth Builder" data-tier="premium">Invest Now</button>
+        </div>
+
+        <!-- Premium Loan -->
+        <div class="invest-plan-card loan-card premium-card plan-lockable" id="card-prem-loan">
+          <div class="plan-lock-overlay premium-overlay" id="lock-prem-loan">
+            <i class="fa-solid fa-crown"></i>
+            <span>Activate Premium Plan</span>
+          </div>
+          <div class="invest-plan-icon premium-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+          <h3>Premium Loan</h3>
+          <p>Access larger loan facilities with better rates for premium members.</p>
+          <div class="invest-plan-rate">
+            <span class="rate-badge premium-rate">4% interest</span>
+            <span class="rate-daily">365 Days duration</span>
+          </div>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Range</span><strong>GHS 500 – 30,000</strong></div>
+            <div class="invest-detail"><span>Duration</span><strong>365 Days</strong></div>
+            <div class="invest-detail"><span>Interest</span><strong>4%</strong></div>
+            <div class="invest-detail"><span>Repayment</span><strong>End of Term</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="Premium Loan" data-tier="premium">Apply Now</button>
+        </div>
+
+      </div>
+
+      <!-- Referral Bonus Banner -->
+      <div class="referral-bonus-banner" id="referralBonusBanner">
+        <div class="referral-bonus-left">
+          <div class="referral-bonus-icon"><i class="fa-solid fa-gift"></i></div>
+          <div>
+            <h4>🎉 YMG Premium Referral Bonus</h4>
+            <p>Earn <strong>10% cash</strong> every time someone registers with your referral link and activates any YMG plan.</p>
+            <div class="referral-payouts">
+              <span><i class="fa-solid fa-check"></i> Standard (GHS 500) → You get <strong>GHS 50</strong></span>
+              <span><i class="fa-solid fa-check"></i> Premium (GHS 1,000) → You get <strong>GHS 100</strong></span>
+            </div>
+          </div>
+        </div>
+        <div class="referral-bonus-right">
+          <p class="referral-code-label">Your Referral Code</p>
+          <div class="referral-code-box" id="referralCodeBox">—</div>
+          <a href="referrals.html" class="btn-referral-link">View Referrals <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- Premium Activation Banner -->
+      <div class="activation-banner premium-activation-banner" id="premiumActivationBanner">
+        <div class="activation-banner-text">
+          <i class="fa-solid fa-crown"></i>
+          <span><strong>Unlock All Premium Plans:</strong> One-time Activation Fee: <strong>GHS 1,000</strong></span>
+        </div>
+        <button class="btn-activate premium-activate-btn" id="activatePremiumBtn">
+          Upgrade Now <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- ── ACTIVE INVESTMENTS TABLE ──────────── -->
+      <div class="card" style="margin-top: 32px;">
+        <div class="card-header"><h4>My Active Investments</h4></div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Plan</th>
+                <th>Amount</th>
+                <th>Start Date</th>
+                <th>Maturity</th>
+                <th>Profit Earned</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="activeInvestmentsTable">
+              <tr><td colspan="6" class="table-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ── INVEST MODAL ────────────────────────── -->
+  <div class="modal-overlay" id="investModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalPlanName">Invest in Plan</h3>
+        <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="form-group">
+        <label class="modal-label">Amount (GHS)</label>
+        <div class="input-prefix">
+          <span class="prefix-label">GHS</span>
+          <input type="number" id="investAmount" placeholder="Enter amount" min="0" />
+        </div>
+        <span class="form-note" id="investMinNote"></span>
+      </div>
+      <div class="invest-preview" id="investPreview" style="display:none;">
+        <div class="preview-row"><span>Expected Return</span><strong id="previewReturn">—</strong></div>
+        <div class="preview-row"><span>At Maturity</span><strong id="previewMaturity">—</strong></div>
+        <div class="preview-row" id="previewWeeklyRow" style="display:none;"><span>Weekly Profit</span><strong id="previewWeekly">—</strong></div>
+      </div>
+      <span class="field-error" id="investError"></span>
+      <button class="btn-primary" id="confirmInvestBtn">Confirm Investment</button>
+      <div class="form-success" id="investSuccess">
+        <i class="fa-solid fa-circle-check"></i> Investment confirmed! Your plan is now active.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ACTIVATION MODAL ───────────────────── -->
+  <div class="modal-overlay" id="activationModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="activationModalTitle">Activate Plan</h3>
+        <button class="modal-close" id="activationModalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="activation-modal-body">
+        <div class="activation-modal-icon" id="activationModalIcon">
+          <i class="fa-solid fa-lock-open"></i>
+        </div>
+        <p id="activationModalDesc">Pay a one-time fee to unlock all plans in this tier.</p>
+        <div class="activation-fee-display">
+          <span>Activation Fee</span>
+          <strong id="activationFeeAmount">GHS 500</strong>
+        </div>
+        <p class="activation-balance-note">Your Balance: <strong id="activationUserBalance">GHS 0.00</strong></p>
+      </div>
+      <span class="field-error" id="activationError"></span>
+      <button class="btn-primary" id="confirmActivationBtn">
+        <i class="fa-solid fa-unlock"></i> Pay & Activate
+      </button>
+      <div class="form-success" id="activationSuccess">
+        <i class="fa-solid fa-circle-check"></i> Plan activated! All plans are now unlocked.
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./js/sidebar.js"></script>
+  <script type="module" src="./js/globaluser.js"></script>
+  <script type="module" src="./js/investments.js"></script>
+</body>
+</html>

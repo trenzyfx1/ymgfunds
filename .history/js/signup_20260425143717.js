@@ -1,0 +1,265 @@
+import { auth, db } from "./firebase.js";
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  doc,
+  setDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  updateDoc,
+  addDoc,
+  increment
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  GoogleAuthProvider,
+  signInWithPopup
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+function generateReferralCode(uid) {
+  return "YMG-" + uid.slice(0, 6).toUpperCase();
+}
+
+function getReferralFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("ref") || null;
+}
+
+// ── Show / Hide Password ──────────────────────
+function togglePasswordVisibility(inputId, iconId, btnId) {
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById(iconId);
+  const btn = document.getElementById(btnId);
+
+  btn.addEventListener('click', () => {
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    icon.className = isHidden ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+  });
+}
+
+togglePasswordVisibility('password', 'eyeIcon', 'togglePassword');
+togglePasswordVisibility('confirmPassword', 'eyeIconConfirm', 'toggleConfirm');
+
+// ── Password Strength ─────────────────────────
+const passwordInput = document.getElementById('password');
+const strengthWrap = document.getElementById('passwordStrength');
+const strengthLabel = document.getElementById('strengthLabel');
+const bars = [
+  document.getElementById('bar1'),
+  document.getElementById('bar2'),
+  document.getElementById('bar3'),
+  document.getElementById('bar4')
+];
+
+const hintLength = document.getElementById('hintLength');
+const hintLetter = document.getElementById('hintLetter');
+const hintNumber = document.getElementById('hintNumber');
+
+function checkStrength(val) {
+  const hasLength = val.length >= 8;
+  const hasLetter = /[a-zA-Z]/.test(val);
+  const hasNumber = /[0-9]/.test(val);
+  const hasSpecial = /[^a-zA-Z0-9]/.test(val);
+
+  hintLength.className = 'hint' + (hasLength ? ' met' : '');
+  hintLetter.className = 'hint' + (hasLetter ? ' met' : '');
+  hintNumber.className = 'hint' + (hasNumber ? ' met' : '');
+
+  let score = 0;
+  if (hasLength) score++;
+  if (hasLetter) score++;
+  if (hasNumber) score++;
+  if (hasSpecial) score++;
+
+  const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+  const colors = ['weak', 'fair', 'good', 'strong'];
+
+  bars.forEach((bar, i) => {
+    bar.className = 'bar' + (i < score ? ` ${colors[score - 1]}` : '');
+  });
+
+  strengthLabel.textContent = val.length === 0 ? 'Enter a password' : labels[score - 1] || 'Weak';
+}
+
+passwordInput.addEventListener('input', () => {
+  if (passwordInput.value.length > 0) {
+    strengthWrap.classList.add('visible');
+  } else {
+    strengthWrap.classList.remove('visible');
+  }
+  checkStrength(passwordInput.value);
+});
+
+// ── Validation Helpers ─────────────────────────
+function showError(fieldId, errorId, message) {
+  document.getElementById(fieldId).classList.add('error');
+  document.getElementById(errorId).textContent = message;
+}
+
+function clearAll() {
+  ['fullName', 'email', 'phone', 'password', 'confirmPassword'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('error', 'valid');
+  });
+
+  ['nameError', 'emailError', 'phoneError', 'passwordError', 'confirmError', 'termsError']
+    .forEach(id => document.getElementById(id).textContent = '');
+}
+
+// ── Submit ────────────────────────────────────
+document.getElementById('createBtn').addEventListener('click', () => {
+  clearAll();
+
+  const name = document.getElementById('fullName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const pw = document.getElementById('password').value;
+  const cpw = document.getElementById('confirmPassword').value;
+  const terms = document.getElementById('agreeTerms').checked;
+
+  let valid = true;
+
+  if (name.length < 2) { showError('fullName', 'nameError', 'Enter your full name'); valid = false; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('email', 'emailError', 'Enter valid email'); valid = false; }
+  if (phone.length < 7) { showError('phone', 'phoneError', 'Enter valid phone'); valid = false; }
+  if (pw.length < 8) { showError('password', 'passwordError', 'Min 8 characters'); valid = false; }
+  if (pw !== cpw) { showError('confirmPassword', 'confirmError', 'Passwords don’t match'); valid = false; }
+  if (!terms) { document.getElementById('termsError').textContent = 'Agree to continue'; valid = false; }
+
+  if (!valid) return;
+
+  const btn = document.getElementById('createBtn');
+  const text = document.getElementById('btnText');
+  const icon = document.getElementById('btnIcon');
+
+  btn.disabled = true;
+  text.textContent = 'Securing your account...';
+  icon.className = 'fa-solid fa-spinner fa-spin';
+
+  // UX fallback (if slow network)
+  setTimeout(() => {
+    if (btn.disabled) text.textContent = 'Almost done...';
+  }, 3000);
+  createUserWithEmailAndPassword(auth, email, pw)
+    .then(async (userCredential) => {
+
+      const user = userCredential.user;
+
+      try {
+        const refCode = generateReferralCode(user.uid);
+        const referredBy = getReferralFromURL();
+
+        await setDoc(doc(db, "users", user.uid), {
+          name,
+          email,
+          phone,
+          balance: 0,
+
+          // 🔥 REFERRAL SYSTEM
+          referralCode: refCode,
+          referralCount: 0,
+          referralEarnings: 0,
+          referredBy: referredBy, // 👈 IMPORTANT
+
+          phoneVerified: false,
+          createdAt: serverTimestamp()
+        });
+
+        console.log("✅ User saved to Firestore");
+        
+        const referredBy = getReferralFromURL();
+
+        if (referredBy) {
+          try {
+            // 🔍 Find the referrer (the owner of that code)
+            const q = query(
+              collection(db, "users"),
+              where("referralCode", "==", referredBy)
+            );
+
+            const snap = await getDocs(q);
+
+            if (!snap.empty) {
+              const referrerDoc = snap.docs[0];
+              const referrerId = referrerDoc.id;
+              const referrerData = referrerDoc.data();
+
+              // ✅ Increase referral count
+              await updateDoc(doc(db, "users", referrerId), {
+                referralCount: increment(1)
+              });
+
+              // ✅ Add referral record
+              await addDoc(collection(db, "users", referrerId, "referrals"), {
+                name: name || user.displayName || "User",
+                userId: user.uid,
+                status: "pending", // 🔥 important
+                amountEarned: 0,
+                date: serverTimestamp()
+              });
+
+              console.log("✅ Referral recorded");
+            } else {
+              console.warn("❌ Invalid referral code");
+            }
+          } catch (err) {
+            console.error("Referral error:", err);
+          }
+        }
+
+      } catch (err) {
+        console.error("❌ Firestore save failed:", err);
+        alert("Account created but failed to save data.");
+        return;
+      }
+
+      // 🔥 Show success AFTER save
+      btn.style.display = 'none';
+      document.getElementById('formSuccess').classList.add('visible');
+
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1200);
+
+    })
+});
+
+const googleBtn = document.getElementById("googleBtn");
+
+googleBtn.addEventListener("click", async () => {
+  const provider = new GoogleAuthProvider();
+
+  try {
+    const result = await signInWithPopup(auth, provider);
+
+    const user = result.user;
+
+    console.log("✅ Google user:", user);
+
+    const refCode = generateReferralCode(user.uid);
+    const referredBy = getReferralFromURL();
+
+    await setDoc(doc(db, "users", user.uid), {
+      name: user.displayName,
+      email: user.email,
+      balance: 0,
+
+      referralCode: refCode,
+      referralCount: 0,
+      referralEarnings: 0,
+      referredBy: referredBy,
+
+      phoneVerified: false,
+      createdAt: serverTimestamp()
+    }, { merge: true });
+
+    // Redirect
+    window.location.href = "../dashboard/dashboard.html";
+
+  } catch (error) {
+    console.error("❌ Google sign-in error:", error);
+    alert(error.message);
+  }
+});

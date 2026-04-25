@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Investments — YMG Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><img src="../images/logo.jpeg" alt="YMG Funds" class="sidebar-logo-img"><span>YMG<strong>Funds</strong></span></div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item active"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+    </nav>
+    <div class="sidebar-bottom"><a href="../pages/login.html" class="nav-item logout"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span></a></div>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting"><h2>Investments</h2><p>Choose and manage your investment plans</p></div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" id="notifBtn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-badge" id="notifCount">0</span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="page-header">
+        <h1>Investment Plans</h1>
+        <p>Select a plan to start growing your money steadily.</p>
+      </div>
+
+      <div class="invest-plans-grid">
+
+        <!-- Starter Savings -->
+        <div class="invest-plan-card">
+          <div class="invest-plan-icon"><i class="fa-solid fa-seedling"></i></div>
+          <h3>Starter Savings</h3>
+          <p>Normal savings with flexible access. Earn daily profit as long as funds remain deposited.</p>
+          <div class="invest-plan-rate">
+            <span class="rate-badge">1% / month</span>
+            <span class="rate-daily">≈ 0.033% / day</span>
+          </div>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Min. Deposit</span><strong>GHS 50</strong></div>
+            <div class="invest-detail"><span>Duration</span><strong>Flexible</strong></div>
+            <div class="invest-detail"><span>Withdrawal</span><strong>Anytime</strong></div>
+            <div class="invest-detail"><span>Profit</span><strong>Daily Credit</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="Starter Savings">Invest Now</button>
+        </div>
+
+        <!-- Fixed Deposit -->
+        <div class="invest-plan-card featured">
+          <div class="invest-plan-badge">POPULAR</div>
+          <div class="invest-plan-icon featured-icon"><i class="fa-solid fa-vault"></i></div>
+          <h3>Fixed Deposit</h3>
+          <p>Higher returns with a fixed 30-day lock-in. Funds cannot be withdrawn before maturity.</p>
+          <div class="invest-plan-rate">
+            <span class="rate-badge featured-rate">1.5% / month</span>
+            <span class="rate-daily">≈ 0.05% / day</span>
+          </div>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Min. Deposit</span><strong>GHS 500</strong></div>
+            <div class="invest-detail"><span>Duration</span><strong>30 Days</strong></div>
+            <div class="invest-detail"><span>Withdrawal</span><strong>After Maturity</strong></div>
+            <div class="invest-detail"><span>Profit</span><strong>Daily Credit</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="Fixed Deposit">Invest Now</button>
+        </div>
+
+        <!-- Growth Plus -->
+        <div class="invest-plan-card">
+          <div class="invest-plan-icon"><i class="fa-solid fa-rocket"></i></div>
+          <h3>Growth Plus</h3>
+          <p>Maximum returns for serious investors. Choose your commitment period.</p>
+          <div class="invest-plan-rate">
+            <span class="rate-badge">2% – 3% / month</span>
+            <span class="rate-daily">Based on duration</span>
+          </div>
+          <div class="gp-rate-breakdown">
+            <div class="gp-rate-item"><span>3 Months</span><strong>2% / month</strong></div>
+            <div class="gp-rate-item"><span>6 Months</span><strong>2.5% / month</strong></div>
+            <div class="gp-rate-item"><span>12 Months</span><strong>3% / month</strong></div>
+          </div>
+          <div class="invest-plan-details">
+            <div class="invest-detail"><span>Min. Deposit</span><strong>GHS 1,000</strong></div>
+            <div class="invest-detail"><span>Withdrawal</span><strong>At Cycle End</strong></div>
+          </div>
+          <button class="btn-primary invest-now-btn" data-plan="Growth Plus">Invest Now</button>
+        </div>
+
+      </div>
+
+      <!-- Investment Modal -->
+      <div class="modal-overlay" id="investModal">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h3 id="modalPlanName">Invest in Plan</h3>
+            <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+
+          <!-- Growth Plus Duration Picker (hidden by default) -->
+          <div id="gpDurationPicker" style="display:none;">
+            <label class="modal-label">Select Duration</label>
+            <div class="gp-duration-btns">
+              <button class="gp-duration-btn active" data-duration="3M">3 Months<br><small>2% / month</small></button>
+              <button class="gp-duration-btn" data-duration="6M">6 Months<br><small>2.5% / month</small></button>
+              <button class="gp-duration-btn" data-duration="12M">12 Months<br><small>3% / month</small></button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="modal-label">Amount to Invest (GHS)</label>
+            <div class="input-prefix">
+              <span class="prefix-label">GHS</span>
+              <input type="number" id="investAmount" placeholder="Enter amount" min="0" />
+            </div>
+            <span class="form-note" id="investMinNote"></span>
+          </div>
+
+          <!-- Live profit preview -->
+          <div class="invest-preview" id="investPreview" style="display:none;">
+            <div class="preview-row"><span>Daily Profit</span><strong id="previewDaily">—</strong></div>
+            <div class="preview-row"><span>Monthly Profit</span><strong id="previewMonthly">—</strong></div>
+            <div class="preview-row" id="previewMaturityRow"><span>At Maturity</span><strong id="previewMaturity">—</strong></div>
+          </div>
+
+          <span class="field-error" id="investError"></span>
+
+          <button class="btn-primary" id="confirmInvestBtn">Confirm Investment</button>
+
+          <div class="form-success" id="investSuccess">
+            <i class="fa-solid fa-circle-check"></i> Investment confirmed! Your plan is now active.
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Investments Table -->
+      <div class="card">
+        <div class="card-header"><h4>Active Investments</h4></div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Plan</th>
+                <th>Amount</th>
+                <th>Start Date</th>
+                <th>Maturity</th>
+                <th>Profit Earned</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="activeInvestmentsTable">
+              <tr><td colspan="6" class="table-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  
+</body>
+</html>

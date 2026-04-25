@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Referrals — YMG Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><img src="../images/logo.jpeg" alt="YMG Funds" class="sidebar-logo-img"><span>YMG<strong>Funds</strong></span></div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item active"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+    </nav>
+    <div class="sidebar-bottom"><a href="../pages/login.html" class="nav-item logout"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span></a></div>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting"><h2>Referrals</h2><p>Invite friends and earn GHS 10 per successful referral</p></div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" id="notifBtn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-badge" id="notifCount">0</span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2"><i class="fa-solid fa-arrow-right-from-bracket"></i>
+              Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="referral-stats">
+        <div class="balance-card">
+          <div class="balance-card-top"><span>Total Referrals</span><div class="balance-card-icon"><i class="fa-solid fa-users"></i></div></div>
+          <h3 id="referralCount">0</h3>
+          <p class="balance-change"><i class="fa-solid fa-user-plus"></i> People you've invited</p>
+        </div>
+        <div class="balance-card primary">
+          <div class="balance-card-top"><span>Referral Earnings</span><div class="balance-card-icon"><i class="fa-solid fa-coins"></i></div></div>
+          
+          <p class="balance-change positive"><i class="fa-solid fa-arrow-trend-up"></i> GHS 10 per referral</p>
+        </div>
+        <div class="balance-card">
+          <div class="balance-card-top"><span>Pending Referrals</span><div class="balance-card-icon gold"><i class="fa-solid fa-clock"></i></div></div>
+          <h3>2</h3>
+          <p class="balance-change"><i class="fa-solid fa-hourglass-half"></i> Awaiting first deposit</p>
+        </div>
+        <div class="balance-card">
+          <div class="balance-card-top"><span>Successful Referrals</span><div class="balance-card-icon green"><i class="fa-solid fa-circle-check"></i></div></div>
+          <h3>3</h3>
+          <p class="balance-change positive"><i class="fa-solid fa-check"></i> Earned rewards</p>
+        </div>
+      </div>
+
+      <div class="referral-share-card card">
+        <div class="card-header"><h4>Your Referral Details</h4></div>
+        <div class="referral-code-section">
+          <div class="referral-field">
+            <label>Your Referral Code</label>
+            <div class="referral-copy-row">
+              <span class="referral-code-display" id="refCode">YMG-KM2026</span>
+              <button class="btn-copy" id="copyCode"><i class="fa-solid fa-copy"></i> Copy Code</button>
+            </div>
+          </div>
+          <div class="referral-field">
+            <label>Your Referral Link</label>
+            <div class="referral-copy-row">
+              <span class="referral-link-display" id="refLink">https://ymgfunds.com/signup?ref=YMG-KM2026</span>
+              <button class="btn-copy" id="copyLink"><i class="fa-solid fa-link"></i> Copy Link</button>
+            </div>
+          </div>
+        </div>
+        <div class="referral-how">
+          <h4>How It Works</h4>
+          <div class="referral-steps">
+            <div class="referral-step"><div class="ref-step-num">1</div><p>Share your referral link or code with friends</p></div>
+            <div class="referral-step"><div class="ref-step-num">2</div><p>Your friend signs up using your link or code</p></div>
+            <div class="referral-step"><div class="ref-step-num">3</div><p>They make their first deposit on YMG Funds</p></div>
+            <div class="referral-step"><div class="ref-step-num">4</div><p>You earn GHS 10 credited to your wallet instantly</p></div>
+          </div>
+        </div>
+        <div class="copied-toast" id="copiedToast"><i class="fa-solid fa-circle-check"></i> Copied to clipboard!</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h4>Referral History</h4></div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead><tr><th>Name</th><th>Joined</th><th>First Deposit</th><th>Reward</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Ama A.</strong></td><td>10 Apr 2026</td><td>GHS 200</td><td class="tx-amount positive">+GHS 10</td><td><span class="status-badge success">Earned</span></td></tr>
+              <tr><td><strong>Kofi M.</strong></td><td>05 Apr 2026</td><td>GHS 500</td><td class="tx-amount positive">+GHS 10</td><td><span class="status-badge success">Earned</span></td></tr>
+              <tr><td><strong>Abena O.</strong></td><td>01 Apr 2026</td><td>GHS 100</td><td class="tx-amount positive">+GHS 10</td><td><span class="status-badge success">Earned</span></td></tr>
+              <tr><td><strong>Yaw T.</strong></td><td>08 Apr 2026</td><td>—</td><td>—</td><td><span class="status-badge pending">Pending</span></td></tr>
+              <tr><td><strong>Akua B.</strong></td><td>11 Apr 2026</td><td>—</td><td>—</td><td><span class="status-badge pending">Pending</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <script src="js/dashboard.js"></script>
+  <script src="js/referrals.js"></script>
+  <script type="module" src="./js/sidebar.js"></script>
+</body>
+</html>
