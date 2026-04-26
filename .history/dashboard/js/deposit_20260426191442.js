@@ -9,20 +9,20 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // ── REPLACE THIS WITH CLIENT'S REAL PAYSTACK PUBLIC KEY ──
-const PAYSTACK_PUBLIC_KEY = "pk_live_bbf9be7a02b476503f3608a1a30ca24114186c7d";
+const PAYSTACK_PUBLIC_KEY = "pk_test_1715e22f3504664a394797de9d84fe31720e67a1";
 // ─────────────────────────────────────────────────────────
 
 const DEPOSIT_FEE = 5; // GHS 5 processing fee
 
-let DEP_USER = null;
-let DEP_EMAIL = null;
+let DEP_USER    = null;
+let DEP_EMAIL   = null;
 let DEP_BALANCE = 0;
 let DEP_INVESTED = 0;
 
 // ── AUTH ───────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = "../pages/login.html"; return; }
-  DEP_USER = user;
+  DEP_USER  = user;
   DEP_EMAIL = user.email;
 
   // Real-time balance updates
@@ -30,7 +30,7 @@ onAuthStateChanged(auth, async (user) => {
     if (!snap.exists()) return;
     const d = snap.data();
 
-    DEP_BALANCE = typeof d.balance === "number" ? d.balance : 0;
+    DEP_BALANCE  = typeof d.balance  === "number" ? d.balance  : 0;
     DEP_INVESTED = typeof d.invested === "number" ? d.invested : 0;
 
     // Avatar
@@ -76,7 +76,7 @@ document.getElementById("depositAmount").addEventListener("input", () => {
 
 function updateSummary(amount) {
   const summary = document.getElementById("depSummary");
-  const errEl = document.getElementById("depError");
+  const errEl   = document.getElementById("depError");
   errEl.textContent = "";
 
   if (!amount || isNaN(amount) || amount <= 0) {
@@ -92,8 +92,8 @@ function updateSummary(amount) {
 
 // ── DEPOSIT BUTTON ─────────────────────────────
 document.getElementById("depositBtn").addEventListener("click", () => {
-  const amount = parseFloat(document.getElementById("depositAmount").value);
-  const errEl = document.getElementById("depError");
+  const amount  = parseFloat(document.getElementById("depositAmount").value);
+  const errEl   = document.getElementById("depError");
   errEl.textContent = "";
 
   if (!amount || isNaN(amount)) {
@@ -118,7 +118,7 @@ function initPaystack(amount) {
     document.getElementById("depError").textContent = "Session error. Please refresh the page and try again.";
     return;
   }
-
+  
   const btn = document.getElementById("depositBtn");
   btn.disabled = true;
   document.getElementById("depBtnTxt").textContent = "Opening payment...";
@@ -129,26 +129,26 @@ function initPaystack(amount) {
   const reference = "YMG_" + new Date().getTime() + "_" + Math.random().toString(36).slice(2, 7).toUpperCase();
 
   const handler = window.PaystackPop.setup({
-    key: PAYSTACK_PUBLIC_KEY,
-    email: DEP_EMAIL,
-    amount: amountInPesewas,
-    currency: "GHS",
-    ref: reference,
+    key:       PAYSTACK_PUBLIC_KEY,
+    email:     DEP_EMAIL,
+    amount:    amountInPesewas,
+    currency:  "GHS",
+    ref:       reference,
     metadata: {
       custom_fields: [
-        { display_name: "User ID", variable_name: "user_id", value: DEP_USER.uid },
-        { display_name: "Platform", variable_name: "platform", value: "YMG Funds" }
+        { display_name: "User ID",   variable_name: "user_id",   value: DEP_USER.uid },
+        { display_name: "Platform",  variable_name: "platform",  value: "YMG Funds"  }
       ]
     },
     onClose: () => {
       btn.disabled = false;
       document.getElementById("depBtnTxt").textContent = "Pay Now";
     },
-    callback: (response) => {
-      handlePaymentSuccess(amount, response.reference).then(() => {
-        btn.disabled = false;
-        document.getElementById("depBtnTxt").textContent = "Pay Now";
-      });
+    callback: async (response) => {
+      // Payment successful — response.reference is the Paystack reference
+      await handlePaymentSuccess(amount, response.reference);
+      btn.disabled = false;
+      document.getElementById("depBtnTxt").textContent = "Pay Now";
     }
   });
 
@@ -161,7 +161,7 @@ async function handlePaymentSuccess(amount, reference) {
     const netAmount = amount - DEPOSIT_FEE; // what user actually receives
 
     // Update user balance in Firestore
-    const uRef = doc(db, "users", DEP_USER.uid);
+    const uRef  = doc(db, "users", DEP_USER.uid);
     const uSnap = await getDoc(uRef);
     const uData = uSnap.data();
 
@@ -171,14 +171,14 @@ async function handlePaymentSuccess(amount, reference) {
 
     // Log transaction
     await addDoc(collection(db, "users", DEP_USER.uid, "transactions"), {
-      type: "deposit",
-      amount: netAmount,
-      gross: amount,
-      fee: DEPOSIT_FEE,
-      method: "Paystack",
+      type:      "deposit",
+      amount:    netAmount,
+      gross:     amount,
+      fee:       DEPOSIT_FEE,
+      method:    "Paystack",
       reference: reference,
-      status: "completed",
-      date: serverTimestamp()
+      status:    "completed",
+      date:      serverTimestamp()
     });
 
     // Show success
@@ -207,7 +207,7 @@ async function loadDepositHistory() {
   tbody.innerHTML = `<tr><td colspan="6" class="dep-table-msg"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>`;
 
   try {
-    const q = query(
+    const q    = query(
       collection(db, "users", DEP_USER.uid, "transactions"),
       orderBy("date", "desc")
     );
@@ -228,8 +228,8 @@ async function loadDepositHistory() {
     deposits.forEach(tx => {
       const date = tx.date?.seconds
         ? new Date(tx.date.seconds * 1000).toLocaleDateString("en-GB", {
-          day: "2-digit", month: "short", year: "numeric"
-        })
+            day: "2-digit", month: "short", year: "numeric"
+          })
         : "—";
 
       const ref = tx.reference

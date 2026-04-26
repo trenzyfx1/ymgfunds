@@ -1,41 +1,30 @@
 import { auth, db } from "../../js/firebase.js";
 import {
-  onAuthStateChanged,
-  signOut,
+  onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  doc,
-  getDoc,
-  updateDoc,
-  addDoc,
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  serverTimestamp,
-  onSnapshot,
+  doc, getDoc, updateDoc, addDoc,
+  collection, getDocs, query, orderBy,
+  serverTimestamp, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // ── CONFIG ─────────────────────────────────────
-const FORMSPREE_URL = "https://formspree.io/f/mnjlrbgn"; // same as loan — admin email
-const WITHDRAW_FEE = 0.5;
-const WITHDRAW_MIN = 10;
-const WITHDRAW_MAX = 10000;
-const COOLDOWN_DAYS = 3; // working days after deposit
+const FORMSPREE_URL   = "https://formspree.io/f/mnjlrbgn"; // same as loan — admin email
+const WITHDRAW_FEE    = 0.50;
+const WITHDRAW_MIN    = 10;
+const WITHDRAW_MAX    = 10000;
+const COOLDOWN_DAYS   = 3; // working days after deposit
 
-let WDR_USER = null;
-let WDR_BALANCE = 0;
+let WDR_USER     = null;
+let WDR_BALANCE  = 0;
 let WDR_EMAIL_OK = false;
 let WDR_PHONE_OK = false;
-let WDR_ID_FILE = null;
+let WDR_ID_FILE  = null;
 let WDR_LAST_DEPOSIT_DATE = null;
 
 // ── AUTH ───────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    window.location.href = "../pages/login.html";
-    return;
-  }
+  if (!user) { window.location.href = "../pages/login.html"; return; }
   WDR_USER = user;
 
   // Reload to get latest email verification status
@@ -48,30 +37,25 @@ onAuthStateChanged(auth, async (user) => {
 
     // Avatar
     const name = d.name || "User";
-    const initials = name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
+    const initials = name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
     const av = document.getElementById("profileAvatar");
     if (av) av.textContent = initials;
 
-    WDR_BALANCE = typeof d.balance === "number" ? d.balance : 0;
+    WDR_BALANCE  = typeof d.balance === "number" ? d.balance : 0;
     WDR_PHONE_OK = d.phoneVerified || false;
 
     document.getElementById("wdrAvailBal").textContent = fmtGHS(WDR_BALANCE);
 
     // Pre-fill personal details
-    const nameEl = document.getElementById("wdrName");
+    const nameEl  = document.getElementById("wdrName");
     const emailEl = document.getElementById("wdrEmail");
     const phoneEl = document.getElementById("wdrPhone");
-    if (nameEl && !nameEl.value) nameEl.value = d.name || "";
+    if (nameEl  && !nameEl.value)  nameEl.value  = d.name  || "";
     if (emailEl && !emailEl.value) emailEl.value = d.email || user.email || "";
     if (phoneEl && !phoneEl.value) phoneEl.value = d.phone || "";
 
     // Check verification status
-    checkVerification();
+    // checkVerification();
     await checkDepositCooldown();
   });
 
@@ -79,38 +63,34 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 // ── LOGOUT ─────────────────────────────────────
-document.querySelectorAll("#logoutBtn, #logoutBtn2").forEach((b) => {
-  if (b)
-    b.addEventListener("click", async () => {
-      await signOut(auth);
-      window.location.href = "../pages/login.html";
-    });
+document.querySelectorAll("#logoutBtn, #logoutBtn2").forEach(b => {
+  if (b) b.addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.href = "../pages/login.html";
+  });
 });
 
 // ── CHECK VERIFICATION ─────────────────────────
 function checkVerification() {
-  const banner = document.getElementById("wdrVerifyBanner");
-  const msgEl = document.getElementById("wdrVerifyMsg");
+  const banner  = document.getElementById("wdrVerifyBanner");
+  const msgEl   = document.getElementById("wdrVerifyMsg");
   const formCard = document.getElementById("wdrFormCard");
 
   if (!WDR_EMAIL_OK && !WDR_PHONE_OK) {
     banner.style.display = "flex";
-    msgEl.textContent =
-      "You must verify both your email address and phone number before you can withdraw.";
+    msgEl.textContent = "You must verify both your email address and phone number before you can withdraw.";
     disableForm();
     return;
   }
   if (!WDR_EMAIL_OK) {
     banner.style.display = "flex";
-    msgEl.textContent =
-      "You must verify your email address before you can withdraw. Go to Settings.";
+    msgEl.textContent = "You must verify your email address before you can withdraw. Go to Settings.";
     disableForm();
     return;
   }
   if (!WDR_PHONE_OK) {
     banner.style.display = "flex";
-    msgEl.textContent =
-      "You must verify your phone number before you can withdraw. Go to Settings.";
+    msgEl.textContent = "You must verify your phone number before you can withdraw. Go to Settings.";
     disableForm();
     return;
   }
@@ -123,15 +103,15 @@ function checkVerification() {
 // ── CHECK DEPOSIT COOLDOWN ─────────────────────
 async function checkDepositCooldown() {
   try {
-    const q = query(
+    const q    = query(
       collection(db, "users", WDR_USER.uid, "transactions"),
-      orderBy("date", "desc"),
+      orderBy("date", "desc")
     );
     const snap = await getDocs(q);
 
     let lastDepositDate = null;
 
-    snap.forEach((ds) => {
+    snap.forEach(ds => {
       const tx = ds.data();
       if (tx.type === "deposit" && !lastDepositDate) {
         lastDepositDate = tx.date?.seconds
@@ -186,20 +166,14 @@ function enableForm() {
 // ── WITHDRAWAL METHOD — show/hide fields ───────
 document.getElementById("wdrMethod").addEventListener("change", () => {
   const method = document.getElementById("wdrMethod").value;
-  document.getElementById("wdrMomoFields").style.display = method.includes(
-    "Mobile Money",
-  )
-    ? "block"
-    : "none";
-  document.getElementById("wdrBankFields").style.display =
-    method === "Bank Transfer" ? "block" : "none";
-  document.getElementById("wdrOtherFields").style.display =
-    method === "Other" ? "block" : "none";
+  document.getElementById("wdrMomoFields").style.display  = method.includes("Mobile Money") ? "block" : "none";
+  document.getElementById("wdrBankFields").style.display  = method === "Bank Transfer"      ? "block" : "none";
+  document.getElementById("wdrOtherFields").style.display = method === "Other"              ? "block" : "none";
 });
 
 // ── AMOUNT INPUT — live summary ────────────────
 document.getElementById("wdrAmount").addEventListener("input", () => {
-  const amount = parseFloat(document.getElementById("wdrAmount").value);
+  const amount  = parseFloat(document.getElementById("wdrAmount").value);
   const summary = document.getElementById("wdrSummary");
 
   if (!amount || isNaN(amount) || amount <= 0) {
@@ -219,15 +193,14 @@ document.getElementById("wdrIdFile").addEventListener("change", (e) => {
   if (!file) return;
 
   if (file.size > 5 * 1024 * 1024) {
-    document.getElementById("wdrError").textContent =
-      "File too large. Maximum size is 5MB.";
+    document.getElementById("wdrError").textContent = "File too large. Maximum size is 5MB.";
     return;
   }
 
   WDR_ID_FILE = file;
   document.getElementById("wdrIdFileName").textContent = file.name;
   document.getElementById("wdrIdUploadBox").style.display = "none";
-  document.getElementById("wdrIdPreview").style.display = "flex";
+  document.getElementById("wdrIdPreview").style.display   = "flex";
   document.getElementById("wdrError").textContent = "";
 });
 
@@ -235,102 +208,52 @@ document.getElementById("wdrIdRemove").addEventListener("click", () => {
   WDR_ID_FILE = null;
   document.getElementById("wdrIdFile").value = "";
   document.getElementById("wdrIdUploadBox").style.display = "flex";
-  document.getElementById("wdrIdPreview").style.display = "none";
+  document.getElementById("wdrIdPreview").style.display   = "none";
 });
 
 // ── SUBMIT WITHDRAWAL ──────────────────────────
 document.getElementById("wdrSubmitBtn").addEventListener("click", async () => {
-  const name = document.getElementById("wdrName").value.trim();
-  const email = document.getElementById("wdrEmail").value.trim();
-  const phone = document.getElementById("wdrPhone").value.trim();
-  const method = document.getElementById("wdrMethod").value;
-  const amount = parseFloat(document.getElementById("wdrAmount").value);
-  const errEl = document.getElementById("wdrError");
+  const name    = document.getElementById("wdrName").value.trim();
+  const email   = document.getElementById("wdrEmail").value.trim();
+  const phone   = document.getElementById("wdrPhone").value.trim();
+  const method  = document.getElementById("wdrMethod").value;
+  const amount  = parseFloat(document.getElementById("wdrAmount").value);
+  const errEl   = document.getElementById("wdrError");
   errEl.textContent = "";
 
   // ── Validation ─────────────────────────────
-  if (!name) {
-    errEl.textContent = "Please enter your full name.";
-    return;
-  }
-  if (!email) {
-    errEl.textContent = "Please enter your email address.";
-    return;
-  }
-  if (!phone) {
-    errEl.textContent = "Please enter your phone number.";
-    return;
-  }
-  if (!method) {
-    errEl.textContent = "Please select a withdrawal method.";
-    return;
-  }
+  if (!name)   { errEl.textContent = "Please enter your full name."; return; }
+  if (!email)  { errEl.textContent = "Please enter your email address."; return; }
+  if (!phone)  { errEl.textContent = "Please enter your phone number."; return; }
+  if (!method) { errEl.textContent = "Please select a withdrawal method."; return; }
 
   // Payment method specific validation
   if (method.includes("Mobile Money")) {
-    const momoNum = document.getElementById("wdrMomoNumber").value.trim();
+    const momoNum  = document.getElementById("wdrMomoNumber").value.trim();
     const momoName = document.getElementById("wdrMomoName").value.trim();
-    if (!momoNum) {
-      errEl.textContent = "Please enter your Mobile Money number.";
-      return;
-    }
-    if (!momoName) {
-      errEl.textContent = "Please enter your Mobile Money account name.";
-      return;
-    }
+    if (!momoNum)  { errEl.textContent = "Please enter your Mobile Money number."; return; }
+    if (!momoName) { errEl.textContent = "Please enter your Mobile Money account name."; return; }
   }
 
   if (method === "Bank Transfer") {
-    const bankName = document.getElementById("wdrBankName").value.trim();
+    const bankName    = document.getElementById("wdrBankName").value.trim();
     const bankAccount = document.getElementById("wdrBankAccount").value.trim();
-    const bankAccName = document
-      .getElementById("wdrBankAccountName")
-      .value.trim();
-    if (!bankName) {
-      errEl.textContent = "Please enter your bank name.";
-      return;
-    }
-    if (!bankAccount) {
-      errEl.textContent = "Please enter your account number.";
-      return;
-    }
-    if (!bankAccName) {
-      errEl.textContent = "Please enter your account name.";
-      return;
-    }
+    const bankAccName = document.getElementById("wdrBankAccountName").value.trim();
+    if (!bankName)    { errEl.textContent = "Please enter your bank name."; return; }
+    if (!bankAccount) { errEl.textContent = "Please enter your account number."; return; }
+    if (!bankAccName) { errEl.textContent = "Please enter your account name."; return; }
   }
 
   if (method === "Other") {
-    const otherDetails = document
-      .getElementById("wdrOtherDetails")
-      .value.trim();
-    if (!otherDetails) {
-      errEl.textContent = "Please provide your payment details.";
-      return;
-    }
+    const otherDetails = document.getElementById("wdrOtherDetails").value.trim();
+    if (!otherDetails) { errEl.textContent = "Please provide your payment details."; return; }
   }
 
-  if (!amount || isNaN(amount)) {
-    errEl.textContent = "Please enter a withdrawal amount.";
-    return;
-  }
-  if (amount < WITHDRAW_MIN) {
-    errEl.textContent = `Minimum withdrawal is GHS ${WITHDRAW_MIN}.`;
-    return;
-  }
-  if (amount > WITHDRAW_MAX) {
-    errEl.textContent = `Maximum withdrawal per day is GHS ${WITHDRAW_MAX.toLocaleString()}.`;
-    return;
-  }
-  if (amount > WDR_BALANCE) {
-    errEl.textContent = "Insufficient balance.";
-    return;
-  }
-  if (!WDR_ID_FILE) {
-    errEl.textContent =
-      "Please upload your Ghana Card or government-issued ID.";
-    return;
-  }
+  if (!amount || isNaN(amount))  { errEl.textContent = "Please enter a withdrawal amount."; return; }
+  if (amount < WITHDRAW_MIN)     { errEl.textContent = `Minimum withdrawal is GHS ${WITHDRAW_MIN}.`; return; }
+  if (amount > WITHDRAW_MAX)     { errEl.textContent = `Maximum withdrawal per day is GHS ${WITHDRAW_MAX.toLocaleString()}.`; return; }
+  if (amount > WDR_BALANCE)      { errEl.textContent = "Insufficient balance."; return; }
+  if (!WDR_ID_FILE)              { errEl.textContent = "Please upload your Ghana Card or government-issued ID."; return; }
 
   // ── Process ────────────────────────────────
   const btn = document.getElementById("wdrSubmitBtn");
@@ -340,7 +263,7 @@ document.getElementById("wdrSubmitBtn").addEventListener("click", async () => {
   try {
     const reference = "WDR-" + Date.now();
     const netAmount = amount - WITHDRAW_FEE;
-    const now = new Date();
+    const now       = new Date();
 
     // Build payment details string for email
     let paymentDetails = `Method: ${method}\n`;
@@ -359,53 +282,50 @@ document.getElementById("wdrSubmitBtn").addEventListener("click", async () => {
     const idBase64 = await fileToBase64(WDR_ID_FILE);
 
     // Save to Firestore — deduct balance
-    const uRef = doc(db, "users", WDR_USER.uid);
+    const uRef  = doc(db, "users", WDR_USER.uid);
     const uSnap = await getDoc(uRef);
     const uData = uSnap.data();
 
     await updateDoc(uRef, {
-      balance: (uData.balance || 0) - amount,
+      balance: (uData.balance || 0) - amount
     });
 
     // Save withdrawal record
     await addDoc(collection(db, "users", WDR_USER.uid, "transactions"), {
-      type: "withdrawal",
-      amount: netAmount,
-      gross: amount,
-      fee: WITHDRAW_FEE,
+      type:          "withdrawal",
+      amount:        netAmount,
+      gross:         amount,
+      fee:           WITHDRAW_FEE,
       method,
       paymentDetails,
       reference,
-      status: "pending",
-      date: serverTimestamp(),
+      status:        "pending",
+      date:          serverTimestamp()
     });
 
     // Save to top-level withdrawalRequests for admin
     await addDoc(collection(db, "withdrawalRequests"), {
-      uid: WDR_USER.uid,
+      uid:           WDR_USER.uid,
       name,
       email,
       phone,
-      amount: netAmount,
-      gross: amount,
-      fee: WITHDRAW_FEE,
+      amount:        netAmount,
+      gross:         amount,
+      fee:           WITHDRAW_FEE,
       method,
       paymentDetails,
       reference,
-      status: "pending",
-      requestDate: serverTimestamp(),
+      status:        "pending",
+      requestDate:   serverTimestamp()
     });
 
     // Send email to admin via Formspree
     await fetch(FORMSPREE_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
+      method:  "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
       body: JSON.stringify({
-        subject: `Withdrawal Request from ${name}`,
-        message: `
+  subject: `Withdrawal Request from ${name}`,
+  message: `
 Hello Admin,
 
 A user has requested a withdrawal on YMG Funds. Please review and process it within 2–3 working days.
@@ -433,8 +353,8 @@ Please log in to the admin panel to approve or reject this request.
 
 — YMG Funds System
   `,
-        id_document: idBase64,
-      }),
+  id_document: idBase64
+})
     });
 
     // Show success
@@ -444,14 +364,14 @@ Please log in to the admin panel to approve or reject this request.
 
     // Reload history
     await loadWithdrawalHistory();
+
   } catch (err) {
     console.error(err);
     errEl.textContent = "Something went wrong. Please try again.";
   }
 
   btn.disabled = false;
-  document.getElementById("wdrBtnTxt").textContent =
-    "Submit Withdrawal Request";
+  document.getElementById("wdrBtnTxt").textContent = "Submit Withdrawal Request";
 });
 
 // ── LOAD WITHDRAWAL HISTORY ────────────────────
@@ -460,14 +380,14 @@ async function loadWithdrawalHistory() {
   tbody.innerHTML = `<tr><td colspan="6" class="wdr-table-msg"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>`;
 
   try {
-    const q = query(
+    const q    = query(
       collection(db, "users", WDR_USER.uid, "transactions"),
-      orderBy("date", "desc"),
+      orderBy("date", "desc")
     );
     const snap = await getDocs(q);
 
     const withdrawals = [];
-    snap.forEach((ds) => {
+    snap.forEach(ds => {
       const tx = ds.data();
       if (tx.type === "withdrawal") withdrawals.push(tx);
     });
@@ -478,21 +398,16 @@ async function loadWithdrawalHistory() {
     }
 
     tbody.innerHTML = "";
-    withdrawals.forEach((tx) => {
+    withdrawals.forEach(tx => {
       const date = tx.date?.seconds
         ? new Date(tx.date.seconds * 1000).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
+            day: "2-digit", month: "short", year: "numeric"
           })
         : "—";
 
-      const statusClass =
-        tx.status === "completed"
-          ? "success"
-          : tx.status === "failed"
-            ? "danger"
-            : "pending";
+      const statusClass = tx.status === "completed" ? "success"
+        : tx.status === "failed"    ? "danger"
+        : "pending";
 
       tbody.innerHTML += `
         <tr>
@@ -504,6 +419,7 @@ async function loadWithdrawalHistory() {
           <td><span class="wdr-status ${statusClass}">${tx.status || "pending"}</span></td>
         </tr>`;
     });
+
   } catch (err) {
     console.error(err);
     tbody.innerHTML = `<tr><td colspan="6" class="wdr-table-msg">Failed to load. Please refresh.</td></tr>`;
@@ -512,15 +428,13 @@ async function loadWithdrawalHistory() {
 
 // ── HELPERS ────────────────────────────────────
 function fmtGHS(n) {
-  return (
-    "GHS " + Number(n).toLocaleString("en-GH", { minimumFractionDigits: 2 })
-  );
+  return "GHS " + Number(n).toLocaleString("en-GH", { minimumFractionDigits: 2 });
 }
 
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
+    reader.onload  = () => resolve(reader.result);
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });

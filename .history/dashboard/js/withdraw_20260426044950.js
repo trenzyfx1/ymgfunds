@@ -71,7 +71,7 @@ onAuthStateChanged(auth, async (user) => {
     if (phoneEl && !phoneEl.value) phoneEl.value = d.phone || "";
 
     // Check verification status
-    checkVerification();
+    // checkVerification();
     await checkDepositCooldown();
   });
 
