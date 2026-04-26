@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("totalBalance").textContent = `GHS ${balance.toLocaleString()}`;
         document.getElementById("investedBalance").textContent = `GHS ${invested.toLocaleString()}`;
         document.getElementById("profitBalance").textContent = `GHS ${profit.toLocaleString()}`;
-        document.getElementById("availableBalance").textContent = `GHS ${balance.toLocaleString()}`;
+        
 
         document.getElementById("activeInvestments").textContent = data.activePlans || 0;
         document.getElementById("referrals").textContent = data.referrals || 0;

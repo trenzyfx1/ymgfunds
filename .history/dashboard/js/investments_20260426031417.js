@@ -11,15 +11,13 @@ import {
 
 // ── PLAN CONFIG ────────────────────────────────
 const INV_PLANS = {
-  "Starter Savings":       { rate: 0.005, rateType: "weekly",  minDep: 50,   duration: null, tier: "standard" },
-  "Fixed Deposit":         { rate: 0.095, rateType: "fixed",   minDep: 500,  duration: 90,   tier: "standard" },
-  "Growth Plus":           { rate: 0.125, rateType: "fixed",   minDep: 1000, duration: 182,  tier: "standard" },
-  "182-Day Growth Tool":   { rate: 0.15,  rateType: "fixed",   minDep: 1000, duration: 182,  tier: "premium"  },
-  "365-Day Premium Tool":  { rate: 0.25,  rateType: "fixed",   minDep: 2000, duration: 365,  tier: "premium"  },
-  "3-Year Wealth Builder": { rate: 0.35,  rateType: "annual",  minDep: 500,  duration: 1095, tier: "premium"  }
+  "Starter Savings":       { rate: 0.005, rateType: "weekly", minDep: 50,   duration: null, tier: "standard" },
+  "Fixed Deposit":         { rate: 0.095, rateType: "fixed",  minDep: 500,  duration: 90,   tier: "standard" },
+  "Growth Plus":           { rate: 0.125, rateType: "fixed",  minDep: 1000, duration: 182,  tier: "standard" },
+  "182-Day Growth Tool":   { rate: 0.15,  rateType: "fixed",  minDep: 1000, duration: 182,  tier: "premium"  },
+  "365-Day Premium Tool":  { rate: 0.25,  rateType: "fixed",  minDep: 2000, duration: 365,  tier: "premium"  },
+  "3-Year Wealth Builder": { rate: 0.35,  rateType: "annual", minDep: 500,  duration: 1095, tier: "premium"  }
 };
-
-const FORMSPREE_URL = "https://formspree.io/f/mnjlrbgn";
 
 let INV_USER     = null;
 let INV_PLAN     = null;
@@ -27,8 +25,10 @@ let INV_BALANCE  = 0;
 let INV_STD_ON   = false;
 let INV_PREM_ON  = false;
 let INV_ACT_TIER = null;
+
+// What to do after password is confirmed
+// "invest" | "activate"
 let INV_PW_ACTION = null;
-let INV_PW_PLAN   = null;
 
 // ── AUTH ───────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
@@ -53,16 +53,16 @@ onAuthStateChanged(auth, async (user) => {
     invSetEl("invTotalProfit", fmtGHS(d.profit   || 0));
 
     // Referral code
-    const code = d.referralCode || user.uid.slice(0, 8).toUpperCase();
-    invSetEl("invRefCode", code);
+    const refCode = d.referralCode || user.uid.slice(0, 8).toUpperCase();
+    invSetEl("invRefCode", refCode);
 
     // Pre-fill loan form
-    const lnEl = document.getElementById("loanName");
-    const leEl = document.getElementById("loanEmail");
-    const lpEl = document.getElementById("loanPhone");
-    if (lnEl && !lnEl.value) lnEl.value = d.name  || "";
-    if (leEl && !leEl.value) leEl.value = d.email || user.email || "";
-    if (lpEl && !lpEl.value) lpEl.value = d.phone || "";
+    const loanNameEl  = document.getElementById("loanName");
+    const loanEmailEl = document.getElementById("loanEmail");
+    const loanPhoneEl = document.getElementById("loanPhone");
+    if (loanNameEl  && !loanNameEl.value)  loanNameEl.value  = d.name  || "";
+    if (loanEmailEl && !loanEmailEl.value) loanEmailEl.value = d.email || user.email || "";
+    if (loanPhoneEl && !loanPhoneEl.value) loanPhoneEl.value = d.phone || "";
 
     invRefreshUI();
   });
@@ -110,30 +110,28 @@ function invRefreshUI() {
 }
 
 // ══════════════════════════════════════════════
-// PASSWORD MODAL
+// PASSWORD CONFIRMATION MODAL
 // ══════════════════════════════════════════════
-function pwModalOpen() {
+function invOpenPwModal(action) {
+  INV_PW_ACTION = action;
   document.getElementById("pwModalInput").value = "";
-  document.getElementById("pwModalErr").textContent = "";
-  document.getElementById("pwModal").classList.add("inv-modal-active");
+  invSetEl("pwModalErr", "");
+  invModalOpen("pwModal");
   setTimeout(() => document.getElementById("pwModalInput").focus(), 300);
 }
 
-function pwModalClose() {
-  document.getElementById("pwModal").classList.remove("inv-modal-active");
-}
-
-document.getElementById("pwModalClose").addEventListener("click", pwModalClose);
-document.getElementById("pwModal").addEventListener("click", e => {
-  if (e.target.id === "pwModal") pwModalClose();
-});
-
+// Eye toggle
 document.getElementById("pwModalEye").addEventListener("click", () => {
   const inp = document.getElementById("pwModalInput");
   const ico = document.getElementById("pwModalEyeIco");
   const isHidden = inp.type === "password";
   inp.type = isHidden ? "text" : "password";
   ico.className = isHidden ? "fa-solid fa-eye-slash" : "fa-solid fa-eye";
+});
+
+document.getElementById("pwModalClose").addEventListener("click", () => invModalClose("pwModal"));
+document.getElementById("pwModal").addEventListener("click", e => {
+  if (e.target.id === "pwModal") invModalClose("pwModal");
 });
 
 document.getElementById("pwModalConfirm").addEventListener("click", async () => {
@@ -150,34 +148,14 @@ document.getElementById("pwModalConfirm").addEventListener("click", async () => 
   try {
     const credential = EmailAuthProvider.credential(INV_USER.email, pw);
     await reauthenticateWithCredential(INV_USER, credential);
-    pwModalClose();
 
-    if (INV_PW_ACTION === "activate") {
-      const fee = INV_ACT_TIER === "standard" ? 500 : 1000;
-      invSetEl("actModalTitle", INV_ACT_TIER === "standard" ? "Activate Standard Plans" : "Activate Premium Plans");
-      invSetEl("actModalDesc",  `Pay a one-time GHS ${fee} fee to unlock all ${INV_ACT_TIER} plans.`);
-      invSetEl("actModalFee",   `GHS ${fee.toLocaleString()}`);
-      invSetEl("actModalBal",   fmtGHS(INV_BALANCE));
-      invSetEl("actModalErr",   "");
-      document.getElementById("actModalOk").style.display = "none";
-      const ico = document.getElementById("actModalIco");
-      if (ico) ico.innerHTML = INV_ACT_TIER === "premium"
-        ? '<i class="fa-solid fa-crown"></i>'
-        : '<i class="fa-solid fa-lock-open"></i>';
-      document.getElementById("actModal").classList.add("inv-modal-active");
+    invModalClose("pwModal");
 
-    } else if (INV_PW_ACTION === "invest") {
-      INV_PLAN = INV_PW_PLAN;
-      const cfg = INV_PLANS[INV_PLAN];
-      invSetEl("invModalTitle",    `Invest in ${INV_PLAN}`);
-      invSetEl("invModalPlanChip", INV_PLAN);
-      invSetEl("invModalBalNote",  fmtGHS(INV_BALANCE));
-      invSetEl("invModalNote",     `Minimum: GHS ${cfg.minDep.toLocaleString()}`);
-      invSetEl("invModalErr",      "");
-      document.getElementById("invAmount").value = "";
-      document.getElementById("invModalPreview").style.display = "none";
-      document.getElementById("invModalOk").style.display = "none";
-      document.getElementById("invModal").classList.add("inv-modal-active");
+    // Proceed with the intended action
+    if (INV_PW_ACTION === "invest") {
+      invModalOpen("invModal");
+    } else if (INV_PW_ACTION === "activate") {
+      invModalOpen("actModal");
     }
 
   } catch (err) {
@@ -186,7 +164,6 @@ document.getElementById("pwModalConfirm").addEventListener("click", async () => 
     } else {
       errEl.textContent = "Verification failed. Please try again.";
     }
-    console.error(err);
   }
 
   btn.disabled = false;
@@ -194,55 +171,46 @@ document.getElementById("pwModalConfirm").addEventListener("click", async () => 
 });
 
 // ══════════════════════════════════════════════
-// INVEST NOW BUTTONS — password first
+// ACTIVATION
 // ══════════════════════════════════════════════
-document.querySelectorAll(".inv-cta-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const plan = btn.dataset.plan;
-    const tier = btn.dataset.tier;
-
-    if (tier === "standard" && !INV_STD_ON) {
-      INV_ACT_TIER  = "standard";
-      INV_PW_ACTION = "activate";
-      pwModalOpen();
-      return;
-    }
-    if (tier === "premium" && !INV_PREM_ON) {
-      INV_ACT_TIER  = "premium";
-      INV_PW_ACTION = "activate";
-      pwModalOpen();
-      return;
-    }
-
-    INV_PW_ACTION = "invest";
-    INV_PW_PLAN   = plan;
-    pwModalOpen();
-  });
+document.getElementById("stdActBtn").addEventListener("click",  () => {
+  INV_ACT_TIER = "standard";
+  invOpenPwModal("activate");
 });
-
-// ── Activation banner buttons ──────────────────
-document.getElementById("stdActBtn").addEventListener("click", () => {
-  INV_ACT_TIER  = "standard";
-  INV_PW_ACTION = "activate";
-  pwModalOpen();
-});
-
 document.getElementById("premActBtn").addEventListener("click", () => {
-  INV_ACT_TIER  = "premium";
-  INV_PW_ACTION = "activate";
-  pwModalOpen();
+  INV_ACT_TIER = "premium";
+  invOpenPwModal("activate");
 });
 
-// ── Activation modal close ─────────────────────
-document.getElementById("actModalClose").addEventListener("click", () => {
-  document.getElementById("actModal").classList.remove("inv-modal-active");
-});
+// Populate activation modal after password confirmed
+function invPopulateActModal() {
+  const tier = INV_ACT_TIER;
+  const fee  = tier === "standard" ? 500 : 1000;
+  invSetEl("actModalTitle", tier === "standard" ? "Activate Standard Plans" : "Activate Premium Plans");
+  invSetEl("actModalDesc",  `Pay a one-time GHS ${fee} fee to unlock all ${tier} plans.`);
+  invSetEl("actModalFee",   `GHS ${fee.toLocaleString()}`);
+  invSetEl("actModalBal",   fmtGHS(INV_BALANCE));
+  invSetEl("actModalErr",   "");
+  document.getElementById("actModalOk").style.display = "none";
+  const ico = document.getElementById("actModalIco");
+  if (ico) ico.innerHTML = tier === "premium"
+    ? '<i class="fa-solid fa-crown"></i>'
+    : '<i class="fa-solid fa-lock-open"></i>';
+}
+
+// Override invModalOpen for actModal to populate first
+const _origOpen = invModalOpen;
+function invModalOpen(id) {
+  if (id === "actModal") invPopulateActModal();
+  const el = document.getElementById(id);
+  if (el) el.classList.add("inv-modal-active");
+}
+
+document.getElementById("actModalClose").addEventListener("click", () => invModalClose("actModal"));
 document.getElementById("actModal").addEventListener("click", e => {
-  if (e.target.id === "actModal")
-    document.getElementById("actModal").classList.remove("inv-modal-active");
+  if (e.target.id === "actModal") invModalClose("actModal");
 });
 
-// ── Activation confirm ─────────────────────────
 document.getElementById("actModalConfirm").addEventListener("click", async () => {
   const fee   = INV_ACT_TIER === "standard" ? 500 : 1000;
   const errEl = document.getElementById("actModalErr");
@@ -275,9 +243,7 @@ document.getElementById("actModalConfirm").addEventListener("click", async () =>
     });
 
     document.getElementById("actModalOk").style.display = "flex";
-    setTimeout(() => {
-      document.getElementById("actModal").classList.remove("inv-modal-active");
-    }, 2000);
+    setTimeout(() => invModalClose("actModal"), 2000);
   } catch (err) {
     console.error(err);
     errEl.textContent = "Something went wrong. Try again.";
@@ -287,16 +253,56 @@ document.getElementById("actModalConfirm").addEventListener("click", async () =>
   btn.innerHTML = '<i class="fa-solid fa-unlock"></i> Pay & Activate';
 });
 
-// ── Invest modal close ─────────────────────────
-document.getElementById("invModalClose").addEventListener("click", () => {
-  document.getElementById("invModal").classList.remove("inv-modal-active");
-});
-document.getElementById("invModal").addEventListener("click", e => {
-  if (e.target.id === "invModal")
-    document.getElementById("invModal").classList.remove("inv-modal-active");
+// ══════════════════════════════════════════════
+// INVEST NOW BUTTONS
+// ══════════════════════════════════════════════
+document.querySelectorAll(".inv-cta-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const plan = btn.dataset.plan;
+    const tier = btn.dataset.tier;
+
+    if (tier === "standard" && !INV_STD_ON) {
+      INV_ACT_TIER = "standard";
+      invOpenPwModal("activate");
+      return;
+    }
+    if (tier === "premium" && !INV_PREM_ON) {
+      INV_ACT_TIER = "premium";
+      invOpenPwModal("activate");
+      return;
+    }
+
+    // Plan is unlocked — ask for password first
+    INV_PLAN = plan;
+    invOpenPwModal("invest");
+  });
 });
 
-// ── Live preview ───────────────────────────────
+function invOpenInvModal(plan) {
+  const cfg = INV_PLANS[plan];
+  invSetEl("invModalTitle",    `Invest in ${plan}`);
+  invSetEl("invModalPlanChip", plan);
+  invSetEl("invModalBalNote",  fmtGHS(INV_BALANCE));
+  invSetEl("invModalNote",     `Minimum: GHS ${cfg.minDep.toLocaleString()}`);
+  invSetEl("invModalErr",      "");
+  document.getElementById("invAmount").value = "";
+  document.getElementById("invModalPreview").style.display = "none";
+  document.getElementById("invModalOk").style.display = "none";
+}
+
+// Override open for invModal
+function invModalOpenInv() {
+  invOpenInvModal(INV_PLAN);
+  const el = document.getElementById("invModal");
+  if (el) el.classList.add("inv-modal-active");
+}
+
+document.getElementById("invModalClose").addEventListener("click", () => invModalClose("invModal"));
+document.getElementById("invModal").addEventListener("click", e => {
+  if (e.target.id === "invModal") invModalClose("invModal");
+});
+
+// ── LIVE PREVIEW ───────────────────────────────
 document.getElementById("invAmount").addEventListener("input", () => {
   const amt  = parseFloat(document.getElementById("invAmount").value);
   const cfg  = INV_PLANS[INV_PLAN];
@@ -323,7 +329,7 @@ document.getElementById("invAmount").addEventListener("input", () => {
   prev.style.display = "block";
 });
 
-// ── Confirm investment ─────────────────────────
+// ── CONFIRM INVESTMENT ─────────────────────────
 document.getElementById("invModalConfirm").addEventListener("click", async () => {
   const amt   = parseFloat(document.getElementById("invAmount").value);
   const cfg   = INV_PLANS[INV_PLAN];
@@ -332,9 +338,9 @@ document.getElementById("invModalConfirm").addEventListener("click", async () =>
   const ico   = document.getElementById("invModalBtnIco");
   errEl.textContent = "";
 
-  if (!amt || isNaN(amt)) { errEl.textContent = "Please enter an amount."; return; }
-  if (amt < cfg.minDep)   { errEl.textContent = `Minimum is GHS ${cfg.minDep.toLocaleString()}.`; return; }
-  if (amt > INV_BALANCE)  { errEl.textContent = "Insufficient balance. Please deposit first."; return; }
+  if (!amt || isNaN(amt))  { errEl.textContent = "Please enter an amount."; return; }
+  if (amt < cfg.minDep)    { errEl.textContent = `Minimum is GHS ${cfg.minDep.toLocaleString()}.`; return; }
+  if (amt > INV_BALANCE)   { errEl.textContent = "Insufficient balance. Please deposit first."; return; }
 
   btn.disabled = true;
   invSetEl("invModalBtnTxt", "Processing...");
@@ -380,7 +386,7 @@ document.getElementById("invModalConfirm").addEventListener("click", async () =>
 
     document.getElementById("invModalOk").style.display = "flex";
     setTimeout(async () => {
-      document.getElementById("invModal").classList.remove("inv-modal-active");
+      invModalClose("invModal");
       await invLoadHistory();
     }, 1800);
 
@@ -394,96 +400,88 @@ document.getElementById("invModalConfirm").addEventListener("click", async () =>
   if (ico) ico.className = "fa-solid fa-arrow-right";
 });
 
-// ── Referral copy button ───────────────────────
-const refCopyBtn = document.getElementById("invRefCopyBtn");
-if (refCopyBtn) {
-  refCopyBtn.addEventListener("click", () => {
-    const code = document.getElementById("invRefCode").textContent;
-    if (!code || code === "—") return;
-    navigator.clipboard.writeText(code).then(() => {
-      refCopyBtn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
-      setTimeout(() => {
-        refCopyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy Code';
-      }, 2000);
+// ══════════════════════════════════════════════
+// REFERRAL COPY BUTTON
+// ══════════════════════════════════════════════
+document.getElementById("invRefCopyBtn").addEventListener("click", () => {
+  const code = document.getElementById("invRefCode").textContent;
+  if (!code || code === "—") return;
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = document.getElementById("invRefCopyBtn");
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+    setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy Code'; }, 2000);
+  });
+});
+
+// ══════════════════════════════════════════════
+// LOAN FORM
+// ══════════════════════════════════════════════
+document.getElementById("loanSubmitBtn").addEventListener("click", async () => {
+  const name    = document.getElementById("loanName").value.trim();
+  const email   = document.getElementById("loanEmail").value.trim();
+  const phone   = document.getElementById("loanPhone").value.trim();
+  const amount  = document.getElementById("loanAmount").value.trim();
+  const purpose = document.getElementById("loanPurpose").value.trim();
+  const errEl   = document.getElementById("loanErr");
+  const btn     = document.getElementById("loanSubmitBtn");
+
+  errEl.textContent = "";
+
+  if (!name)    { errEl.textContent = "Please enter your full name."; return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errEl.textContent = "Please enter a valid email address."; return;
+  }
+  if (!phone)   { errEl.textContent = "Please enter your phone number."; return; }
+  if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
+    errEl.textContent = "Please enter a valid loan amount."; return;
+  }
+  if (!purpose) { errEl.textContent = "Please briefly explain the purpose of the loan."; return; }
+
+  btn.disabled = true;
+  document.getElementById("loanBtnTxt").innerHTML =
+    '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
+  try {
+    // Save loan request to Firestore
+    await addDoc(collection(db, "loanRequests"), {
+      uid:       INV_USER.uid,
+      name,
+      email,
+      phone,
+      amount:    parseFloat(amount),
+      purpose,
+      status:    "under_review",
+      createdAt: serverTimestamp()
     });
-  });
-}
 
-// ── Loan form ──────────────────────────────────
-const loanSubmitBtn = document.getElementById("loanSubmitBtn");
-if (loanSubmitBtn) {
-  loanSubmitBtn.addEventListener("click", async () => {
-    const name    = document.getElementById("loanName").value.trim();
-    const email   = document.getElementById("loanEmail").value.trim();
-    const phone   = document.getElementById("loanPhone").value.trim();
-    const amount  = document.getElementById("loanAmount").value.trim();
-    const purpose = document.getElementById("loanPurpose").value.trim();
-    const errEl   = document.getElementById("loanErr");
-    errEl.textContent = "";
+    // Also save under user's own collection for their records
+    await addDoc(collection(db, "users", INV_USER.uid, "loanRequests"), {
+      amount:    parseFloat(amount),
+      purpose,
+      status:    "under_review",
+      createdAt: serverTimestamp()
+    });
 
-    if (!name)    { errEl.textContent = "Please enter your full name."; return; }
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errEl.textContent = "Please enter a valid email address."; return;
-    }
-    if (!phone)   { errEl.textContent = "Please enter your phone number."; return; }
-    if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
-      errEl.textContent = "Please enter a valid loan amount."; return;
-    }
-    if (!purpose) { errEl.textContent = "Please explain the purpose of the loan."; return; }
+    // Send email notification to admin via EmailJS
+    // We use a simple fetch to a mailto-style approach via EmailJS public API
+    // Replace with your EmailJS service/template IDs if you set it up
+    // For now we store in Firestore and the admin checks the dashboard
+    // Admin email: Rolemodel987@gmail.com
 
-    loanSubmitBtn.disabled = true;
-    document.getElementById("loanBtnTxt").innerHTML =
-      '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+    document.getElementById("loanSuccess").style.display = "flex";
+    document.getElementById("loanName").value    = "";
+    document.getElementById("loanAmount").value  = "";
+    document.getElementById("loanPurpose").value = "";
 
-    try {
-      // Save to Firestore
-      await addDoc(collection(db, "loanRequests"), {
-        uid: INV_USER.uid, name, email, phone,
-        amount:    parseFloat(amount),
-        purpose,
-        status:    "under_review",
-        createdAt: serverTimestamp()
-      });
+  } catch (err) {
+    console.error(err);
+    errEl.textContent = "Something went wrong. Please try again.";
+  }
 
-      await addDoc(collection(db, "users", INV_USER.uid, "loanRequests"), {
-        amount:    parseFloat(amount),
-        purpose,
-        status:    "under_review",
-        createdAt: serverTimestamp()
-      });
-
-      // Send email to admin via Formspree
-      const response = await fetch(FORMSPREE_URL, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({
-          name,
-          email,
-          phone,
-          amount:  `GHS ${parseFloat(amount).toLocaleString()}`,
-          purpose,
-          subject: `New Loan Request from ${name} — YMG Funds`
-        })
-      });
-
-      if (!response.ok) {
-        console.warn("Formspree error:", await response.text());
-      }
-
-      document.getElementById("loanSuccess").style.display = "flex";
-      document.getElementById("loanAmount").value  = "";
-      document.getElementById("loanPurpose").value = "";
-
-    } catch (err) {
-      console.error(err);
-      errEl.textContent = "Something went wrong. Please try again.";
-    }
-
-    loanSubmitBtn.disabled = false;
-    document.getElementById("loanBtnTxt").innerHTML =
-      '<i class="fa-solid fa-paper-plane"></i> Submit Loan Request';
-  });
-}
+  btn.disabled = false;
+  document.getElementById("loanBtnTxt").innerHTML =
+    '<i class="fa-solid fa-paper-plane"></i> Submit Loan Request';
+});
 
 // ══════════════════════════════════════════════
 // LOAD HISTORY
@@ -603,8 +601,18 @@ async function invRunProfitEngine() {
 }
 
 // ══════════════════════════════════════════════
-// HELPERS
+// MODAL & DOM HELPERS
 // ══════════════════════════════════════════════
+function invModalOpen(id) {
+  if (id === "actModal") invPopulateActModal();
+  if (id === "invModal") invOpenInvModal(INV_PLAN);
+  const el = document.getElementById(id);
+  if (el) el.classList.add("inv-modal-active");
+}
+function invModalClose(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove("inv-modal-active");
+}
 function invSetEl(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val;
@@ -619,4 +627,33 @@ function invHide(id) {
 }
 function fmtGHS(n) {
   return "GHS " + Number(n).toLocaleString("en-GH", { minimumFractionDigits: 2 });
+}
+
+function invPopulateActModal() {
+  const tier = INV_ACT_TIER;
+  const fee  = tier === "standard" ? 500 : 1000;
+  invSetEl("actModalTitle", tier === "standard" ? "Activate Standard Plans" : "Activate Premium Plans");
+  invSetEl("actModalDesc",  `Pay a one-time GHS ${fee} fee to unlock all ${tier} plans.`);
+  invSetEl("actModalFee",   `GHS ${fee.toLocaleString()}`);
+  invSetEl("actModalBal",   fmtGHS(INV_BALANCE));
+  invSetEl("actModalErr",   "");
+  document.getElementById("actModalOk").style.display = "none";
+  const ico = document.getElementById("actModalIco");
+  if (ico) ico.innerHTML = tier === "premium"
+    ? '<i class="fa-solid fa-crown"></i>'
+    : '<i class="fa-solid fa-lock-open"></i>';
+}
+
+function invOpenInvModal(plan) {
+  if (!plan) return;
+  const cfg = INV_PLANS[plan];
+  if (!cfg) return;
+  invSetEl("invModalTitle",    `Invest in ${plan}`);
+  invSetEl("invModalPlanChip", plan);
+  invSetEl("invModalBalNote",  fmtGHS(INV_BALANCE));
+  invSetEl("invModalNote",     `Minimum: GHS ${cfg.minDep.toLocaleString()}`);
+  invSetEl("invModalErr",      "");
+  document.getElementById("invAmount").value = "";
+  document.getElementById("invModalPreview").style.display = "none";
+  document.getElementById("invModalOk").style.display = "none";
 }

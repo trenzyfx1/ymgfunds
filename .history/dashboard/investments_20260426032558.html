@@ -300,80 +300,6 @@
         </div>
       </div>
 
-      <div class="inv-sec-head" style="margin-top:36px;">
-        <div>
-          <h3 class="inv-sec-title">
-            <i class="fa-solid fa-hand-holding-dollar"></i> Apply for a Loan
-          </h3>
-          <p class="inv-sec-sub">Need funds to invest? Submit a request and our team will review it.</p>
-        </div>
-      </div>
-
-      <div class="inv-loan-wrap">
-        <div class="inv-loan-info">
-          <div class="inv-loan-info-item">
-            <i class="fa-solid fa-circle-info"></i>
-            <div>
-              <strong>How it works</strong>
-              <p>Fill in the form, submit your request, and our admin team will review and respond to your email within
-                1–2 working days.</p>
-            </div>
-          </div>
-          <div class="inv-loan-info-item">
-            <i class="fa-solid fa-shield-halved"></i>
-            <div>
-              <strong>Secure & Confidential</strong>
-              <p>Your loan request is reviewed privately. All information is kept confidential.</p>
-            </div>
-          </div>
-          <div class="inv-loan-info-item">
-            <i class="fa-solid fa-clock"></i>
-            <div>
-              <strong>Response Time</strong>
-              <p>Expect a response within 1–2 working days to your registered email address.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="inv-loan-form-card">
-          <h4><i class="fa-solid fa-file-lines"></i> Loan Request Form</h4>
-          <div class="inv-loan-field">
-            <label>Full Name</label>
-            <input type="text" id="loanName" placeholder="Enter your full name" autocomplete="off" />
-          </div>
-          <div class="inv-loan-field">
-            <label>Email Address</label>
-            <input type="email" id="loanEmail" placeholder="Enter your email address" autocomplete="off" />
-          </div>
-          <div class="inv-loan-field">
-            <label>Phone Number</label>
-            <input type="tel" id="loanPhone" placeholder="e.g. +233 24 000 0000" autocomplete="off" />
-          </div>
-          <div class="inv-loan-field">
-            <label>Loan Amount (GHS)</label>
-            <div class="inv-loan-inp-wrap">
-              <span>GHS</span>
-              <input type="number" id="loanAmount" placeholder="Enter amount" min="0" autocomplete="off" />
-            </div>
-          </div>
-          <div class="inv-loan-field">
-            <label>Purpose of Loan</label>
-            <textarea id="loanPurpose" placeholder="Briefly explain why you need this loan..." rows="3"></textarea>
-          </div>
-          <p class="inv-loan-err" id="loanErr"></p>
-          <button class="inv-loan-submit-btn" id="loanSubmitBtn">
-            <span id="loanBtnTxt"><i class="fa-solid fa-paper-plane"></i> Submit Loan Request</span>
-          </button>
-          <div class="inv-loan-success" id="loanSuccess">
-            <i class="fa-solid fa-clock"></i>
-            <div>
-              <strong>Request Submitted!</strong>
-              <p>Your loan request is under review. Our team will respond to your email within 1–2 working days.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- ── ACTIVE INVESTMENTS TABLE ──────────────── -->
       <div class="inv-history-card">
         <div class="inv-history-head">
@@ -479,34 +405,6 @@
       </div>
     </div>
   </div>
-
-  <div class="inv-modal-wrap" id="pwModal">
-    <div class="inv-modal-box">
-      <div class="inv-modal-head">
-        <h3>Confirm Your Password</h3>
-        <button class="inv-modal-x" id="pwModalClose"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="inv-pw-modal-body">
-        <div class="inv-pw-icon"><i class="fa-solid fa-shield-halved"></i></div>
-        <p>For your security, please enter your account password to continue.</p>
-      </div>
-      <div class="inv-modal-field">
-        <label>Password</label>
-        <div class="inv-modal-inp-wrap">
-          <span><i class="fa-solid fa-lock"></i></span>
-          <input type="password" id="pwModalInput" placeholder="Enter your password" autocomplete="current-password" />
-          <button type="button" class="inv-pw-eye" id="pwModalEye">
-            <i class="fa-solid fa-eye" id="pwModalEyeIco"></i>
-          </button>
-        </div>
-      </div>
-      <p class="inv-modal-err" id="pwModalErr"></p>
-      <button class="inv-modal-go-btn" id="pwModalConfirm">
-        <i class="fa-solid fa-check"></i> Confirm & Continue
-      </button>
-    </div>
-  </div>
-
 
   <script type="module" src="./js/sidebar.js"></script>
   <script type="module" src="./js/globaluser.js"></script>

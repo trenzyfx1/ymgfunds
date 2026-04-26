@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Investments — YMG Funds</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="./css/dashboard.css">
   <link rel="stylesheet" href="./css/pages.css">
 </head>
-
 <body>
 
   <aside class="sidebar" id="sidebar">
@@ -22,11 +19,9 @@
     <nav class="sidebar-nav">
       <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
       <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
-      <a href="investments.html" class="nav-item active"><i
-          class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="investments.html" class="nav-item active"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
       <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
-      <a href="transactions.html" class="nav-item"><i
-          class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="transactions.html" class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
       <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
       <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
     </nav>
@@ -132,7 +127,7 @@
           </div>
           <div class="inv-specs">
             <div class="inv-spec"><span>Min. Deposit</span><strong>GHS 500</strong></div>
-            <div class="inv-spec"><span>Duration</span><strong>90 Days</strong></div>
+            <div class="v-spec"><span>Duration</span><strong>90 Days</strong></div>
             <div class="inv-spec"><span>Withdrawal</span><strong>After Maturity</strong></div>
             <div class="inv-spec"><span>Lock-in</span><strong>90 Days</strong></div>
           </div>
@@ -209,8 +204,7 @@
             <div class="inv-spec"><span>Projected</span><strong>Up to 15%</strong></div>
             <div class="inv-spec"><span>Payout</span><strong>End of Cycle</strong></div>
           </div>
-          <button class="inv-cta-btn inv-cta-prem" data-plan="182-Day Growth Tool" data-tier="premium">Invest
-            Now</button>
+          <button class="inv-cta-btn inv-cta-prem" data-plan="182-Day Growth Tool" data-tier="premium">Invest Now</button>
         </div>
 
         <div class="inv-card inv-card-prem" id="icard-p365">
@@ -231,8 +225,7 @@
             <div class="inv-spec"><span>Projected</span><strong>Up to 25%</strong></div>
             <div class="inv-spec"><span>Payout</span><strong>End of Cycle</strong></div>
           </div>
-          <button class="inv-cta-btn inv-cta-prem" data-plan="365-Day Premium Tool" data-tier="premium">Invest
-            Now</button>
+          <button class="inv-cta-btn inv-cta-prem" data-plan="365-Day Premium Tool" data-tier="premium">Invest Now</button>
         </div>
 
         <div class="inv-card inv-card-prem" id="icard-p3yr">
@@ -253,8 +246,7 @@
             <div class="inv-spec"><span>Projected</span><strong>Up to 35%/yr</strong></div>
             <div class="inv-spec"><span>Payout</span><strong>Per Cycle</strong></div>
           </div>
-          <button class="inv-cta-btn inv-cta-prem" data-plan="3-Year Wealth Builder" data-tier="premium">Invest
-            Now</button>
+          <button class="inv-cta-btn inv-cta-prem" data-plan="3-Year Wealth Builder" data-tier="premium">Invest Now</button>
         </div>
 
       </div>
@@ -272,106 +264,6 @@
         <button class="inv-act-banner-btn" id="premActBtn">
           Upgrade Now <i class="fa-solid fa-arrow-right"></i>
         </button>
-      </div>
-
-      <div class="inv-ref-banner">
-        <div class="inv-ref-left">
-          <div class="inv-ref-icon"><i class="fa-solid fa-gift"></i></div>
-          <div class="inv-ref-text">
-            <h4>🎉 Premium Referral Bonus</h4>
-            <p>Earn <strong>GHS 10</strong> every time someone registers with your referral link and makes their first
-              deposit.</p>
-            <div class="inv-ref-payouts">
-              <span><i class="fa-solid fa-check"></i> Share your code → Friend deposits → You earn GHS 10
-                instantly</span>
-              <span><i class="fa-solid fa-check"></i> No limit — refer 10 friends = GHS 100+ in your wallet</span>
-            </div>
-          </div>
-        </div>
-        <div class="inv-ref-right">
-          <p class="inv-ref-code-label">Your Referral Code</p>
-          <div class="inv-ref-code-box" id="invRefCode">—</div>
-          <button class="inv-ref-copy-btn" id="invRefCopyBtn">
-            <i class="fa-solid fa-copy"></i> Copy Code
-          </button>
-          <a href="referrals.html" class="inv-ref-link">
-            View Referrals <i class="fa-solid fa-arrow-right"></i>
-          </a>
-        </div>
-      </div>
-
-      <div class="inv-sec-head" style="margin-top:36px;">
-        <div>
-          <h3 class="inv-sec-title">
-            <i class="fa-solid fa-hand-holding-dollar"></i> Apply for a Loan
-          </h3>
-          <p class="inv-sec-sub">Need funds to invest? Submit a request and our team will review it.</p>
-        </div>
-      </div>
-
-      <div class="inv-loan-wrap">
-        <div class="inv-loan-info">
-          <div class="inv-loan-info-item">
-            <i class="fa-solid fa-circle-info"></i>
-            <div>
-              <strong>How it works</strong>
-              <p>Fill in the form, submit your request, and our admin team will review and respond to your email within
-                1–2 working days.</p>
-            </div>
-          </div>
-          <div class="inv-loan-info-item">
-            <i class="fa-solid fa-shield-halved"></i>
-            <div>
-              <strong>Secure & Confidential</strong>
-              <p>Your loan request is reviewed privately. All information is kept confidential.</p>
-            </div>
-          </div>
-          <div class="inv-loan-info-item">
-            <i class="fa-solid fa-clock"></i>
-            <div>
-              <strong>Response Time</strong>
-              <p>Expect a response within 1–2 working days to your registered email address.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="inv-loan-form-card">
-          <h4><i class="fa-solid fa-file-lines"></i> Loan Request Form</h4>
-          <div class="inv-loan-field">
-            <label>Full Name</label>
-            <input type="text" id="loanName" placeholder="Enter your full name" autocomplete="off" />
-          </div>
-          <div class="inv-loan-field">
-            <label>Email Address</label>
-            <input type="email" id="loanEmail" placeholder="Enter your email address" autocomplete="off" />
-          </div>
-          <div class="inv-loan-field">
-            <label>Phone Number</label>
-            <input type="tel" id="loanPhone" placeholder="e.g. +233 24 000 0000" autocomplete="off" />
-          </div>
-          <div class="inv-loan-field">
-            <label>Loan Amount (GHS)</label>
-            <div class="inv-loan-inp-wrap">
-              <span>GHS</span>
-              <input type="number" id="loanAmount" placeholder="Enter amount" min="0" autocomplete="off" />
-            </div>
-          </div>
-          <div class="inv-loan-field">
-            <label>Purpose of Loan</label>
-            <textarea id="loanPurpose" placeholder="Briefly explain why you need this loan..." rows="3"></textarea>
-          </div>
-          <p class="inv-loan-err" id="loanErr"></p>
-          <button class="inv-loan-submit-btn" id="loanSubmitBtn">
-            <span id="loanBtnTxt"><i class="fa-solid fa-paper-plane"></i> Submit Loan Request</span>
-          </button>
-          <div class="inv-loan-success" id="loanSuccess">
-            <i class="fa-solid fa-clock"></i>
-            <div>
-              <strong>Request Submitted!</strong>
-              <p>Your loan request is under review. Our team will respond to your email within 1–2 working days.</p>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- ── ACTIVE INVESTMENTS TABLE ──────────────── -->
@@ -480,37 +372,8 @@
     </div>
   </div>
 
-  <div class="inv-modal-wrap" id="pwModal">
-    <div class="inv-modal-box">
-      <div class="inv-modal-head">
-        <h3>Confirm Your Password</h3>
-        <button class="inv-modal-x" id="pwModalClose"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="inv-pw-modal-body">
-        <div class="inv-pw-icon"><i class="fa-solid fa-shield-halved"></i></div>
-        <p>For your security, please enter your account password to continue.</p>
-      </div>
-      <div class="inv-modal-field">
-        <label>Password</label>
-        <div class="inv-modal-inp-wrap">
-          <span><i class="fa-solid fa-lock"></i></span>
-          <input type="password" id="pwModalInput" placeholder="Enter your password" autocomplete="current-password" />
-          <button type="button" class="inv-pw-eye" id="pwModalEye">
-            <i class="fa-solid fa-eye" id="pwModalEyeIco"></i>
-          </button>
-        </div>
-      </div>
-      <p class="inv-modal-err" id="pwModalErr"></p>
-      <button class="inv-modal-go-btn" id="pwModalConfirm">
-        <i class="fa-solid fa-check"></i> Confirm & Continue
-      </button>
-    </div>
-  </div>
-
-
   <script type="module" src="./js/sidebar.js"></script>
   <script type="module" src="./js/globaluser.js"></script>
   <script type="module" src="./js/investments.js"></script>
 </body>
-
 </html>

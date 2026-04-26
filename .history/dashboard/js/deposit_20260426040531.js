@@ -42,7 +42,7 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("currentBalance").textContent =
       fmtGHS(DEP_BALANCE);
     document.getElementById("availableBalance").textContent =
-      fmtGHS(DEP_BALANCE);
+      fmtGHS(DEP_BALANCE - DEP_INVESTED);
   });
 
   await loadDepositHistory();
