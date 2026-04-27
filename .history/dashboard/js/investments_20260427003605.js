@@ -281,7 +281,7 @@ document.getElementById("actModalConfirm").addEventListener("click", () => {
   const reference = "ACT_" + new Date().getTime() + "_" + Math.random().toString(36).slice(2, 5).toUpperCase();
 
   const handler = window.PaystackPop.setup({
-    key:      "pk_test_1715e22f3504664a394797de9d84fe31720e67a1", // Use test key for development
+    key:      "pk_",
     email:    INV_USER.email,
     amount:   fee * 100, // pesewas
     currency: "GHS",

@@ -4,21 +4,20 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   doc, getDoc, addDoc, updateDoc,
-  collection, getDocs, query, orderBy, where,
-  serverTimestamp, onSnapshot, increment
+  collection, getDocs, query, orderBy,
+  serverTimestamp, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // ── REPLACE THIS WITH CLIENT'S REAL PAYSTACK PUBLIC KEY ──
-const PAYSTACK_PUBLIC_KEY = "pk_test_1715e22f3504664a394797de9d84fe31720e67a1"; // TEST KEY
+const PAYSTACK_PUBLIC_KEY = "pk_live_bbf9be7a02b476503f3608a1a30ca24114186c7d";
 // ─────────────────────────────────────────────────────────
-// pk_test_1715e22f3504664a394797de9d84fe31720e67a1
-// pk_live_bbf9be7a02b476503f3608a1a30ca24114186c7d
+
 const DEPOSIT_FEE_PERCENT = 0.02; // 2% processing fee
-const REFERRAL_REWARD     = 10;   // GHS 10 per successful referral
 
 let DEP_USER    = null;
 let DEP_EMAIL   = null;
 let DEP_BALANCE = 0;
+let DEP_INVESTED = 0;
 
 // ── AUTH ───────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
@@ -30,7 +29,8 @@ onAuthStateChanged(auth, async (user) => {
     if (!snap.exists()) return;
     const d = snap.data();
 
-    DEP_BALANCE = typeof d.balance === "number" ? d.balance : 0;
+    DEP_BALANCE  = typeof d.balance  === "number" ? d.balance  : 0;
+    DEP_INVESTED = typeof d.invested === "number" ? d.invested : 0;
 
     const name = d.name || "User";
     const initials = name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
@@ -83,9 +83,9 @@ function updateSummary(amount) {
   const fee = parseFloat((amount * DEPOSIT_FEE_PERCENT).toFixed(2));
   const net = parseFloat((amount - fee).toFixed(2));
 
-  document.getElementById("summaryAmt").textContent  = fmtGHS(amount);
-  document.getElementById("summaryFee").textContent  = `− ${fmtGHS(fee)}`;
-  document.getElementById("summaryNet").textContent  = fmtGHS(net > 0 ? net : 0);
+  document.getElementById("summaryAmt").textContent = fmtGHS(amount);
+  document.getElementById("summaryFee").textContent = `− ${fmtGHS(fee)}`;
+  document.getElementById("summaryNet").textContent = fmtGHS(net > 0 ? net : 0);
   summary.style.display = "block";
 }
 
@@ -154,7 +154,6 @@ async function handlePaymentSuccess(amount, reference) {
     const fee       = parseFloat((amount * DEPOSIT_FEE_PERCENT).toFixed(2));
     const netAmount = parseFloat((amount - fee).toFixed(2));
 
-    // Update user balance
     const uRef  = doc(db, "users", DEP_USER.uid);
     const uSnap = await getDoc(uRef);
     const uData = uSnap.data();
@@ -163,7 +162,6 @@ async function handlePaymentSuccess(amount, reference) {
       balance: (uData.balance || 0) + netAmount
     });
 
-    // Log deposit transaction
     await addDoc(collection(db, "users", DEP_USER.uid, "transactions"), {
       type:      "deposit",
       amount:    netAmount,
@@ -175,10 +173,6 @@ async function handlePaymentSuccess(amount, reference) {
       date:      serverTimestamp()
     });
 
-    // ── REFERRAL CREDIT — trigger on first deposit ──
-    await handleReferralCredit(uData);
-
-    // Show success
     document.getElementById("depositedAmt").textContent =
       netAmount.toLocaleString("en-GH", { minimumFractionDigits: 2 });
     document.getElementById("depositSuccess").style.display = "flex";
@@ -196,70 +190,6 @@ async function handlePaymentSuccess(amount, reference) {
     console.error("Payment processing error:", err);
     document.getElementById("depError").textContent =
       "Payment received but failed to update balance. Please contact support with reference: " + reference;
-  }
-}
-
-// ── REFERRAL CREDIT ────────────────────────────
-// Called after every deposit — only triggers on the FIRST deposit
-async function handleReferralCredit(uData) {
-  try {
-    // Check if this user was referred
-    const referredBy = uData.referredBy;
-    if (!referredBy) return;
-
-    // Check if this is their first deposit
-    // If referralRewarded is already true, skip
-    if (uData.referralRewarded) return;
-
-    // Find the referrer by their referral code
-    const q    = query(collection(db, "users"), where("referralCode", "==", referredBy));
-    const snap = await getDocs(q);
-    if (snap.empty) return;
-
-    const referrerDoc  = snap.docs[0];
-    const referrerId   = referrerDoc.id;
-    const referrerData = referrerDoc.data();
-
-    // Prevent self-referral
-    if (referrerId === DEP_USER.uid) return;
-
-    // Credit GHS 10 to referrer's balance
-    await updateDoc(doc(db, "users", referrerId), {
-      balance:          (referrerData.balance || 0) + REFERRAL_REWARD,
-      referralEarnings: (referrerData.referralEarnings || 0) + REFERRAL_REWARD
-    });
-
-    // Log reward as a transaction for the referrer
-    await addDoc(collection(db, "users", referrerId, "transactions"), {
-      type:   "referral_reward",
-      amount: REFERRAL_REWARD,
-      note:   `Referral reward from ${uData.name || "a new user"}`,
-      status: "completed",
-      date:   serverTimestamp()
-    });
-
-    // Update the referral record to "completed"
-    const refCol  = collection(db, "users", referrerId, "referrals");
-    const refSnap = await getDocs(refCol);
-    refSnap.forEach(async (refDoc) => {
-      if (refDoc.data().userId === DEP_USER.uid) {
-        await updateDoc(doc(db, "users", referrerId, "referrals", refDoc.id), {
-          status:      "completed",
-          amountEarned: REFERRAL_REWARD,
-          depositedAt:  serverTimestamp()
-        });
-      }
-    });
-
-    // Mark this user as referral-rewarded so it doesn't trigger again
-    await updateDoc(doc(db, "users", DEP_USER.uid), {
-      referralRewarded: true
-    });
-
-    console.log("✅ Referral reward credited to", referrerId);
-
-  } catch (err) {
-    console.error("Referral credit error:", err);
   }
 }
 

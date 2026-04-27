@@ -70,9 +70,9 @@ onAuthStateChanged(auth, async (user) => {
     if (emailEl && !emailEl.value) emailEl.value = d.email || user.email || "";
     if (phoneEl && !phoneEl.value) phoneEl.value = d.phone || "";
 
-    // // Check verification status
-    // checkVerification();
-    // await checkDepositCooldown();
+    // Check verification status
+    checkVerification();
+    await checkDepositCooldown();
   });
 
   await loadWithdrawalHistory();

@@ -21,7 +21,7 @@ const FORMSPREE_URL = "https://formspree.io/f/mnjlrbgn"; // same as loan — adm
 const WITHDRAW_FEE = 5;
 const WITHDRAW_MIN = 10;
 const WITHDRAW_MAX = 10000;
-// const COOLDOWN_DAYS = 3; // working days after deposit
+const COOLDOWN_DAYS = 3; // working days after deposit
 
 let WDR_USER = null;
 let WDR_BALANCE = 0;
@@ -70,9 +70,9 @@ onAuthStateChanged(auth, async (user) => {
     if (emailEl && !emailEl.value) emailEl.value = d.email || user.email || "";
     if (phoneEl && !phoneEl.value) phoneEl.value = d.phone || "";
 
-    // // Check verification status
-    // checkVerification();
-    // await checkDepositCooldown();
+    // Check verification status
+    checkVerification();
+    await checkDepositCooldown();
   });
 
   await loadWithdrawalHistory();

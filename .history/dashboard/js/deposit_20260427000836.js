@@ -9,10 +9,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // ── REPLACE THIS WITH CLIENT'S REAL PAYSTACK PUBLIC KEY ──
-const PAYSTACK_PUBLIC_KEY = "pk_test_1715e22f3504664a394797de9d84fe31720e67a1"; // TEST KEY
+const PAYSTACK_PUBLIC_KEY = "pk_live_bbf9be7a02b476503f3608a1a30ca24114186c7d";
 // ─────────────────────────────────────────────────────────
-// pk_test_1715e22f3504664a394797de9d84fe31720e67a1
-// pk_live_bbf9be7a02b476503f3608a1a30ca24114186c7d
+pk_test_1715e22f3504664a394797de9d84fe31720e67a1
 const DEPOSIT_FEE_PERCENT = 0.02; // 2% processing fee
 const REFERRAL_REWARD     = 10;   // GHS 10 per successful referral
 

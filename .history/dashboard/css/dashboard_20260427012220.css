@@ -758,12 +758,7 @@ button { cursor: pointer; font-family: 'Inter', sans-serif; }
 ═══════════════════════════════════════════════ */
 
 /* ── Balance Cards Grid ───────────────────────── */
-.dash-balance-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 18px;
-}
+
 
 .dash-bal-card {
   background: #fff;

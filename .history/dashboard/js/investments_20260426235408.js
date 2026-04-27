@@ -263,65 +263,36 @@ document.getElementById("actModal").addEventListener("click", e => {
     document.getElementById("actModal").classList.remove("inv-modal-active");
 });
 
-// ── Activation confirm — PAYSTACK ──────────────
-document.getElementById("actModalConfirm").addEventListener("click", () => {
+// ── Activation confirm — UNCHANGED ─────────────
+document.getElementById("actModalConfirm").addEventListener("click", async () => {
   const fee   = INV_ACT_TIER === "standard" ? 500 : 1000;
   const errEl = document.getElementById("actModalErr");
   const btn   = document.getElementById("actModalConfirm");
   errEl.textContent = "";
 
-  if (!INV_USER?.email) {
-    errEl.textContent = "Session error. Please refresh and try again.";
+  if (INV_BALANCE < fee) {
+    errEl.textContent = `Insufficient balance. You need GHS ${fee.toLocaleString()} to activate.`;
     return;
   }
 
   btn.disabled = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Opening payment...';
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
 
-  const reference = "ACT_" + new Date().getTime() + "_" + Math.random().toString(36).slice(2, 5).toUpperCase();
-
-  const handler = window.PaystackPop.setup({
-    key:      "pk_test_1715e22f3504664a394797de9d84fe31720e67a1", // Use test key for development
-    email:    INV_USER.email,
-    amount:   fee * 100, // pesewas
-    currency: "GHS",
-    ref:      reference,
-    metadata: {
-      custom_fields: [
-        { display_name: "Type",    variable_name: "type",    value: `${INV_ACT_TIER} activation` },
-        { display_name: "User ID", variable_name: "user_id", value: INV_USER.uid }
-      ]
-    },
-    onClose: () => {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-unlock"></i> Pay & Activate';
-    },
-    callback: (response) => {
-      handleActivationSuccess(response.reference).then(() => {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-unlock"></i> Pay & Activate';
-      });
-    }
-  });
-
-  handler.openIframe();
-});
-
-async function handleActivationSuccess(reference) {
   try {
-    const uRef = doc(db, "users", INV_USER.uid);
-    const upd  = {};
+    const uRef  = doc(db, "users", INV_USER.uid);
+    const uSnap = await getDoc(uRef);
+    const uData = uSnap.data();
+    const upd   = { balance: (uData.balance || 0) - fee };
     if (INV_ACT_TIER === "standard") upd.standardActivated = true;
     if (INV_ACT_TIER === "premium")  upd.premiumActivated  = true;
     await updateDoc(uRef, upd);
 
     await addDoc(collection(db, "users", INV_USER.uid, "transactions"), {
-      type:      "activation",
-      plan:      INV_ACT_TIER === "standard" ? "Standard Plan Activation" : "Premium Plan Activation",
-      amount:    INV_ACT_TIER === "standard" ? 500 : 1000,
-      reference: reference,
-      status:    "completed",
-      date:      serverTimestamp()
+      type:   "activation",
+      plan:   INV_ACT_TIER === "standard" ? "Standard Plan Activation" : "Premium Plan Activation",
+      amount: fee,
+      status: "completed",
+      date:   serverTimestamp()
     });
 
     document.getElementById("actModalOk").style.display = "flex";
@@ -330,9 +301,12 @@ async function handleActivationSuccess(reference) {
     }, 2000);
   } catch (err) {
     console.error(err);
-    document.getElementById("actModalErr").textContent = "Payment received but activation failed. Contact support with ref: " + reference;
+    errEl.textContent = "Something went wrong. Try again.";
   }
-}
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-unlock"></i> Pay & Activate';
+});
 
 // ── Invest modal close — UNCHANGED ─────────────
 document.getElementById("invModalClose").addEventListener("click", () => {
