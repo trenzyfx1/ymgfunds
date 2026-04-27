@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Withdraw — YMG Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/logo.jpeg" alt="YMG Funds" class="sidebar-logo-img">
+      <span>YMG<strong>Funds</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item active"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="../pages/login.html" class="nav-item logout">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting">
+          <h2>Withdraw Funds</h2>
+          <p>Request a withdrawal from your available balance</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn" id="notifBtn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-badge" id="notifCount" style="display:none;">0</span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Verification Warning Banner (shown if not verified) -->
+      <div class="wdr-verify-banner" id="wdrVerifyBanner" style="display:none;">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <div>
+          <strong>Verification Required</strong>
+          <p id="wdrVerifyMsg">You must verify your email and phone number before you can withdraw.</p>
+        </div>
+        <a href="settings.html" class="wdr-verify-link">Go to Settings <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <!-- Deposit Cooldown Banner (shown if deposited within 3 working days) -->
+      <div class="wdr-cooldown-banner" id="wdrCooldownBanner" style="display:none;">
+        <i class="fa-solid fa-clock"></i>
+        <div>
+          <strong>Withdrawal Not Available Yet</strong>
+          <p>You must wait <strong>2–3 working days</strong> after your last deposit before you can withdraw. Please check back later.</p>
+        </div>
+      </div>
+
+      <div class="wdr-grid">
+
+        <!-- LEFT: Form -->
+        <div class="wdr-form-card" id="wdrFormCard">
+
+          <div class="wdr-form-title">
+            <i class="fa-solid fa-money-bill-transfer"></i>
+            <h3>Request a Withdrawal</h3>
+          </div>
+
+          <!-- Balance Bar -->
+          <div class="wdr-balance-bar">
+            <div class="wdr-bal-item">
+              <span>Available Balance</span>
+              <strong id="wdrAvailBal">GHS 0.00</strong>
+            </div>
+            <div class="wdr-bal-divider"></div>
+            <div class="wdr-bal-item">
+              <span>Daily Limit</span>
+              <strong>GHS 10,000.00</strong>
+            </div>
+            <div class="wdr-bal-divider"></div>
+            <div class="wdr-bal-item">
+              <span>Processing Fee</span>
+              <strong class="wdr-fee-text">GHS 5</strong>
+            </div>
+          </div>
+
+          <!-- Personal Details -->
+          <div class="wdr-section-label">
+            <i class="fa-solid fa-user"></i> Personal Details
+          </div>
+
+          <div class="wdr-field-row">
+            <div class="wdr-field">
+              <label>Full Name</label>
+              <input type="text" id="wdrName" placeholder="Your full name" autocomplete="off" />
+            </div>
+            <div class="wdr-field">
+              <label>Email Address</label>
+              <input type="email" id="wdrEmail" placeholder="Your email address" autocomplete="off" />
+            </div>
+          </div>
+
+          <div class="wdr-field">
+            <label>Phone Number</label>
+            <input type="tel" id="wdrPhone" placeholder="e.g. +233 24 000 0000" autocomplete="off" />
+          </div>
+
+          <!-- Payment Details -->
+          <div class="wdr-section-label" style="margin-top:8px;">
+            <i class="fa-solid fa-credit-card"></i> Payment Details
+          </div>
+
+          <div class="wdr-field">
+            <label>Withdrawal Method</label>
+            <select id="wdrMethod">
+              <option value="">Select withdrawal method</option>
+              <option value="Mobile Money (MTN MoMo)">📱 MTN Mobile Money</option>
+              <option value="Mobile Money (Vodafone Cash)">📱 Vodafone Cash</option>
+              <option value="Mobile Money (AirtelTigo)">📱 AirtelTigo Money</option>
+              <option value="Bank Transfer">🏦 Bank Transfer</option>
+              <option value="Other">🌍 Other (International)</option>
+            </select>
+          </div>
+
+          <!-- Mobile Money Fields -->
+          <div id="wdrMomoFields" style="display:none;">
+            <div class="wdr-field">
+              <label>Mobile Money Number</label>
+              <input type="tel" id="wdrMomoNumber" placeholder="e.g. 024 000 0000" autocomplete="off" />
+            </div>
+            <div class="wdr-field">
+              <label>Account Name (as registered)</label>
+              <input type="text" id="wdrMomoName" placeholder="Name on MoMo account" autocomplete="off" />
+            </div>
+          </div>
+
+          <!-- Bank Transfer Fields -->
+          <div id="wdrBankFields" style="display:none;">
+            <div class="wdr-field-row">
+              <div class="wdr-field">
+                <label>Bank Name</label>
+                <input type="text" id="wdrBankName" placeholder="e.g. GCB Bank" autocomplete="off" />
+              </div>
+              <div class="wdr-field">
+                <label>Account Number</label>
+                <input type="text" id="wdrBankAccount" placeholder="Account number" autocomplete="off" />
+              </div>
+            </div>
+            <div class="wdr-field">
+              <label>Account Name</label>
+              <input type="text" id="wdrBankAccountName" placeholder="Name on bank account" autocomplete="off" />
+            </div>
+          </div>
+
+          <!-- Other / International Fields -->
+          <div id="wdrOtherFields" style="display:none;">
+            <div class="wdr-field">
+              <label>Payment Details</label>
+              <textarea id="wdrOtherDetails" placeholder="Provide your payment details (e.g. IBAN, PayPal email, SWIFT code, etc.)" rows="3"></textarea>
+            </div>
+          </div>
+
+          <!-- Amount -->
+          <div class="wdr-section-label" style="margin-top:8px;">
+            <i class="fa-solid fa-coins"></i> Withdrawal Amount
+          </div>
+
+          <div class="wdr-amount-wrap">
+            <span class="wdr-currency">GHS</span>
+            <input type="number" id="wdrAmount" placeholder="0.00" min="10" max="10000" autocomplete="off" />
+          </div>
+          <p class="wdr-min-note">Minimum: GHS 10.00 · Maximum per day: GHS 10,000.00</p>
+
+          <!-- Fee Summary -->
+          <div class="wdr-summary" id="wdrSummary" style="display:none;">
+            <div class="wdr-summary-row">
+              <span>Withdrawal Amount</span>
+              <strong id="wdrSumAmt">GHS 0.00</strong>
+            </div>
+            <div class="wdr-summary-row">
+              <span>Processing Fee</span>
+              <strong class="wdr-fee-red">− GHS 5</strong>
+            </div>
+            <div class="wdr-summary-row wdr-summary-total">
+              <span>You Receive</span>
+              <strong id="wdrSumNet">GHS 0.00</strong>
+            </div>
+          </div>
+
+          <!-- Identity Verification -->
+          <div class="wdr-section-label" style="margin-top:8px;">
+            <i class="fa-solid fa-id-card"></i> Identity Verification
+          </div>
+
+          <div class="wdr-id-upload-wrap">
+            <div class="wdr-id-upload-box" id="wdrIdUploadBox">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <p>Upload your Ghana Card or Government-issued ID</p>
+              <span>JPG, PNG or PDF — Max 5MB</span>
+              <input type="file" id="wdrIdFile" accept="image/*,.pdf" />
+            </div>
+            <div class="wdr-id-preview" id="wdrIdPreview" style="display:none;">
+              <i class="fa-solid fa-file-circle-check"></i>
+              <span id="wdrIdFileName">document.jpg</span>
+              <button type="button" id="wdrIdRemove"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+
+          <p class="wdr-error" id="wdrError"></p>
+
+          <button class="wdr-submit-btn" id="wdrSubmitBtn">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span id="wdrBtnTxt">Submit Withdrawal Request</span>
+          </button>
+
+          <div class="wdr-success" id="wdrSuccess">
+            <i class="fa-solid fa-clock"></i>
+            <div>
+              <strong>Request Submitted!</strong>
+              <p>Your withdrawal is under review. Funds will be sent to your account within <strong>2–3 working days</strong>.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Info -->
+        <div class="wdr-info-col">
+
+          <div class="wdr-info-card">
+            <h4><i class="fa-solid fa-circle-info"></i> How Withdrawals Work</h4>
+            <div class="wdr-steps">
+              <div class="wdr-step">
+                <div class="wdr-step-num">1</div>
+                <div>
+                  <strong>Fill the Form</strong>
+                  <p>Enter your details, payment method, and the amount you want to withdraw.</p>
+                </div>
+              </div>
+              <div class="wdr-step">
+                <div class="wdr-step-num">2</div>
+                <div>
+                  <strong>Upload ID</strong>
+                  <p>Upload your Ghana Card or government-issued ID for verification.</p>
+                </div>
+              </div>
+              <div class="wdr-step">
+                <div class="wdr-step-num">3</div>
+                <div>
+                  <strong>Admin Review</strong>
+                  <p>Our team reviews and processes your request within 2–3 working days.</p>
+                </div>
+              </div>
+              <div class="wdr-step">
+                <div class="wdr-step-num">4</div>
+                <div>
+                  <strong>Funds Sent</strong>
+                  <p>Money is sent directly to your provided account.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wdr-info-card wdr-rules-card">
+            <h4><i class="fa-solid fa-list-check"></i> Withdrawal Rules</h4>
+            <ul class="wdr-rules-list">
+              <li><i class="fa-solid fa-check"></i> Email and phone must be verified</li>
+              <li><i class="fa-solid fa-check"></i> Wait 2–3 working days after deposit</li>
+              <li><i class="fa-solid fa-check"></i> Minimum withdrawal: GHS 10.00</li>
+              <li><i class="fa-solid fa-check"></i> Maximum per day: GHS 10,000.00</li>
+              <li><i class="fa-solid fa-check"></i> Flat fee: GHS 0.50 per withdrawal</li>
+              <li><i class="fa-solid fa-check"></i> Processing: 2–3 working days</li>
+              <li><i class="fa-solid fa-check"></i> Government ID required</li>
+            </ul>
+          </div>
+
+          <div class="wdr-info-card wdr-warning-card">
+            <h4><i class="fa-solid fa-triangle-exclamation"></i> Important</h4>
+            <p>Ensure your account details are accurate. Withdrawals sent to incorrect accounts <strong>cannot be reversed</strong>. YMG Funds is not liable for losses due to incorrect information.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Withdrawal History -->
+      <div class="wdr-history-card">
+        <div class="wdr-history-head">
+          <h4><i class="fa-solid fa-clock-rotate-left"></i> Withdrawal History</h4>
+        </div>
+        <div class="wdr-history-wrap">
+          <table class="wdr-table">
+            <thead>
+              <tr>
+                <th>Reference</th>
+                <th>Amount</th>
+                <th>Fee</th>
+                <th>Method</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="wdrHistoryBody">
+              <tr>
+                <td colspan="6" class="wdr-table-msg">
+                  <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <script type="module" src="./js/globaluser.js"></script>
+  <script type="module" src="./js/withdraw.js"></script>
+  <script type="module" src="./js/sidebar.js"></script>
+</body>
+</html>
