@@ -695,61 +695,6 @@ async function invRunProfitEngine() {
 // ══════════════════════════════════════════════
 // PREMIUM REFERRAL CREDIT ON ACTIVATION
 // ══════════════════════════════════════════════
-async function handlePremiumReferralCredit(tier, fee) {
-  try {
-    const uRef = doc(db, "users", INV_USER.uid);
-    const uSnap = await getDoc(uRef);
-    const uData = uSnap.data();
-
-    const premReferredBy = uData.premiumReferredBy;
-    if (!premReferredBy) return;
-
-    const rewardedKey = tier === "standard" ? "premStdRefRewarded" : "premPremRefRewarded";
-    if (uData[rewardedKey]) return;
-
-    const q = query(collection(db, "users"), where("premiumReferralCode", "==", premReferredBy));
-    const snap = await getDocs(q);
-    if (snap.empty) return;
-
-    const referrerDoc = snap.docs[0];
-    const referrerId = referrerDoc.id;
-    const referrerData = referrerDoc.data();
-
-    if (referrerId === INV_USER.uid) return;
-
-    const reward = parseFloat((fee * 0.10).toFixed(2));
-
-    // ── Only count as a new person if this is their FIRST reward
-    // (i.e. neither tier has been rewarded yet)
-    const isFirstReward = !uData.premStdRefRewarded && !uData.premPremRefRewarded;
-
-    await updateDoc(doc(db, "users", referrerId), {
-      balance: (referrerData.balance || 0) + reward,
-      premiumReferralEarnings: (referrerData.premiumReferralEarnings || 0) + reward,
-      // Only increment people count on first reward from this user
-      ...(isFirstReward && { premiumReferralCount: (referrerData.premiumReferralCount || 0) + 1 })
-    });
-
-    await addDoc(collection(db, "users", referrerId, "transactions"), {
-      type: "referral_reward",
-      amount: reward,
-      note: `Premium referral reward — ${uData.name || "a user"} activated ${tier} plan`,
-      status: "completed",
-      date: serverTimestamp()
-    });
-
-    await createNotification(
-      referrerId, "referral_reward",
-      "Premium Referral Reward 🎉",
-      `${uData.name || "Someone you referred"} activated their ${tier} plan. You earned GHS ${reward.toFixed(2)}.`
-    );
-
-    await updateDoc(uRef, { [rewardedKey]: true });
-
-  } catch (err) {
-    console.error("Premium referral credit error:", err);
-  }
-}
 
 // ══════════════════════════════════════════════
 // PREMIUM REFERRAL CARD

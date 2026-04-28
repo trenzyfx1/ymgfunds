@@ -697,7 +697,7 @@ async function invRunProfitEngine() {
 // ══════════════════════════════════════════════
 async function handlePremiumReferralCredit(tier, fee) {
   try {
-    const uRef = doc(db, "users", INV_USER.uid);
+    const uRef  = doc(db, "users", INV_USER.uid);
     const uSnap = await getDoc(uRef);
     const uData = uSnap.data();
 
@@ -707,12 +707,12 @@ async function handlePremiumReferralCredit(tier, fee) {
     const rewardedKey = tier === "standard" ? "premStdRefRewarded" : "premPremRefRewarded";
     if (uData[rewardedKey]) return;
 
-    const q = query(collection(db, "users"), where("premiumReferralCode", "==", premReferredBy));
+    const q    = query(collection(db, "users"), where("premiumReferralCode", "==", premReferredBy));
     const snap = await getDocs(q);
     if (snap.empty) return;
 
-    const referrerDoc = snap.docs[0];
-    const referrerId = referrerDoc.id;
+    const referrerDoc  = snap.docs[0];
+    const referrerId   = referrerDoc.id;
     const referrerData = referrerDoc.data();
 
     if (referrerId === INV_USER.uid) return;
@@ -724,18 +724,18 @@ async function handlePremiumReferralCredit(tier, fee) {
     const isFirstReward = !uData.premStdRefRewarded && !uData.premPremRefRewarded;
 
     await updateDoc(doc(db, "users", referrerId), {
-      balance: (referrerData.balance || 0) + reward,
+      balance:                 (referrerData.balance                 || 0) + reward,
       premiumReferralEarnings: (referrerData.premiumReferralEarnings || 0) + reward,
       // Only increment people count on first reward from this user
       ...(isFirstReward && { premiumReferralCount: (referrerData.premiumReferralCount || 0) + 1 })
     });
 
     await addDoc(collection(db, "users", referrerId, "transactions"), {
-      type: "referral_reward",
+      type:   "referral_reward",
       amount: reward,
-      note: `Premium referral reward — ${uData.name || "a user"} activated ${tier} plan`,
+      note:   `Premium referral reward — ${uData.name || "a user"} activated ${tier} plan`,
       status: "completed",
-      date: serverTimestamp()
+      date:   serverTimestamp()
     });
 
     await createNotification(
