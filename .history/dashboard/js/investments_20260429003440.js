@@ -13,31 +13,31 @@ import { createNotification, Notifs } from "./notify-helper.js";
 
 // ── PLAN CONFIG ────────────────────────────────
 const INV_PLANS = {
-  "Starter Savings": { rate: 0.005, rateType: "weekly", minDep: 50, duration: null, tier: "standard" },
-  "Fixed Deposit": { rate: 0.095, rateType: "fixed", minDep: 500, duration: 90, tier: "standard" },
-  "Growth Plus": { rate: 0.125, rateType: "fixed", minDep: 1000, duration: 182, tier: "standard" },
-  "182-Day Growth Tool": { rate: 0.15, rateType: "fixed", minDep: 1000, duration: 182, tier: "premium" },
-  "365-Day Premium Tool": { rate: 0.25, rateType: "fixed", minDep: 2000, duration: 365, tier: "premium" },
-  "3-Year Wealth Builder": { rate: 0.35, rateType: "annual", minDep: 500, duration: 1095, tier: "premium" }
+  "Starter Savings":       { rate: 0.005, rateType: "weekly",  minDep: 50,    duration: null, tier: "standard" },
+  "Fixed Deposit":         { rate: 0.095, rateType: "fixed",   minDep: 500,   duration: 90,   tier: "standard" },
+  "Growth Plus":           { rate: 0.125, rateType: "fixed",   minDep: 1000,  duration: 182,  tier: "standard" },
+  "182-Day Growth Tool":   { rate: 0.15,  rateType: "fixed",   minDep: 1000,  duration: 182,  tier: "premium"  },
+  "365-Day Premium Tool":  { rate: 0.25,  rateType: "fixed",   minDep: 2000,  duration: 365,  tier: "premium"  },
+  "3-Year Wealth Builder": { rate: 0.35,  rateType: "annual",  minDep: 500,   duration: 1095, tier: "premium"  }
 };
 
 // ── LOAN CONFIG — UPDATED RATES ────────────────
 const LOAN_PLANS = {
-  "Standard Loan": { rate: 0.12, minAmt: 500, maxAmt: 5000, duration: 182, tier: "standard" },
-  "Premium Loan": { rate: 0.20, minAmt: 500, maxAmt: 30000, duration: 365, tier: "premium" }
+  "Standard Loan": { rate: 0.12, minAmt: 500,  maxAmt: 5000,  duration: 182, tier: "standard" },
+  "Premium Loan":  { rate: 0.20, minAmt: 500,  maxAmt: 30000, duration: 365, tier: "premium"  }
 };
 
 const FORMSPREE_URL = "https://formspree.io/f/xvzdjlqo";
-const MIN_BALANCE = 50; // GHS 50 must always remain in account
+const MIN_BALANCE   = 50; // GHS 50 must always remain in account
 
-let INV_USER = null;
-let INV_PLAN = null;
-let INV_BALANCE = 0;
-let INV_STD_ON = false;
-let INV_PREM_ON = false;
-let INV_ACT_TIER = null;
+let INV_USER      = null;
+let INV_PLAN      = null;
+let INV_BALANCE   = 0;
+let INV_STD_ON    = false;
+let INV_PREM_ON   = false;
+let INV_ACT_TIER  = null;
 let INV_PW_ACTION = null;
-let INV_PW_PLAN = null;
+let INV_PW_PLAN   = null;
 let INV_LOAN_PLAN = null;
 
 // ── AUTH ───────────────────────────────────────
@@ -55,12 +55,12 @@ onAuthStateChanged(auth, async (user) => {
     if (av) av.textContent = initials;
 
     INV_BALANCE = typeof d.balance === "number" ? d.balance : 0;
-    INV_STD_ON = d.standardActivated || false;
-    INV_PREM_ON = d.premiumActivated || false;
+    INV_STD_ON  = d.standardActivated || false;
+    INV_PREM_ON = d.premiumActivated   || false;
 
-    invSetEl("invAvailBal", fmtGHS(d.balance || 0));
-    invSetEl("invTotalInv", fmtGHS(d.invested || 0));
-    invSetEl("invTotalProfit", fmtGHS(d.profit || 0));
+    invSetEl("invAvailBal",      fmtGHS(d.balance  || 0));
+    invSetEl("invTotalInv",      fmtGHS(d.invested || 0));
+    invSetEl("invTotalProfit",   fmtGHS(d.profit   || 0));
     invSetEl("invPremRefEarned", fmtGHS(d.premiumReferralEarnings || 0));
 
     const code = d.referralCode || user.uid.slice(0, 8).toUpperCase();
@@ -69,7 +69,7 @@ onAuthStateChanged(auth, async (user) => {
 
     const lnEl = document.getElementById("loanModalName");
     const lpEl = document.getElementById("loanModalPhone");
-    if (lnEl && !lnEl.value) lnEl.value = d.name || "";
+    if (lnEl && !lnEl.value) lnEl.value = d.name  || "";
     if (lpEl && !lpEl.value) lpEl.value = d.phone || "";
 
     invRefreshUI();
@@ -89,7 +89,7 @@ document.querySelectorAll("#logoutBtn, #logoutBtn2").forEach(b => {
 
 // ── REFRESH LOCK/UNLOCK UI ─────────────────────
 function invRefreshUI() {
-  const stdStrips = ["istrip-starter", "istrip-fixed", "istrip-growth", "istrip-std-loan"];
+  const stdStrips  = ["istrip-starter", "istrip-fixed", "istrip-growth", "istrip-std-loan"];
   const premStrips = ["istrip-p182", "istrip-p365", "istrip-p3yr", "istrip-prem-loan", "istrip-prem-ref"];
 
   if (INV_STD_ON) {
@@ -151,9 +151,9 @@ document.getElementById("pwModalEye").addEventListener("click", () => {
 });
 
 document.getElementById("pwModalConfirm").addEventListener("click", async () => {
-  const pw = document.getElementById("pwModalInput").value;
+  const pw    = document.getElementById("pwModalInput").value;
   const errEl = document.getElementById("pwModalErr");
-  const btn = document.getElementById("pwModalConfirm");
+  const btn   = document.getElementById("pwModalConfirm");
   errEl.textContent = "";
 
   if (!pw) { errEl.textContent = "Please enter your password."; return; }
@@ -169,10 +169,10 @@ document.getElementById("pwModalConfirm").addEventListener("click", async () => 
     if (INV_PW_ACTION === "activate") {
       const fee = INV_ACT_TIER === "standard" ? 500 : 1000;
       invSetEl("actModalTitle", INV_ACT_TIER === "standard" ? "Activate Standard Plans" : "Activate Premium Plans");
-      invSetEl("actModalDesc", `Pay a one-time GHS ${fee} fee to unlock all ${INV_ACT_TIER} plans.`);
-      invSetEl("actModalFee", `GHS ${fee.toLocaleString()}`);
-      invSetEl("actModalBal", fmtGHS(INV_BALANCE));
-      invSetEl("actModalErr", "");
+      invSetEl("actModalDesc",  `Pay a one-time GHS ${fee} fee to unlock all ${INV_ACT_TIER} plans.`);
+      invSetEl("actModalFee",   `GHS ${fee.toLocaleString()}`);
+      invSetEl("actModalBal",   fmtGHS(INV_BALANCE));
+      invSetEl("actModalErr",   "");
       document.getElementById("actModalOk").style.display = "none";
       const ico = document.getElementById("actModalIco");
       if (ico) ico.innerHTML = INV_ACT_TIER === "premium"
@@ -183,11 +183,11 @@ document.getElementById("pwModalConfirm").addEventListener("click", async () => 
     } else if (INV_PW_ACTION === "invest") {
       INV_PLAN = INV_PW_PLAN;
       const cfg = INV_PLANS[INV_PLAN];
-      invSetEl("invModalTitle", `Invest in ${INV_PLAN}`);
+      invSetEl("invModalTitle",    `Invest in ${INV_PLAN}`);
       invSetEl("invModalPlanChip", INV_PLAN);
-      invSetEl("invModalBalNote", fmtGHS(INV_BALANCE));
-      invSetEl("invModalNote", `Minimum: GHS ${cfg.minDep.toLocaleString()} · Max investable: ${fmtGHS(Math.max(0, INV_BALANCE - MIN_BALANCE))}`);
-      invSetEl("invModalErr", "");
+      invSetEl("invModalBalNote",  fmtGHS(INV_BALANCE));
+      invSetEl("invModalNote",     `Minimum: GHS ${cfg.minDep.toLocaleString()} · Max investable: ${fmtGHS(Math.max(0, INV_BALANCE - MIN_BALANCE))}`);
+      invSetEl("invModalErr",      "");
       document.getElementById("invAmount").value = "";
       document.getElementById("invModalPreview").style.display = "none";
       document.getElementById("invModalOk").style.display = "none";
@@ -220,13 +220,13 @@ document.querySelectorAll(".inv-cta-btn").forEach(btn => {
     const type = btn.dataset.type;
 
     if (tier === "standard" && !INV_STD_ON) {
-      INV_ACT_TIER = "standard";
+      INV_ACT_TIER  = "standard";
       INV_PW_ACTION = "activate";
       pwModalOpen();
       return;
     }
     if (tier === "premium" && !INV_PREM_ON) {
-      INV_ACT_TIER = "premium";
+      INV_ACT_TIER  = "premium";
       INV_PW_ACTION = "activate";
       pwModalOpen();
       return;
@@ -246,20 +246,20 @@ document.querySelectorAll(".inv-cta-btn").forEach(btn => {
     }
 
     INV_PW_ACTION = "invest";
-    INV_PW_PLAN = plan;
+    INV_PW_PLAN   = plan;
     pwModalOpen();
   });
 });
 
 // ── Activation banner buttons ──────────────────
 document.getElementById("stdActBtn").addEventListener("click", () => {
-  INV_ACT_TIER = "standard";
+  INV_ACT_TIER  = "standard";
   INV_PW_ACTION = "activate";
   pwModalOpen();
 });
 
 document.getElementById("premActBtn").addEventListener("click", () => {
-  INV_ACT_TIER = "premium";
+  INV_ACT_TIER  = "premium";
   INV_PW_ACTION = "activate";
   pwModalOpen();
 });
@@ -275,9 +275,9 @@ document.getElementById("actModal").addEventListener("click", e => {
 
 // ── Activation confirm ─────────────────────────
 document.getElementById("actModalConfirm").addEventListener("click", async () => {
-  const fee = INV_ACT_TIER === "standard" ? 500 : 1000;
+  const fee   = INV_ACT_TIER === "standard" ? 500 : 1000;
   const errEl = document.getElementById("actModalErr");
-  const btn = document.getElementById("actModalConfirm");
+  const btn   = document.getElementById("actModalConfirm");
   errEl.textContent = "";
 
   if (INV_BALANCE < fee) {
@@ -289,20 +289,20 @@ document.getElementById("actModalConfirm").addEventListener("click", async () =>
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
 
   try {
-    const uRef = doc(db, "users", INV_USER.uid);
+    const uRef  = doc(db, "users", INV_USER.uid);
     const uSnap = await getDoc(uRef);
     const uData = uSnap.data();
-    const upd = { balance: (uData.balance || 0) - fee };
+    const upd   = { balance: (uData.balance || 0) - fee };
     if (INV_ACT_TIER === "standard") upd.standardActivated = true;
-    if (INV_ACT_TIER === "premium") upd.premiumActivated = true;
+    if (INV_ACT_TIER === "premium")  upd.premiumActivated  = true;
     await updateDoc(uRef, upd);
 
     await addDoc(collection(db, "users", INV_USER.uid, "transactions"), {
-      type: "activation",
-      plan: INV_ACT_TIER === "standard" ? "Standard Plan Activation" : "Premium Plan Activation",
+      type:   "activation",
+      plan:   INV_ACT_TIER === "standard" ? "Standard Plan Activation" : "Premium Plan Activation",
       amount: fee,
       status: "completed",
-      date: serverTimestamp()
+      date:   serverTimestamp()
     });
 
     const aN = Notifs.planActivated(INV_ACT_TIER);
@@ -334,8 +334,8 @@ document.getElementById("invModal").addEventListener("click", e => {
 
 // ── Live preview ───────────────────────────────
 document.getElementById("invAmount").addEventListener("input", () => {
-  const amt = parseFloat(document.getElementById("invAmount").value);
-  const cfg = INV_PLANS[INV_PLAN];
+  const amt  = parseFloat(document.getElementById("invAmount").value);
+  const cfg  = INV_PLANS[INV_PLAN];
   const prev = document.getElementById("invModalPreview");
   if (!cfg || !amt || isNaN(amt) || amt <= 0) { prev.style.display = "none"; return; }
 
@@ -361,16 +361,16 @@ document.getElementById("invAmount").addEventListener("input", () => {
 
 // ── Confirm investment ─────────────────────────
 document.getElementById("invModalConfirm").addEventListener("click", async () => {
-  const amt = parseFloat(document.getElementById("invAmount").value);
-  const cfg = INV_PLANS[INV_PLAN];
+  const amt   = parseFloat(document.getElementById("invAmount").value);
+  const cfg   = INV_PLANS[INV_PLAN];
   const errEl = document.getElementById("invModalErr");
-  const btn = document.getElementById("invModalConfirm");
-  const ico = document.getElementById("invModalBtnIco");
+  const btn   = document.getElementById("invModalConfirm");
+  const ico   = document.getElementById("invModalBtnIco");
   errEl.textContent = "";
 
-  if (!amt || isNaN(amt)) { errEl.textContent = "Please enter an amount."; return; }
-  if (amt < cfg.minDep) { errEl.textContent = `Minimum is GHS ${cfg.minDep.toLocaleString()}.`; return; }
-  if (amt > INV_BALANCE) { errEl.textContent = "Insufficient balance. Please deposit first."; return; }
+  if (!amt || isNaN(amt))  { errEl.textContent = "Please enter an amount."; return; }
+  if (amt < cfg.minDep)    { errEl.textContent = `Minimum is GHS ${cfg.minDep.toLocaleString()}.`; return; }
+  if (amt > INV_BALANCE)   { errEl.textContent = "Insufficient balance. Please deposit first."; return; }
 
   // ── Minimum balance check ──────────────────
   if ((INV_BALANCE - amt) < MIN_BALANCE) {
@@ -389,35 +389,35 @@ document.getElementById("invModalConfirm").addEventListener("click", async () =>
       : null;
 
     await addDoc(collection(db, "users", INV_USER.uid, "investments"), {
-      plan: INV_PLAN,
-      amount: amt,
-      rate: cfg.rate,
-      rateType: cfg.rateType,
-      duration: cfg.duration,
-      tier: cfg.tier,
-      startDate: serverTimestamp(),
-      maturityDate: maturityDate ? Timestamp.fromDate(maturityDate) : null,
-      profitEarned: 0,
+      plan:           INV_PLAN,
+      amount:         amt,
+      rate:           cfg.rate,
+      rateType:       cfg.rateType,
+      duration:       cfg.duration,
+      tier:           cfg.tier,
+      startDate:      serverTimestamp(),
+      maturityDate:   maturityDate ? Timestamp.fromDate(maturityDate) : null,
+      profitEarned:   0,
       lastProfitDate: Timestamp.fromDate(now),
-      status: "active",
-      locked: cfg.duration !== null
+      status:         "active",
+      locked:         cfg.duration !== null
     });
 
-    const uRef = doc(db, "users", INV_USER.uid);
+    const uRef  = doc(db, "users", INV_USER.uid);
     const uSnap = await getDoc(uRef);
     const uData = uSnap.data();
     await updateDoc(uRef, {
-      balance: (uData.balance || 0) - amt,
-      invested: (uData.invested || 0) + amt,
+      balance:     (uData.balance     || 0) - amt,
+      invested:    (uData.invested    || 0) + amt,
       activePlans: (uData.activePlans || 0) + 1
     });
 
     await addDoc(collection(db, "users", INV_USER.uid, "transactions"), {
-      type: "investment",
-      plan: INV_PLAN,
+      type:   "investment",
+      plan:   INV_PLAN,
       amount: amt,
       status: "active",
-      date: serverTimestamp()
+      date:   serverTimestamp()
     });
 
     const iN = Notifs.investmentActive(INV_PLAN, amt);
@@ -460,13 +460,13 @@ function openLoanModal(plan) {
   const cfg = LOAN_PLANS[plan];
 
   invSetEl("loanModalTitle", `Apply for ${plan}`);
-  invSetEl("loanModalChip", plan);
-  invSetEl("loanModalNote", `Min: GHS ${cfg.minAmt.toLocaleString()} · Max: GHS ${cfg.maxAmt.toLocaleString()} · ${(cfg.rate * 100)}% interest`);
-  invSetEl("loanModalErr", "");
-  document.getElementById("loanModalAmount").value = "";
+  invSetEl("loanModalChip",  plan);
+  invSetEl("loanModalNote",  `Min: GHS ${cfg.minAmt.toLocaleString()} · Max: GHS ${cfg.maxAmt.toLocaleString()} · ${(cfg.rate * 100)}% interest`);
+  invSetEl("loanModalErr",   "");
+  document.getElementById("loanModalAmount").value  = "";
   document.getElementById("loanModalPurpose").value = "";
   document.getElementById("loanModalPreview").style.display = "none";
-  document.getElementById("loanModalOk").style.display = "none";
+  document.getElementById("loanModalOk").style.display     = "none";
   document.getElementById("loanModal").classList.add("inv-modal-active");
 }
 
@@ -479,42 +479,42 @@ document.getElementById("loanModal").addEventListener("click", e => {
 });
 
 document.getElementById("loanModalAmount").addEventListener("input", () => {
-  const amt = parseFloat(document.getElementById("loanModalAmount").value);
-  const cfg = LOAN_PLANS[INV_LOAN_PLAN];
+  const amt  = parseFloat(document.getElementById("loanModalAmount").value);
+  const cfg  = LOAN_PLANS[INV_LOAN_PLAN];
   const prev = document.getElementById("loanModalPreview");
   if (!cfg || !amt || isNaN(amt) || amt <= 0) { prev.style.display = "none"; return; }
 
   const interest = amt * cfg.rate;
-  const total = amt + interest;
-  invSetEl("loanPrevAmt", fmtGHS(amt));
+  const total    = amt + interest;
+  invSetEl("loanPrevAmt",      fmtGHS(amt));
   invSetEl("loanPrevInterest", `+${fmtGHS(interest)}`);
-  invSetEl("loanPrevTotal", fmtGHS(total));
+  invSetEl("loanPrevTotal",    fmtGHS(total));
   prev.style.display = "block";
 });
 
 document.getElementById("loanModalConfirm").addEventListener("click", async () => {
-  const name = document.getElementById("loanModalName").value.trim();
-  const phone = document.getElementById("loanModalPhone").value.trim();
-  const amount = parseFloat(document.getElementById("loanModalAmount").value);
+  const name    = document.getElementById("loanModalName").value.trim();
+  const phone   = document.getElementById("loanModalPhone").value.trim();
+  const amount  = parseFloat(document.getElementById("loanModalAmount").value);
   const purpose = document.getElementById("loanModalPurpose").value.trim();
-  const errEl = document.getElementById("loanModalErr");
-  const btn = document.getElementById("loanModalConfirm");
-  const cfg = LOAN_PLANS[INV_LOAN_PLAN];
+  const errEl   = document.getElementById("loanModalErr");
+  const btn     = document.getElementById("loanModalConfirm");
+  const cfg     = LOAN_PLANS[INV_LOAN_PLAN];
   errEl.textContent = "";
 
-  if (!name) { errEl.textContent = "Please enter your full name."; return; }
-  if (!phone) { errEl.textContent = "Please enter your phone number."; return; }
+  if (!name)                    { errEl.textContent = "Please enter your full name."; return; }
+  if (!phone)                   { errEl.textContent = "Please enter your phone number."; return; }
   if (!amount || isNaN(amount)) { errEl.textContent = "Please enter a loan amount."; return; }
-  if (amount < cfg.minAmt) { errEl.textContent = `Minimum loan amount is GHS ${cfg.minAmt.toLocaleString()}.`; return; }
-  if (amount > cfg.maxAmt) { errEl.textContent = `Maximum loan amount is GHS ${cfg.maxAmt.toLocaleString()}.`; return; }
-  if (!purpose) { errEl.textContent = "Please explain the purpose of the loan."; return; }
+  if (amount < cfg.minAmt)      { errEl.textContent = `Minimum loan amount is GHS ${cfg.minAmt.toLocaleString()}.`; return; }
+  if (amount > cfg.maxAmt)      { errEl.textContent = `Maximum loan amount is GHS ${cfg.maxAmt.toLocaleString()}.`; return; }
+  if (!purpose)                 { errEl.textContent = "Please explain the purpose of the loan."; return; }
 
   btn.disabled = true;
   invSetEl("loanModalBtnTxt", "Submitting...");
 
   try {
     const interest = amount * cfg.rate;
-    const total = amount + interest;
+    const total    = amount + interest;
 
     await addDoc(collection(db, "loanRequests"), {
       uid: INV_USER.uid, name, email: INV_USER.email, phone,
@@ -528,7 +528,7 @@ document.getElementById("loanModalConfirm").addEventListener("click", async () =
     });
 
     await fetch(FORMSPREE_URL, {
-      method: "POST",
+      method:  "POST",
       headers: { "Content-Type": "application/json", "Accept": "application/json" },
       body: JSON.stringify({
         subject: `Loan Application — ${name} — ${INV_LOAN_PLAN}`,
@@ -582,7 +582,7 @@ async function invLoadHistory() {
   tbody.innerHTML = `<tr><td colspan="6" class="inv-table-msg"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>`;
 
   try {
-    const q = query(collection(db, "users", INV_USER.uid, "investments"), orderBy("startDate", "desc"));
+    const q    = query(collection(db, "users", INV_USER.uid, "investments"), orderBy("startDate", "desc"));
     const snap = await getDocs(q);
 
     if (snap.empty) {
@@ -592,15 +592,15 @@ async function invLoadHistory() {
 
     tbody.innerHTML = "";
     snap.forEach(ds => {
-      const inv = ds.data();
-      const start = inv.startDate?.seconds
+      const inv    = ds.data();
+      const start  = inv.startDate?.seconds
         ? new Date(inv.startDate.seconds * 1000).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
         : "—";
-      const mat = inv.maturityDate?.seconds
+      const mat    = inv.maturityDate?.seconds
         ? new Date(inv.maturityDate.seconds * 1000).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
         : "Flexible";
       const profit = typeof inv.profitEarned === "number" ? inv.profitEarned : 0;
-      const sc = inv.status === "active" ? "success" : inv.status === "matured" ? "warning" : "pending";
+      const sc     = inv.status === "active" ? "success" : inv.status === "matured" ? "warning" : "pending";
 
       tbody.innerHTML += `
         <tr>
@@ -659,27 +659,27 @@ async function invRunProfitEngine() {
       }
 
       await updateDoc(doc(db, "users", INV_USER.uid, "investments", ds.id), {
-        profitEarned: (inv.profitEarned || 0) + gained,
+        profitEarned:   (inv.profitEarned || 0) + gained,
         lastProfitDate: Timestamp.fromDate(now),
-        status: newStatus
+        status:         newStatus
       });
 
       totalProfit += gained;
     }
 
     if (totalProfit > 0) {
-      const uRef = doc(db, "users", INV_USER.uid);
+      const uRef  = doc(db, "users", INV_USER.uid);
       const uData = (await getDoc(uRef)).data();
       await updateDoc(uRef, {
         balance: (uData.balance || 0) + totalProfit,
-        profit: (uData.profit || 0) + totalProfit
+        profit:  (uData.profit  || 0) + totalProfit
       });
       await addDoc(collection(db, "users", INV_USER.uid, "transactions"), {
-        type: "profit",
+        type:   "profit",
         amount: parseFloat(totalProfit.toFixed(2)),
-        note: "Profit credit",
+        note:   "Profit credit",
         status: "completed",
-        date: serverTimestamp()
+        date:   serverTimestamp()
       });
 
       const pN = Notifs.profitCredited(parseFloat(totalProfit.toFixed(2)));
@@ -697,7 +697,7 @@ async function invRunProfitEngine() {
 // ══════════════════════════════════════════════
 async function handlePremiumReferralCredit(tier, fee) {
   try {
-    const uRef = doc(db, "users", INV_USER.uid);
+    const uRef  = doc(db, "users", INV_USER.uid);
     const uSnap = await getDoc(uRef);
     const uData = uSnap.data();
 
@@ -707,12 +707,12 @@ async function handlePremiumReferralCredit(tier, fee) {
     const rewardedKey = tier === "standard" ? "premStdRefRewarded" : "premPremRefRewarded";
     if (uData[rewardedKey]) return;
 
-    const q = query(collection(db, "users"), where("premiumReferralCode", "==", premReferredBy));
+    const q    = query(collection(db, "users"), where("premiumReferralCode", "==", premReferredBy));
     const snap = await getDocs(q);
     if (snap.empty) return;
 
-    const referrerDoc = snap.docs[0];
-    const referrerId = referrerDoc.id;
+    const referrerDoc  = snap.docs[0];
+    const referrerId   = referrerDoc.id;
     const referrerData = referrerDoc.data();
 
     if (referrerId === INV_USER.uid) return;
@@ -720,17 +720,17 @@ async function handlePremiumReferralCredit(tier, fee) {
     const reward = parseFloat((fee * 0.10).toFixed(2));
 
     await updateDoc(doc(db, "users", referrerId), {
-      balance: (referrerData.balance || 0) + reward,
+      balance:                 (referrerData.balance                 || 0) + reward,
       premiumReferralEarnings: (referrerData.premiumReferralEarnings || 0) + reward,
-      premiumReferralCount: (referrerData.premiumReferralCount || 0) + 1
+      premiumReferralCount:    (referrerData.premiumReferralCount    || 0) + 1
     });
 
     await addDoc(collection(db, "users", referrerId, "transactions"), {
-      type: "referral_reward",
+      type:   "referral_reward",
       amount: reward,
-      note: `Premium referral reward — ${uData.name || "a user"} activated ${tier} plan`,
+      note:   `Premium referral reward — ${uData.name || "a user"} activated ${tier} plan`,
       status: "completed",
-      date: serverTimestamp()
+      date:   serverTimestamp()
     });
 
     await createNotification(
@@ -750,18 +750,18 @@ async function handlePremiumReferralCredit(tier, fee) {
 // PREMIUM REFERRAL CARD
 // ══════════════════════════════════════════════
 function loadPremRefStats(d, uid) {
-  const codeEl = document.getElementById("premRefCodeDisplay");
-  const copyBtn = document.getElementById("premRefCopyBtn");
-  const countEl = document.getElementById("premRefCount");
-  const earnedEl = document.getElementById("premRefEarned");
+  const codeEl    = document.getElementById("premRefCodeDisplay");
+  const copyBtn   = document.getElementById("premRefCopyBtn");
+  const countEl   = document.getElementById("premRefCount");
+  const earnedEl  = document.getElementById("premRefEarned");
 
   if (!d.premiumActivated) {
     // Not activated — hide code, disable copy
-    if (codeEl) codeEl.textContent = "———";
-    if (copyBtn) copyBtn.disabled = true;
-    if (copyBtn) copyBtn.style.opacity = "0.4";
-    if (copyBtn) copyBtn.style.cursor = "not-allowed";
-    if (countEl) countEl.textContent = "0";
+    if (codeEl)   codeEl.textContent   = "———";
+    if (copyBtn)  copyBtn.disabled     = true;
+    if (copyBtn)  copyBtn.style.opacity = "0.4";
+    if (copyBtn)  copyBtn.style.cursor  = "not-allowed";
+    if (countEl)  countEl.textContent  = "0";
     if (earnedEl) earnedEl.textContent = fmtGHS(0);
     return;
   }
@@ -770,15 +770,15 @@ function loadPremRefStats(d, uid) {
   const premCode = d.premiumReferralCode || ("YMGP-" + uid.slice(0, 6).toUpperCase());
 
   if (!d.premiumReferralCode) {
-    updateDoc(doc(db, "users", uid), { premiumReferralCode: premCode }).catch(() => { });
+    updateDoc(doc(db, "users", uid), { premiumReferralCode: premCode }).catch(() => {});
   }
 
-  if (codeEl) codeEl.textContent = premCode;
-  if (copyBtn) copyBtn.disabled = false;
-  if (copyBtn) copyBtn.style.opacity = "1";
-  if (copyBtn) copyBtn.style.cursor = "pointer";
-  if (countEl) countEl.textContent = d.premiumReferralCount || 0;
-  if (earnedEl) earnedEl.textContent = fmtGHS(d.premiumReferralEarnings || 0);
+  if (codeEl)   codeEl.textContent    = premCode;
+  if (copyBtn)  copyBtn.disabled      = false;
+  if (copyBtn)  copyBtn.style.opacity = "1";
+  if (copyBtn)  copyBtn.style.cursor  = "pointer";
+  if (countEl)  countEl.textContent   = d.premiumReferralCount    || 0;
+  if (earnedEl) earnedEl.textContent  = fmtGHS(d.premiumReferralEarnings || 0);
 }
 
 const premRefCopyBtn = document.getElementById("premRefCopyBtn");
