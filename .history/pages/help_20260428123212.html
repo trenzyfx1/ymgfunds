@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Help Center — YMG Funds</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/help.css">
+  <link rel="icon" href="../images/logo-2.png" type="image/x-icon">
+</head>
+
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="logo">
+        <img src="../images/logo.jpeg" alt="YMG Funds Logo" class="logo-img">
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="features.html" class="nav-link">Features</a></li>
+        <li><a href="plans.html" class="nav-link">Plans</a></li>
+        <li><a href="security.html" class="nav-link">Security</a></li>
+        <li><a href="about.html" class="nav-link">About Us</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── HERO + SEARCH ──────────────────────── -->
+  <section class="help-hero">
+    <div class="help-hero-container">
+      <span class="section-label">Help Center</span>
+      <h1>How can we <span class="accent">help you</span> today?</h1>
+      <p>Search for answers or browse help topics below.</p>
+      <div class="help-search-wrapper">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="helpSearch" placeholder="Search for help…" autocomplete="off" />
+        <button class="search-btn" id="searchBtn">Search</button>
+      </div>
+      <div class="search-no-results" id="searchNoResults">
+        No results found. Try a different keyword or browse the categories below.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HELP CATEGORIES ────────────────────── -->
+  <section class="help-categories">
+    <div class="help-categories-container">
+      <span class="section-label">Browse Topics</span>
+      <h2>Help Categories</h2>
+      <p class="section-sub">Select a category to find answers quickly.</p>
+
+      <div class="categories-grid">
+
+        <div class="category-card" data-category="getting-started">
+          <div class="category-icon"><i class="fa-solid fa-rocket"></i></div>
+          <h3>Getting Started</h3>
+          <ul>
+            <li><i class="fa-solid fa-chevron-right"></i> How to create an account</li>
+            <li><i class="fa-solid fa-chevron-right"></i> How to log in</li>
+            <li><i class="fa-solid fa-chevron-right"></i> How to set up your profile</li>
+          </ul>
+          <span class="category-count">3 articles</span>
+        </div>
+
+        <div class="category-card" data-category="deposits">
+          <div class="category-icon"><i class="fa-solid fa-download"></i></div>
+          <h3>Deposits & Payments</h3>
+          <ul>
+            <li><i class="fa-solid fa-chevron-right"></i> How to deposit money</li>
+            <li><i class="fa-solid fa-chevron-right"></i> Payment methods accepted</li>
+            <li><i class="fa-solid fa-chevron-right"></i> Deposit issues & delays</li>
+          </ul>
+          <span class="category-count">3 articles</span>
+        </div>
+
+        <div class="category-card" data-category="plans">
+          <div class="category-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <h3>Plans & Growth</h3>
+          <ul>
+            <li><i class="fa-solid fa-chevron-right"></i> How plans work</li>
+            <li><i class="fa-solid fa-chevron-right"></i> Choosing the right plan</li>
+            <li><i class="fa-solid fa-chevron-right"></i> Understanding your growth</li>
+          </ul>
+          <span class="category-count">3 articles</span>
+        </div>
+
+        <div class="category-card" data-category="withdrawals">
+          <div class="category-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
+          <h3>Withdrawals</h3>
+          <ul>
+            <li><i class="fa-solid fa-chevron-right"></i> How to withdraw funds</li>
+            <li><i class="fa-solid fa-chevron-right"></i> Withdrawal processing time</li>
+            <li><i class="fa-solid fa-chevron-right"></i> Withdrawal issues</li>
+          </ul>
+          <span class="category-count">3 articles</span>
+        </div>
+
+        <div class="category-card" data-category="security">
+          <div class="category-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <h3>Security & Account</h3>
+          <ul>
+            <li><i class="fa-solid fa-chevron-right"></i> How to reset your password</li>
+            <li><i class="fa-solid fa-chevron-right"></i> Keeping your account safe</li>
+            <li><i class="fa-solid fa-chevron-right"></i> Identity verification (KYC)</li>
+          </ul>
+          <span class="category-count">3 articles</span>
+        </div>
+
+        <div class="category-card" data-category="dashboard">
+          <div class="category-icon"><i class="fa-solid fa-gauge-high"></i></div>
+          <h3>Dashboard & Tracking</h3>
+          <ul>
+            <li><i class="fa-solid fa-chevron-right"></i> How to view your balance</li>
+            <li><i class="fa-solid fa-chevron-right"></i> Reading your transaction history</li>
+            <li><i class="fa-solid fa-chevron-right"></i> Tracking your growth</li>
+          </ul>
+          <span class="category-count">3 articles</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── POPULAR QUESTIONS ───────────────────── -->
+  <section class="popular-questions">
+    <div class="popular-container">
+      <span class="section-label">Most Asked</span>
+      <h2>Popular Questions</h2>
+      <p class="section-sub">Quick answers to the questions we hear most often.</p>
+
+      <div class="popular-faq-list">
+
+        <div class="faq-item">
+          <button class="faq-question">
+            How do I deposit money into my account?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Log in to your account and navigate to your wallet. Select the deposit option, enter the amount you wish
+              to add, and choose your preferred payment method. Once the payment is confirmed, your wallet balance will
+              be updated accordingly.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            How long do withdrawals take?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Withdrawal processing times depend on your selected plan and payment method. Flexible plan withdrawals
+              are generally processed within a short period, while fixed deposit withdrawals are available after the
+              plan's maturity date. You will be able to track your withdrawal status from your dashboard.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            Are returns guaranteed?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-warning">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <p>Returns are not guaranteed and may vary depending on market conditions and overall platform
+                performance. We encourage all users to read the full terms of their selected plan before investing.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            How do I choose the right plan?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Start by identifying your financial goals. If you want flexible access to your funds, the Starter Savings
+              plan is a good fit. If you can commit for a set period and want higher returns, the Fixed Deposit plan is
+              worth considering. For compound growth over time, explore the Growth Plus plan. Visit our Plans page for a
+              full side-by-side comparison.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            How do I track my account growth?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Your dashboard gives you a complete overview of your account — including your total balance, profits
+              earned, active plans, and full transaction history. All information is updated in real time so you always
+              know exactly where your money stands.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            What do I do if I have a problem with my account?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>If you experience any issue with your account, first check your transaction history and dashboard for any
+              useful information. If the issue persists, reach out to our support team through the Contact Us page and
+              describe your problem clearly. We aim to respond within 24–48 hours.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── QUICK GUIDE ─────────────────────────── -->
+  <section class="quick-guide">
+    <div class="quick-guide-container">
+      <span class="section-label">Step by Step</span>
+      <h2>How to Start Using YMG Funds</h2>
+      <p class="section-sub">New here? Follow these four simple steps to get up and running.</p>
+
+      <div class="guide-steps">
+        <div class="guide-step">
+          <div class="guide-step-num">1</div>
+          <div class="guide-step-icon"><i class="fa-solid fa-user-plus"></i></div>
+          <h3>Create an Account</h3>
+          <p>Sign up with your basic details and get instant access to your personal dashboard and wallet.</p>
+        </div>
+        <div class="guide-connector"></div>
+        <div class="guide-step">
+          <div class="guide-step-num">2</div>
+          <div class="guide-step-icon"><i class="fa-solid fa-wallet"></i></div>
+          <h3>Deposit Funds</h3>
+          <p>Add money to your wallet using your preferred payment method, starting from as little as 50 GHS.</p>
+        </div>
+        <div class="guide-connector"></div>
+        <div class="guide-step">
+          <div class="guide-step-num">3</div>
+          <div class="guide-step-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+          <h3>Choose a Plan</h3>
+          <p>Browse the available savings and investment plans and select the one that best matches your goals.</p>
+        </div>
+        <div class="guide-connector"></div>
+        <div class="guide-step">
+          <div class="guide-step-num">4</div>
+          <div class="guide-step-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <h3>Track Your Growth</h3>
+          <p>Monitor your balance, profits, and transaction history from your dashboard at any time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SUPPORT CTA ─────────────────────────── -->
+  <section class="help-support">
+    <div class="help-support-container">
+      <div class="help-support-left">
+        <div class="help-support-icon"><i class="fa-solid fa-headset"></i></div>
+        <h2>Still Need Help?</h2>
+        <p>If you could not find what you were looking for, our support team is ready to assist you directly. We are
+          here to make sure your experience on YMG Funds is smooth and stress-free.</p>
+        <p class="response-note"><i class="fa-solid fa-clock"></i> We typically respond within 24–48 hours.</p>
+        <div class="help-support-btns">
+          <a href="contact.html" class="btn-cta-primary">Contact Support <i class="fa-solid fa-arrow-right"></i></a>
+          <div class="help-support-btns">
+            <a href="contact.html" class="btn-cta-primary">Contact Support <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="https://wa.me/233536115032?text=Hello%20YMG%20Funds%2C%20I%20need%20help." target="_blank"
+              style="display:inline-flex;align-items:center;gap:7px;padding:12px 22px;background:#25d366;color:#fff;border-radius:8px;font-weight:700;font-size:0.88rem;text-decoration:none;transition:background 0.2s;"
+              onmouseover="this.style.background='#1da851'" onmouseout="this.style.background='#25d366'">
+              <i class="fa-brands fa-whatsapp" style="font-size:1rem;"></i> WhatsApp
+            </a>
+            <a href="faq.html" class="btn-cta-outline">Visit FAQ</a>
+        </div>
+      </div>
+      <div class="help-support-right">
+        <div class="support-card">
+          <div class="support-card-item">
+            <i class="fa-solid fa-envelope"></i>
+            <div>
+              <h4>Email Support</h4>
+              <p>support@ymgfunds.com</p>
+            </div>
+          </div>
+          <div class="support-card-divider"></div>
+          <div class="support-card-item">
+            <i class="fa-solid fa-location-dot"></i>
+            <div>
+              <h4>Location</h4>
+              <p>Volta Region, Ghana</p>
+            </div>
+          </div>
+          <div class="support-card-divider"></div>
+          <div class="support-card-item">
+            <i class="fa-solid fa-clock"></i>
+            <div>
+              <h4>Response Time</h4>
+              <p>Within 24–48 hours</p>
+            </div>
+          </div>
+          <div class="support-card-divider"></div>
+          <div class="support-card-item">
+            <i class="fa-brands fa-whatsapp" style="color:#25d366;"></i>
+            <div>
+              <h4>WhatsApp</h4>
+              <p>+233 53 611 5032</p>
+              <a href="https://wa.me/233536115032?text=Hello%20YMG%20Funds%2C%20I%20need%20help." target="_blank"
+                style="display:inline-flex;align-items:center;gap:5px;margin-top:5px;background:#25d366;color:#fff;padding:5px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;text-decoration:none;">
+                <i class="fa-brands fa-whatsapp"></i> Chat Now
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TRUST NOTE ──────────────────────────── -->
+  <section class="help-trust">
+    <div class="help-trust-container">
+      <i class="fa-solid fa-shield-halved"></i>
+      <p>YMG Funds is committed to providing clear guidance, reliable support, and a smooth user experience at every
+        step of your financial journey.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-main">
+      <div class="footer-container">
+        <div class="footer-brand">
+          <a href="../index.html"><img src="../images/logo-2.png" alt="YMG Funds" class="footer-logo"></a>
+          <p>YMG Funds is a modern savings and investment platform designed to help users grow their money with clarity,
+            simplicity, and confidence. Built for steady financial progress, not risky speculation.</p>
+          <div class="footer-contact">
+            <p><i class="fa-solid fa-location-dot"></i> Volta Region, Ghana</p>
+          </div>
+          <div class="footer-socials">
+            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-links-group">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="plans.html">Plans</a></li>
+            <li><a href="security.html">Security</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-group">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="help.html">Help Center</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-group">
+          <h4>Account</h4>
+          <ul>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="signup.html">Sign Up</a></li>
+            <li><a href="signup.html">Dashboard</a></li>
+            <li><a href="forgot-password.html">Forgot Password</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-container">
+        <p>© 2026 YMG Funds. All rights reserved. &nbsp;|&nbsp; Designed & Built by <strong>Trenzy Tech</strong></p>
+        <div class="footer-security">
+          <span><i class="fa-solid fa-shield-halved"></i> Secure Platform</span>
+          <span><i class="fa-solid fa-lock"></i> Encrypted Transactions</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+  <script src="../js/help.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Deposit — YMG Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="icon" href="../images/logo-2.png" type="image/x-icon">
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/logo.jpeg" alt="YMG Funds" class="sidebar-logo-img">
+      <span>YMG<strong>Funds</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item active"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+      <a href="help.html" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>Help</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="../pages/login.html" class="nav-item logout">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span>
+      </a>
+    </div>
+    <a href="../index.html"
+      style="position:fixed;bottom:24px;left:24px;background:#081c10;color:#c9a84c;border:2px solid #c9a84c;border-radius:50px;padding:10px 20px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:9999;transition:all 0.2s;"
+      onmouseover="this.style.background='#c9a84c';this.style.color='#081c10';"
+      onmouseout="this.style.background='#081c10';this.style.color='#c9a84c';">
+      <i class="fa-solid fa-house"></i>
+    </a>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting">
+          <h2>Deposit Funds</h2>
+          <p>Add money to your YMG Funds wallet</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <div class="dep-grid">
+
+        <!-- LEFT: Form -->
+        <div class="dep-form-card">
+          <div class="dep-form-title">
+            <i class="fa-solid fa-wallet"></i>
+            <h3>Add Money to Wallet</h3>
+          </div>
+
+          <!-- Balance Bar -->
+          <div class="dep-balance-bar">
+            <div class="dep-bal-item">
+              <span>Wallet Balance</span>
+              <strong id="currentBalance">GHS 0.00</strong>
+            </div>
+            <div class="dep-bal-divider"></div>
+            <div class="dep-bal-item">
+              <span>Available Balance</span>
+              <strong id="availableBalance">GHS 0.00</strong>
+            </div>
+          </div>
+
+          <!-- Quick Amounts -->
+          <div class="dep-quick-label">Select or enter amount</div>
+          <div class="dep-quick-btns">
+            <button class="dep-quick-btn" data-amount="50">GHS 50</button>
+            <button class="dep-quick-btn" data-amount="100">GHS 100</button>
+            <button class="dep-quick-btn" data-amount="200">GHS 200</button>
+            <button class="dep-quick-btn" data-amount="500">GHS 500</button>
+            <button class="dep-quick-btn" data-amount="1000">GHS 1,000</button>
+            <button class="dep-quick-btn" data-amount="5000">GHS 5,000</button>
+          </div>
+
+          <!-- Amount Input -->
+          <div class="dep-amount-wrap">
+            <span class="dep-currency">GHS</span>
+            <input
+              type="number"
+              id="depositAmount"
+              placeholder="0.00"
+              min="50"
+              autocomplete="off"
+            />
+          </div>
+          <p class="dep-min-note">Minimum deposit: GHS 50.00</p>
+
+          <!-- Fee Summary -->
+          <div class="dep-summary" id="depSummary" style="display:none;">
+            <div class="dep-summary-row">
+              <span>Deposit Amount</span>
+              <strong id="summaryAmt">GHS 0.00</strong>
+            </div>
+            <div class="dep-summary-row">
+              <span>Processing Fee</span>
+             <strong class="dep-fee" id="summaryFee">− GHS 0.00</strong>
+            </div>
+            <div class="dep-summary-row dep-summary-total">
+              <span>You Receive</span>
+              <strong id="summaryNet">GHS 0.00</strong>
+            </div>
+          </div>
+
+          <!-- Paystack Badge -->
+          <div class="dep-paystack-badge">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Secured by <strong>Paystack</strong> — Pay with Card, Mobile Money or Bank Transfer</span>
+          </div>
+
+          <p class="dep-error" id="depError"></p>
+
+          <button class="dep-pay-btn" id="depositBtn">
+            <i class="fa-solid fa-lock"></i>
+            <span id="depBtnTxt">Top Up</span>
+          </button>
+
+          <div class="dep-success" id="depositSuccess">
+            <i class="fa-solid fa-circle-check"></i>
+            <div>
+              <strong>Deposit Successful!</strong>
+              <p>GHS <span id="depositedAmt">0</span> has been added to your wallet.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Info -->
+        <div class="dep-info-col">
+
+          <div class="dep-info-card">
+            <h4><i class="fa-solid fa-circle-info"></i> How It Works</h4>
+            <div class="dep-steps">
+              <div class="dep-step">
+                <div class="dep-step-num">1</div>
+                <div>
+                  <strong>Enter Amount</strong>
+                  <p>Choose or type the amount you want to deposit.</p>
+                </div>
+              </div>
+              <div class="dep-step">
+                <div class="dep-step-num">2</div>
+                <div>
+                  <strong>Pay via Paystack</strong>
+                  <p>Complete payment securely using card, MoMo, or bank transfer.</p>
+                </div>
+              </div>
+              <div class="dep-step">
+                <div class="dep-step-num">3</div>
+                <div>
+                  <strong>Instant Credit</strong>
+                  <p>Your wallet balance updates immediately after payment.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dep-info-card dep-warning-card">
+            <h4><i class="fa-solid fa-triangle-exclamation"></i> Important</h4>
+            <p>A processing fee of <strong>GHS 2%</strong> applies to every deposit. Ensure payment details are accurate before confirming. YMG Funds is not liable for failed transfers due to incorrect information.</p>
+          </div>
+
+          <div class="dep-info-card dep-secure-card">
+            <h4><i class="fa-solid fa-lock"></i> Safe & Secure</h4>
+            <p>All transactions are encrypted and processed through Paystack, a PCI-DSS compliant payment gateway trusted by thousands of businesses across Africa.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Deposit History -->
+      <div class="dep-history-card">
+        <div class="dep-history-head">
+          <h4><i class="fa-solid fa-clock-rotate-left"></i> Deposit History</h4>
+        </div>
+        <div class="dep-history-wrap">
+          <table class="dep-table">
+            <thead>
+              <tr>
+                <th>Reference</th>
+                <th>Amount</th>
+                <th>Fee</th>
+                <th>Credited</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="depositTable">
+              <tr>
+                <td colspan="6" class="dep-table-msg">
+                  <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Paystack CDN -->
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+
+  <script type="module" src="./js/globaluser.js"></script>
+  <script type="module" src="./js/deposit.js"></script>
+  <script type="module" src="./js/sidebar.js"></script>
+</body>
+</html>

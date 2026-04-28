@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Investments — YMG Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/dashboard.css">
+  <link rel="stylesheet" href="./css/pages.css">
+  <link rel="icon" href="../images/logo-2.png" type="image/x-icon">
+</head>
+
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/logo.jpeg" alt="YMG Funds" class="sidebar-logo-img">
+      <span>YMG<strong>Funds</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item active"><i
+          class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i
+          class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+      <a href="help.html" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>Help</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="../pages/login.html" class="nav-item logout">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span>
+      </a>
+    </div>
+    <a href="../index.html"
+      style="position:fixed;bottom:80px;left:24px;background:#081c10;color:#c9a84c;border:2px solid #c9a84c;border-radius:50px;padding:10px 20px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:9999;transition:all 0.2s;"
+      onmouseover="this.style.background='#c9a84c';this.style.color='#081c10';"
+      onmouseout="this.style.background='#081c10';this.style.color='#c9a84c';">
+      <i class="fa-solid fa-house"></i>
+    </a>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting">
+          <h2>Investments</h2>
+          <p>Choose and manage your investment plans</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Balance Bar — UNCHANGED -->
+      <div class="inv-balance-bar">
+        <div class="inv-bal-item">
+          <span>Available Balance</span>
+          <strong id="invAvailBal">GHS 0.00</strong>
+        </div>
+        <div class="inv-bal-item">
+          <span>Total Invested</span>
+          <strong id="invTotalInv">GHS 0.00</strong>
+        </div>
+        <div class="inv-bal-item">
+          <span>Total Profit</span>
+          <strong id="invTotalProfit" class="inv-green">GHS 0.00</strong>
+        </div>
+        <div class="inv-bal-item">
+          <span>Premium Referral Earned</span>
+          <strong id="invPremRefEarned" class="inv-green">GHS 0.00</strong>
+        </div>
+      </div>
+
+      <!-- ── STANDARD PLANS ──────────────────────── -->
+      <div class="inv-sec-head">
+        <div>
+          <h3 class="inv-sec-title"><i class="fa-solid fa-star"></i> YMG Standard Plans</h3>
+          <p class="inv-sec-sub">One-time activation fee of GHS 500 unlocks all standard plans.</p>
+        </div>
+        <span class="inv-tier-tag inv-tier-locked" id="stdTierTag">
+          <i class="fa-solid fa-lock"></i> Locked
+        </span>
+      </div>
+
+      <div class="inv-cards-grid">
+
+        <!-- Starter Savings — UNCHANGED -->
+        <div class="inv-card" id="icard-starter">
+          <div class="inv-lock-strip" id="istrip-starter">
+            <i class="fa-solid fa-lock"></i> Locked — Activate Standard Plan
+          </div>
+          <div class="inv-card-icon"><i class="fa-solid fa-seedling"></i></div>
+          <h4>Starter Savings</h4>
+          <p>Flexible savings with weekly growth. No lock-in period.</p>
+          <div class="inv-rate-wrap">
+            <span class="inv-rate-chip">Weekly Growth</span>
+            <span class="inv-rate-sub">0.5%/week · 1%/month</span>
+          </div>
+          <div class="inv-specs">
+            <div class="inv-spec"><span>Min. Deposit</span><strong>GHS 50</strong></div>
+            <div class="inv-spec"><span>Duration</span><strong>Flexible</strong></div>
+            <div class="inv-spec"><span>Withdrawal</span><strong>Anytime</strong></div>
+            <div class="inv-spec"><span>Lock-in</span><strong>None</strong></div>
+          </div>
+          <button class="inv-cta-btn" data-plan="Starter Savings" data-tier="standard">Invest Now</button>
+        </div>
+
+        <!-- Fixed Deposit — UNCHANGED -->
+        <div class="inv-card inv-card-hot" id="icard-fixed">
+          <div class="inv-lock-strip" id="istrip-fixed">
+            <i class="fa-solid fa-lock"></i> Locked — Activate Standard Plan
+          </div>
+          <span class="inv-hot-tag">POPULAR</span>
+          <div class="inv-card-icon inv-icon-gold"><i class="fa-solid fa-vault"></i></div>
+          <h4>Fixed Deposit</h4>
+          <p>Higher returns with a structured 90-day commitment.</p>
+          <div class="inv-rate-wrap">
+            <span class="inv-rate-chip inv-chip-gold">9.50% Return</span>
+            <span class="inv-rate-sub">90 Days · Fixed</span>
+          </div>
+          <div class="inv-specs">
+            <div class="inv-spec"><span>Min. Deposit</span><strong>GHS 500</strong></div>
+            <div class="inv-spec"><span>Duration</span><strong>90 Days</strong></div>
+            <div class="inv-spec"><span>Withdrawal</span><strong>After Maturity</strong></div>
+            <div class="inv-spec"><span>Lock-in</span><strong>90 Days</strong></div>
+          </div>
+          <button class="inv-cta-btn" data-plan="Fixed Deposit" data-tier="standard">Invest Now</button>
+        </div>
+
+        <!-- Growth Plus — UNCHANGED -->
+        <div class="inv-card" id="icard-growth">
+          <div class="inv-lock-strip" id="istrip-growth">
+            <i class="fa-solid fa-lock"></i> Locked — Activate Standard Plan
+          </div>
+          <div class="inv-card-icon"><i class="fa-solid fa-rocket"></i></div>
+          <h4>Growth Plus</h4>
+          <p>Compound growth for medium-term investors with periodic payouts.</p>
+          <div class="inv-rate-wrap">
+            <span class="inv-rate-chip">12.50% Return</span>
+            <span class="inv-rate-sub">182 Days · Compound</span>
+          </div>
+          <div class="inv-specs">
+            <div class="inv-spec"><span>Min. Deposit</span><strong>GHS 1,000</strong></div>
+            <div class="inv-spec"><span>Duration</span><strong>182 Days</strong></div>
+            <div class="inv-spec"><span>Withdrawal</span><strong>Per Cycle</strong></div>
+            <div class="inv-spec"><span>Lock-in</span><strong>Flexible</strong></div>
+          </div>
+          <button class="inv-cta-btn" data-plan="Growth Plus" data-tier="standard">Invest Now</button>
+        </div>
+
+        <!-- NEW: Standard Loan Card -->
+        <div class="inv-card inv-loan-card" id="icard-std-loan">
+          <div class="inv-lock-strip" id="istrip-std-loan">
+            <i class="fa-solid fa-lock"></i> Locked — Activate Standard Plan
+          </div>
+          <div class="inv-card-icon inv-loan-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+          <h4>Standard Loan</h4>
+          <p>Access instant loan facilities to support your investment needs.</p>
+          <div class="inv-rate-wrap">
+            <span class="inv-rate-chip inv-loan-chip">6% Interest</span>
+            <span class="inv-rate-sub">182 Days · Standard</span>
+          </div>
+          <div class="inv-specs">
+            <div class="inv-spec"><span>Min. Loan</span><strong>GHS 500</strong></div>
+            <div class="inv-spec"><span>Max. Loan</span><strong>GHS 5,000</strong></div>
+            <div class="inv-spec"><span>Duration</span><strong>182 Days</strong></div>
+            <div class="inv-spec"><span>Interest</span><strong>6%</strong></div>
+          </div>
+          <button class="inv-cta-btn inv-loan-btn" data-plan="Standard Loan" data-tier="standard" data-type="loan"></button>
+        </div>
+
+      </div>
+
+      <!-- Disclaimer — UNCHANGED -->
+      <div class="inv-disclaimer" id="stdDisclaimer" style="display:none;">
+        <i class="fa-solid fa-circle-info"></i>
+        All investments carry risk. Returns are not guaranteed and may vary based on market performance.
+      </div>
+
+      <!-- Standard Banner — UNCHANGED -->
+      <div class="inv-act-banner" id="stdActBanner">
+        <div class="inv-act-banner-text">
+          <i class="fa-solid fa-lock"></i>
+          <span><strong>Unlock All Standard Plans</strong> — One-time fee: <strong>GHS 500</strong></span>
+        </div>
+        <button class="inv-act-banner-btn" id="stdActBtn">
+          Activate Now <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- ── PREMIUM PLANS ───────────────────────── -->
+      <div class="inv-sec-head" style="margin-top:36px;">
+        <div>
+          <h3 class="inv-sec-title inv-sec-title-gold">
+            <i class="fa-solid fa-crown"></i> YMG Premium Plans
+          </h3>
+          <p class="inv-sec-sub">One-time activation fee of GHS 1,000 unlocks all premium plans.</p>
+        </div>
+        <span class="inv-tier-tag inv-tier-locked" id="premTierTag">
+          <i class="fa-solid fa-lock"></i> Locked
+        </span>
+      </div>
+
+      <div class="inv-cards-grid">
+
+        <!-- 182-Day — UNCHANGED -->
+        <div class="inv-card inv-card-prem" id="icard-p182">
+          <div class="inv-lock-strip inv-lock-prem" id="istrip-p182">
+            <i class="fa-solid fa-crown"></i> Premium — Activate to Unlock
+          </div>
+          <span class="inv-hot-tag inv-hot-prem">PREMIUM</span>
+          <div class="inv-card-icon inv-icon-gold"><i class="fa-solid fa-chart-line"></i></div>
+          <h4>182-Day Growth Tool</h4>
+          <p>Steady mid-term investment with projected returns up to 15%.</p>
+          <div class="inv-rate-wrap">
+            <span class="inv-rate-chip inv-chip-prem">Up to 15%</span>
+            <span class="inv-rate-sub">182 Days · End of cycle</span>
+          </div>
+          <div class="inv-specs">
+            <div class="inv-spec"><span>Min. Amount</span><strong>GHS 1,000</strong></div>
+            <div class="inv-spec"><span>Duration</span><strong>182 Days</strong></div>
+            <div class="inv-spec"><span>Projected</span><strong>Up to 15%</strong></div>
+            <div class="inv-spec"><span>Payout</span><strong>End of Cycle</strong></div>
+          </div>
+          <button class="inv-cta-btn inv-cta-prem" data-plan="182-Day Growth Tool" data-tier="premium">Invest
+            Now</button>
+        </div>
+
+        <!-- 365-Day — UNCHANGED -->
+        <div class="inv-card inv-card-prem" id="icard-p365">
+          <div class="inv-lock-strip inv-lock-prem" id="istrip-p365">
+            <i class="fa-solid fa-crown"></i> Premium — Activate to Unlock
+          </div>
+          <span class="inv-hot-tag inv-hot-prem">PREMIUM</span>
+          <div class="inv-card-icon inv-icon-gold"><i class="fa-solid fa-gem"></i></div>
+          <h4>365-Day Premium Tool</h4>
+          <p>Long-term investment with projected performance up to 25%.</p>
+          <div class="inv-rate-wrap">
+            <span class="inv-rate-chip inv-chip-prem">Up to 25%</span>
+            <span class="inv-rate-sub">365 Days · End of cycle</span>
+          </div>
+          <div class="inv-specs">
+            <div class="inv-spec"><span>Min. Amount</span><strong>GHS 2,000</strong></div>
+            <div class="inv-spec"><span>Duration</span><strong>365 Days</strong></div>
+            <div class="inv-spec"><span>Projected</span><strong>Up to 25%</strong></div>
+            <div class="inv-spec"><span>Payout</span><strong>End of Cycle</strong></div>
+          </div>
+          <button class="inv-cta-btn inv-cta-prem" data-plan="365-Day Premium Tool" data-tier="premium">Invest
+            Now</button>
+        </div>
+
+        <!-- 3-Year — UNCHANGED -->
+        <div class="inv-card inv-card-prem" id="icard-p3yr">
+          <div class="inv-lock-strip inv-lock-prem" id="istrip-p3yr">
+            <i class="fa-solid fa-crown"></i> Premium — Activate to Unlock
+          </div>
+          <span class="inv-hot-tag inv-hot-prem">PREMIUM</span>
+          <div class="inv-card-icon inv-icon-gold"><i class="fa-solid fa-building-columns"></i></div>
+          <h4>3-Year Wealth Builder</h4>
+          <p>Maximum long-term returns up to 35% annually over 3 years.</p>
+          <div class="inv-rate-wrap">
+            <span class="inv-rate-chip inv-chip-prem">Up to 35%/yr</span>
+            <span class="inv-rate-sub">3 Years · Per cycle</span>
+          </div>
+          <div class="inv-specs">
+            <div class="inv-spec"><span>Min. Amount</span><strong>GHS 500</strong></div>
+            <div class="inv-spec"><span>Duration</span><strong>3 Years</strong></div>
+            <div class="inv-spec"><span>Projected</span><strong>Up to 35%/yr</strong></div>
+            <div class="inv-spec"><span>Payout</span><strong>Per Cycle</strong></div>
+          </div>
+          <button class="inv-cta-btn inv-cta-prem" data-plan="3-Year Wealth Builder" data-tier="premium">Invest
+            Now</button>
+        </div>
+
+        <!-- NEW: Premium Loan Card -->
+        <div class="inv-card inv-card-prem inv-loan-card" id="icard-prem-loan">
+          <div class="inv-lock-strip inv-lock-prem" id="istrip-prem-loan">
+            <i class="fa-solid fa-crown"></i> Premium — Activate to Unlock
+          </div>
+          <span class="inv-hot-tag inv-hot-prem">PREMIUM</span>
+          <div class="inv-card-icon inv-loan-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+          <h4>Premium Loan</h4>
+          <p>Access larger loan facilities with better rates for premium members.</p>
+          <div class="inv-rate-wrap">
+            <span class="inv-rate-chip inv-chip-prem">4% Interest</span>
+            <span class="inv-rate-sub">365 Days · Premium</span>
+          </div>
+          <div class="inv-specs">
+            <div class="inv-spec"><span>Min. Loan</span><strong>GHS 500</strong></div>
+            <div class="inv-spec"><span>Max. Loan</span><strong>GHS 30,000</strong></div>
+            <div class="inv-spec"><span>Duration</span><strong>365 Days</strong></div>
+            <div class="inv-spec"><span>Interest</span><strong>4%</strong></div>
+          </div>
+          <button class="inv-cta-btn inv-cta-prem inv-loan-btn" data-plan="Premium Loan" data-tier="premium"
+            data-type="loan">Apply for Loan</button>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════
+     PASTE THIS after the Premium Loan card div
+     i.e. after:  </div>  ← closing of icard-prem-loan
+     and BEFORE the closing </div> of inv-cards-grid
+═══════════════════════════════════════════════════════ -->
+
+        <!-- NEW: Premium Referral Card -->
+        <div class="inv-card inv-card-prem" id="icard-prem-ref">
+          <div class="inv-lock-strip inv-lock-prem" id="istrip-prem-ref">
+            <i class="fa-solid fa-crown"></i> Premium — Activate to Unlock
+          </div>
+          <span class="inv-hot-tag inv-hot-prem">PREMIUM</span>
+          <div class="inv-card-icon inv-icon-gold"><i class="fa-solid fa-user-plus"></i></div>
+          <h4>Premium Referral</h4>
+          <p>Earn 10% of every new user's first deposit using your exclusive premium code.</p>
+          <div class="inv-rate-wrap">
+            <span class="inv-rate-chip inv-chip-prem">10% per Referral</span>
+            <span class="inv-rate-sub">First deposit only</span>
+          </div>
+          <div class="inv-specs">
+            <div class="inv-spec"><span>Your Code</span><strong id="premRefCodeDisplay">—</strong></div>
+            <div class="inv-spec"><span>Total Referred</span><strong id="premRefCount">0</strong></div>
+            <div class="inv-spec"><span>Total Earned</span><strong id="premRefEarned">GHS 0.00</strong></div>
+            <div class="inv-spec"><span>Rate</span><strong>10%</strong></div>
+          </div>
+          <button class="inv-ref-copy-btn" id="premRefCopyBtn"
+            style="margin-bottom:8px;width:100%;justify-content:center;">Copy Premium Code</button>
+          <a href="referrals.html" class="inv-cta-btn inv-cta-prem"
+            style="display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;background:transparent;border:1.5px solid rgba(201,168,76,0.4);color:#c9a84c;font-size:0.78rem;padding:8px;">
+            <i class="fa-solid fa-arrow-right"></i> View Referral Options
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Disclaimer — UNCHANGED -->
+      <div class="inv-disclaimer" id="premDisclaimer" style="display:none;">
+        <i class="fa-solid fa-circle-info"></i>
+        All investments carry risk. Returns are not guaranteed and may be higher or lower than expected.
+      </div>
+
+      <!-- Premium Banner — UNCHANGED -->
+      <div class="inv-act-banner inv-act-banner-prem" id="premActBanner">
+        <div class="inv-act-banner-text">
+          <i class="fa-solid fa-crown"></i>
+          <span><strong>Unlock All Premium Plans</strong> — One-time fee: <strong>GHS 1,000</strong></span>
+        </div>
+        <button class="inv-act-banner-btn" id="premActBtn">
+          Upgrade Now <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- Active Investments Table — UNCHANGED -->
+      <div class="inv-history-card">
+        <div class="inv-history-head">
+          <h4><i class="fa-solid fa-list-check"></i> My Active Investments</h4>
+        </div>
+        <div class="inv-history-wrap">
+          <table class="inv-history-table">
+            <thead>
+              <tr>
+                <th>Plan</th>
+                <th>Amount</th>
+                <th>Start Date</th>
+                <th>Maturity</th>
+                <th>Profit Earned</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="invHistoryBody">
+              <tr>
+                <td colspan="6" class="inv-table-msg">
+                  <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- INVEST MODAL — UNCHANGED -->
+  <div class="inv-modal-wrap" id="invModal">
+    <div class="inv-modal-box">
+      <div class="inv-modal-head">
+        <h3 id="invModalTitle">Invest Now</h3>
+        <button class="inv-modal-x" id="invModalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="inv-modal-plan-chip" id="invModalPlanChip"></div>
+      <div class="inv-modal-bal-note">
+        Available Balance: <strong id="invModalBalNote">GHS 0.00</strong>
+      </div>
+      <div class="inv-modal-field">
+        <label>Amount (GHS)</label>
+        <div class="inv-modal-inp-wrap">
+          <span>GHS</span>
+          <input type="number" id="invAmount" placeholder="Enter amount" min="0" autocomplete="off" />
+        </div>
+        <small class="inv-modal-note" id="invModalNote"></small>
+      </div>
+      <div class="inv-modal-preview" id="invModalPreview" style="display:none;">
+        <div class="inv-prev-row">
+          <span id="invPrevLbl1">Expected Return</span>
+          <strong id="invPrevVal1">—</strong>
+        </div>
+        <div class="inv-prev-row">
+          <span id="invPrevLbl2">At Maturity</span>
+          <strong id="invPrevVal2">—</strong>
+        </div>
+      </div>
+      <p class="inv-modal-err" id="invModalErr"></p>
+      <button class="inv-modal-go-btn" id="invModalConfirm">
+        <span id="invModalBtnTxt">Confirm Investment</span>
+        <i class="fa-solid fa-arrow-right" id="invModalBtnIco"></i>
+      </button>
+      <div class="inv-modal-ok" id="invModalOk">
+        <i class="fa-solid fa-circle-check"></i>
+        Investment confirmed! Your plan is now active.
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIVATION MODAL — UNCHANGED -->
+  <div class="inv-modal-wrap" id="actModal">
+    <div class="inv-modal-box">
+      <div class="inv-modal-head">
+        <h3 id="actModalTitle">Activate Plan</h3>
+        <button class="inv-modal-x" id="actModalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="inv-act-modal-body">
+        <div class="inv-act-ico" id="actModalIco">
+          <i class="fa-solid fa-lock-open"></i>
+        </div>
+        <p id="actModalDesc">Pay a one-time fee to unlock all plans in this tier.</p>
+        <div class="inv-act-fee-row">
+          <span>Activation Fee</span>
+          <strong id="actModalFee">GHS 500</strong>
+        </div>
+        <div class="inv-act-fee-row">
+          <span>Your Balance</span>
+          <strong id="actModalBal">GHS 0.00</strong>
+        </div>
+      </div>
+      <p class="inv-modal-err" id="actModalErr"></p>
+      <button class="inv-modal-go-btn" id="actModalConfirm">
+        <i class="fa-solid fa-unlock"></i> Pay & Activate
+      </button>
+      <div class="inv-modal-ok" id="actModalOk">
+        <i class="fa-solid fa-circle-check"></i>
+        Activated! All plans are now unlocked.
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSWORD MODAL — UNCHANGED -->
+  <div class="inv-modal-wrap" id="pwModal">
+    <div class="inv-modal-box">
+      <div class="inv-modal-head">
+        <h3>Confirm Your Password</h3>
+        <button class="inv-modal-x" id="pwModalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="inv-pw-modal-body">
+        <div class="inv-pw-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <p>For your security, please enter your account password to continue.</p>
+      </div>
+      <div class="inv-modal-field">
+        <label>Password</label>
+        <div class="inv-modal-inp-wrap">
+          <span><i class="fa-solid fa-lock"></i></span>
+          <input type="password" id="pwModalInput" placeholder="Enter your password" autocomplete="current-password" />
+          <button type="button" class="inv-pw-eye" id="pwModalEye">
+            <i class="fa-solid fa-eye" id="pwModalEyeIco"></i>
+          </button>
+        </div>
+      </div>
+      <p class="inv-modal-err" id="pwModalErr"></p>
+      <button class="inv-modal-go-btn" id="pwModalConfirm">
+        <i class="fa-solid fa-check"></i> Confirm & Continue
+      </button>
+    </div>
+  </div>
+
+  <!-- NEW: LOAN MODAL -->
+  <div class="inv-modal-wrap" id="loanModal">
+    <div class="inv-modal-box">
+      <div class="inv-modal-head">
+        <h3 id="loanModalTitle">Apply for Loan</h3>
+        <button class="inv-modal-x" id="loanModalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="inv-modal-plan-chip" id="loanModalChip"></div>
+      <div class="inv-modal-field">
+        <label>Full Name</label>
+        <div class="inv-modal-inp-wrap">
+          <span><i class="fa-solid fa-user"></i></span>
+          <input type="text" id="loanModalName" placeholder="Your full name" autocomplete="off" />
+        </div>
+      </div>
+      <div class="inv-modal-field">
+        <label>Phone Number</label>
+        <div class="inv-modal-inp-wrap">
+          <span><i class="fa-solid fa-phone"></i></span>
+          <input type="tel" id="loanModalPhone" placeholder="e.g. +233 24 000 0000" autocomplete="off" />
+        </div>
+      </div>
+      <div class="inv-modal-field">
+        <label>Loan Amount (GHS)</label>
+        <div class="inv-modal-inp-wrap">
+          <span>GHS</span>
+          <input type="number" id="loanModalAmount" placeholder="Enter amount" min="0" autocomplete="off" />
+        </div>
+        <small class="inv-modal-note" id="loanModalNote"></small>
+      </div>
+      <div class="inv-modal-field">
+        <label>Purpose of Loan</label>
+        <textarea id="loanModalPurpose" placeholder="Briefly explain why you need this loan..." rows="2"
+          style="border:1.5px solid #d1d5db;border-radius:8px;padding:9px 12px;font-size:0.86rem;font-family:'Inter',sans-serif;color:#081c10;outline:none;width:100%;resize:vertical;"></textarea>
+      </div>
+      <!-- Loan preview -->
+      <div class="inv-modal-preview" id="loanModalPreview" style="display:none;">
+        <div class="inv-prev-row">
+          <span>Loan Amount</span>
+          <strong id="loanPrevAmt">—</strong>
+        </div>
+        <div class="inv-prev-row">
+          <span>Interest</span>
+          <strong id="loanPrevInterest">—</strong>
+        </div>
+        <div class="inv-prev-row">
+          <span>Total Repayment</span>
+          <strong id="loanPrevTotal">—</strong>
+        </div>
+      </div>
+      <p class="inv-modal-err" id="loanModalErr"></p>
+      <button class="inv-modal-go-btn" id="loanModalConfirm">
+        <span id="loanModalBtnTxt"><i class="fa-solid fa-paper-plane"></i> Submit Application</span>
+      </button>
+      <div class="inv-modal-ok" id="loanModalOk">
+        <i class="fa-solid fa-clock"></i>
+        Application submitted! Our team will respond to your email within 1–2 working days.
+      </div>
+    </div>
+  </div>
+
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+
+  <script type="module" src="./js/sidebar.js"></script>
+  <script type="module" src="./js/globaluser.js"></script>
+  <script type="module" src="./js/investments.js"></script>
+</body>
+
+</html>
