@@ -4,25 +4,27 @@ import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  doc, getDoc, addDoc, updateDoc, setDoc,
+  doc, getDoc, addDoc, updateDoc,
   collection, getDocs, query, orderBy, where,
   serverTimestamp, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { createNotification, Notifs } from "./notify-helper.js";
 
-// ── CONFIG ─────────────────────────────────────
+// ── REPLACE THIS WITH CLIENT'S REAL PAYSTACK PUBLIC KEY ──
 const PAYSTACK_PUBLIC_KEY = "pk_test_1715e22f3504664a394797de9d84fe31720e67a1";
-const DEPOSIT_FEE         = 0;    // 0% — no deposit fee
-const REFERRAL_REWARD     = 10;   // GHS 10 flat normal referral
+// ─────────────────────────────────────────────────────────
 
-let DEP_USER    = null;
-let DEP_EMAIL   = null;
+const DEPOSIT_FEE_PERCENT = 0; // 2% processing fee
+const REFERRAL_REWARD = 10;   // GHS 10 per successful referral
+
+let DEP_USER = null;
+let DEP_EMAIL = null;
 let DEP_BALANCE = 0;
 
 // ── AUTH ───────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = "../pages/login.html"; return; }
-  DEP_USER  = user;
+  DEP_USER = user;
   DEP_EMAIL = user.email;
 
   onSnapshot(doc(db, "users", user.uid), (snap) => {
@@ -31,12 +33,12 @@ onAuthStateChanged(auth, async (user) => {
 
     DEP_BALANCE = typeof d.balance === "number" ? d.balance : 0;
 
-    const name     = d.name || "User";
+    const name = d.name || "User";
     const initials = name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
     const av = document.getElementById("profileAvatar");
     if (av) av.textContent = initials;
 
-    document.getElementById("currentBalance").textContent   = fmtGHS(DEP_BALANCE);
+    document.getElementById("currentBalance").textContent = fmtGHS(DEP_BALANCE);
     document.getElementById("availableBalance").textContent = fmtGHS(DEP_BALANCE);
   });
 
@@ -45,8 +47,7 @@ onAuthStateChanged(auth, async (user) => {
 
 // ── LOGOUT ─────────────────────────────────────
 document.querySelectorAll("#logoutBtn, #logoutBtn2").forEach(b => {
-  if (b) b.addEventListener("click", async (e) => {
-    e.preventDefault();
+  if (b) b.addEventListener("click", async () => {
     await signOut(auth);
     window.location.href = "../pages/login.html";
   });
@@ -72,7 +73,7 @@ document.getElementById("depositAmount").addEventListener("input", () => {
 
 function updateSummary(amount) {
   const summary = document.getElementById("depSummary");
-  const errEl   = document.getElementById("depError");
+  const errEl = document.getElementById("depError");
   errEl.textContent = "";
 
   if (!amount || isNaN(amount) || amount <= 0) {
@@ -80,17 +81,19 @@ function updateSummary(amount) {
     return;
   }
 
-  // 0% fee — full amount credited
+  const fee = parseFloat((amount * DEPOSIT_FEE_PERCENT).toFixed(2));
+  const net = parseFloat((amount - fee).toFixed(2));
+
   document.getElementById("summaryAmt").textContent = fmtGHS(amount);
-  document.getElementById("summaryFee").textContent = "GHS 0.00 (Free ✓)";
-  document.getElementById("summaryNet").textContent = fmtGHS(amount);
+  document.getElementById("summaryFee").textContent = `− ${fmtGHS(fee)}`;
+  document.getElementById("summaryNet").textContent = fmtGHS(net > 0 ? net : 0);
   summary.style.display = "block";
 }
 
 // ── DEPOSIT BUTTON ─────────────────────────────
 document.getElementById("depositBtn").addEventListener("click", () => {
   const amount = parseFloat(document.getElementById("depositAmount").value);
-  const errEl  = document.getElementById("depError");
+  const errEl = document.getElementById("depError");
   errEl.textContent = "";
 
   if (!amount || isNaN(amount)) {
@@ -108,7 +111,7 @@ document.getElementById("depositBtn").addEventListener("click", () => {
 // ── PAYSTACK ───────────────────────────────────
 function initPaystack(amount) {
   if (!DEP_USER) {
-    document.getElementById("depError").textContent = "Session error. Please refresh and try again.";
+    document.getElementById("depError").textContent = "Session error. Please refresh the page and try again.";
     return;
   }
 
@@ -120,25 +123,25 @@ function initPaystack(amount) {
   const reference = "YMG_" + new Date().getTime() + "_" + Math.random().toString(36).slice(2, 7).toUpperCase();
 
   const handler = window.PaystackPop.setup({
-    key:      PAYSTACK_PUBLIC_KEY,
-    email:    DEP_EMAIL,
-    amount:   amountInPesewas,
+    key: PAYSTACK_PUBLIC_KEY,
+    email: DEP_EMAIL,
+    amount: amountInPesewas,
     currency: "GHS",
-    ref:      reference,
+    ref: reference,
     metadata: {
       custom_fields: [
-        { display_name: "User ID",  variable_name: "user_id",  value: DEP_USER.uid },
-        { display_name: "Platform", variable_name: "platform", value: "YMG Funds"  }
+        { display_name: "User ID", variable_name: "user_id", value: DEP_USER.uid },
+        { display_name: "Platform", variable_name: "platform", value: "YMG Funds" }
       ]
     },
     onClose: () => {
       btn.disabled = false;
-      document.getElementById("depBtnTxt").textContent = "Top Up";
+      document.getElementById("depBtnTxt").textContent = "Pay Now";
     },
     callback: (response) => {
       handlePaymentSuccess(amount, response.reference).then(() => {
         btn.disabled = false;
-        document.getElementById("depBtnTxt").textContent = "Top Up";
+        document.getElementById("depBtnTxt").textContent = "Pay Now";
       });
     }
   });
@@ -149,51 +152,37 @@ function initPaystack(amount) {
 // ── HANDLE SUCCESSFUL PAYMENT ──────────────────
 async function handlePaymentSuccess(amount, reference) {
   try {
-    // 0% fee — full amount credited
-    const fee       = 0;
-    const netAmount = amount;
+    const fee = parseFloat((amount * DEPOSIT_FEE_PERCENT).toFixed(2));
+    const netAmount = parseFloat((amount - fee).toFixed(2));
 
-    const uRef  = doc(db, "users", DEP_USER.uid);
+    // Update user balance
+    const uRef = doc(db, "users", DEP_USER.uid);
     const uSnap = await getDoc(uRef);
+    const uData = uSnap.data();
 
-    if (!uSnap.exists()) {
-      // Create document if missing (safety net)
-      await setDoc(uRef, {
-        balance:          netAmount,
-        invested:         0,
-        profit:           0,
-        activePlans:      0,
-        referralEarnings: 0,
-        referralCount:    0,
-        email:            DEP_USER.email,
-        createdAt:        serverTimestamp()
-      });
-    } else {
-      const uData = uSnap.data();
-      await updateDoc(uRef, {
-        balance: (uData.balance || 0) + netAmount
-      });
-    }
+    await updateDoc(uRef, {
+      balance: (uData.balance || 0) + netAmount
+    });
 
     // Log deposit transaction
     await addDoc(collection(db, "users", DEP_USER.uid, "transactions"), {
-      type:      "deposit",
-      amount:    netAmount,
-      gross:     amount,
-      fee:       fee,
-      method:    "Paystack",
+      type: "deposit",
+      amount: netAmount,
+      gross: amount,
+      fee: fee,
+      method: "Paystack",
       reference: reference,
-      status:    "completed",
-      date:      serverTimestamp()
+      status: "completed",
+      date: serverTimestamp()
     });
 
-    // Notification
+    // ── CREATE DEPOSIT NOTIFICATION ────────────
     const depNotif = Notifs.depositSuccess(netAmount);
     await createNotification(DEP_USER.uid, depNotif.type, depNotif.title, depNotif.message);
 
-    // Referral credit
-    const uData2 = (await getDoc(uRef)).data();
-    await handleReferralCredit(uData2);
+    // // ── REFERRAL CREDIT ────────────────────────
+    // await handleReferralCredit(uData);
+    // await handlePremiumReferralCredit(uData, netAmount);
 
     // Show success
     document.getElementById("depositedAmt").textContent =
@@ -220,47 +209,52 @@ async function handlePaymentSuccess(amount, reference) {
 async function handleReferralCredit(uData) {
   try {
     const referredBy = uData.referredBy;
-    if (!referredBy)            return;
+    if (!referredBy) return;
     if (uData.referralRewarded) return;
 
-    const q    = query(collection(db, "users"), where("referralCode", "==", referredBy));
+    const q = query(collection(db, "users"), where("referralCode", "==", referredBy));
     const snap = await getDocs(q);
     if (snap.empty) return;
 
-    const referrerDoc  = snap.docs[0];
-    const referrerId   = referrerDoc.id;
+    const referrerDoc = snap.docs[0];
+    const referrerId = referrerDoc.id;
     const referrerData = referrerDoc.data();
 
     if (referrerId === DEP_USER.uid) return;
 
+    // Credit referrer
     await updateDoc(doc(db, "users", referrerId), {
-      balance:          (referrerData.balance || 0) + REFERRAL_REWARD,
+      balance: (referrerData.balance || 0) + REFERRAL_REWARD,
       referralEarnings: (referrerData.referralEarnings || 0) + REFERRAL_REWARD
     });
 
+    // Log referral transaction for referrer
     await addDoc(collection(db, "users", referrerId, "transactions"), {
-      type:   "referral_reward",
+      type: "referral_reward",
       amount: REFERRAL_REWARD,
-      note:   `Referral reward from ${uData.name || "a new user"}`,
+      note: `Referral reward from ${uData.name || "a new user"}`,
       status: "completed",
-      date:   serverTimestamp()
+      date: serverTimestamp()
     });
 
+    // ── CREATE REFERRAL NOTIFICATION for referrer ──
     const refNotif = Notifs.referralEarned(uData.name || "A new user", REFERRAL_REWARD);
     await createNotification(referrerId, refNotif.type, refNotif.title, refNotif.message);
 
-    const refCol  = collection(db, "users", referrerId, "referrals");
+    // Update referral record to completed
+    const refCol = collection(db, "users", referrerId, "referrals");
     const refSnap = await getDocs(refCol);
     refSnap.forEach(async (refDoc) => {
       if (refDoc.data().userId === DEP_USER.uid) {
         await updateDoc(doc(db, "users", referrerId, "referrals", refDoc.id), {
-          status:       "completed",
+          status: "completed",
           amountEarned: REFERRAL_REWARD,
-          depositedAt:  serverTimestamp()
+          depositedAt: serverTimestamp()
         });
       }
     });
 
+    // Mark user as rewarded
     await updateDoc(doc(db, "users", DEP_USER.uid), {
       referralRewarded: true
     });
@@ -276,7 +270,10 @@ async function loadDepositHistory() {
   tbody.innerHTML = `<tr><td colspan="6" class="dep-table-msg"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>`;
 
   try {
-    const q    = query(collection(db, "users", DEP_USER.uid, "transactions"), orderBy("date", "desc"));
+    const q = query(
+      collection(db, "users", DEP_USER.uid, "transactions"),
+      orderBy("date", "desc")
+    );
     const snap = await getDocs(q);
 
     const deposits = [];
@@ -294,8 +291,8 @@ async function loadDepositHistory() {
     deposits.forEach(tx => {
       const date = tx.date?.seconds
         ? new Date(tx.date.seconds * 1000).toLocaleDateString("en-GB", {
-            day: "2-digit", month: "short", year: "numeric"
-          })
+          day: "2-digit", month: "short", year: "numeric"
+        })
         : "—";
 
       const ref = tx.reference
@@ -309,7 +306,7 @@ async function loadDepositHistory() {
         <tr>
           <td>${ref}</td>
           <td class="dep-amount-pos">+${fmtGHS(tx.gross || tx.amount || 0)}</td>
-          <td class="dep-fee-cell" style="color:#16a34a;">Free</td>
+          <td class="dep-fee-cell">−${fmtGHS(tx.fee || 0)}</td>
           <td class="dep-amount-pos">+${fmtGHS(tx.amount || 0)}</td>
           <td>${date}</td>
           <td><span class="dep-status ${statusClass}">${tx.status || "pending"}</span></td>
@@ -326,3 +323,11 @@ async function loadDepositHistory() {
 function fmtGHS(n) {
   return "GHS " + Number(n).toLocaleString("en-GH", { minimumFractionDigits: 2 });
 }
+
+// ═══════════════════════════════════════════════════════
+// PASTE THIS AT THE VERY BOTTOM OF deposit.js
+// DO NOT CHANGE ANYTHING ABOVE
+// ═══════════════════════════════════════════════════════
+
+// ── PREMIUM REFERRAL CREDIT ────────────────────
+// Triggered on first deposit — credits 10% to premium referrer

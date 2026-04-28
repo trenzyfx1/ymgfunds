@@ -2039,7 +2039,7 @@ ul {
 }
 
 @media (max-width: 900px) {
-  .plans-grid[style] { grid-template-columns: repeat(1, 1fr) !important; }
+  .plans-grid[style] { grid-template-columns: repeat(2, 1fr) !important; }
 }
 @media (max-width: 500px) {
   .plans-grid[style] { grid-template-columns: 1fr !important; }

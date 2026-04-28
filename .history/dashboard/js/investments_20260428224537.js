@@ -21,14 +21,13 @@ const INV_PLANS = {
   "3-Year Wealth Builder": { rate: 0.35,  rateType: "annual",  minDep: 500,   duration: 1095, tier: "premium"  }
 };
 
-// ── LOAN CONFIG — UPDATED RATES ────────────────
+// ── LOAN CONFIG ────────────────────────────────
 const LOAN_PLANS = {
-  "Standard Loan": { rate: 0.12, minAmt: 500,  maxAmt: 5000,  duration: 182, tier: "standard" },
-  "Premium Loan":  { rate: 0.20, minAmt: 500,  maxAmt: 30000, duration: 365, tier: "premium"  }
+  "Standard Loan": { rate: 0.06, minAmt: 500,  maxAmt: 5000,  duration: 182, tier: "standard" },
+  "Premium Loan":  { rate: 0.04, minAmt: 500,  maxAmt: 30000, duration: 365, tier: "premium"  }
 };
 
 const FORMSPREE_URL = "https://formspree.io/f/xvzdjlqo";
-const MIN_BALANCE   = 50; // GHS 50 must always remain in account
 
 let INV_USER      = null;
 let INV_PLAN      = null;
@@ -115,12 +114,6 @@ function invRefreshUI() {
     invShow("premActBanner");
     invHide("premDisclaimer");
   }
-
-  // ── Show min balance warning if balance ≤ GHS 50 ──
-  const minBanner = document.getElementById("invMinBalBanner");
-  if (minBanner) {
-    minBanner.style.display = INV_BALANCE <= MIN_BALANCE ? "flex" : "none";
-  }
 }
 
 // ══════════════════════════════════════════════
@@ -186,7 +179,7 @@ document.getElementById("pwModalConfirm").addEventListener("click", async () => 
       invSetEl("invModalTitle",    `Invest in ${INV_PLAN}`);
       invSetEl("invModalPlanChip", INV_PLAN);
       invSetEl("invModalBalNote",  fmtGHS(INV_BALANCE));
-      invSetEl("invModalNote",     `Minimum: GHS ${cfg.minDep.toLocaleString()} · Max investable: ${fmtGHS(Math.max(0, INV_BALANCE - MIN_BALANCE))}`);
+      invSetEl("invModalNote",     `Minimum: GHS ${cfg.minDep.toLocaleString()}`);
       invSetEl("invModalErr",      "");
       document.getElementById("invAmount").value = "";
       document.getElementById("invModalPreview").style.display = "none";
@@ -236,12 +229,6 @@ document.querySelectorAll(".inv-cta-btn").forEach(btn => {
       INV_PW_ACTION = "loan";
       INV_LOAN_PLAN = plan;
       pwModalOpen();
-      return;
-    }
-
-    // ── Block invest if balance ≤ MIN_BALANCE ──
-    if (INV_BALANCE <= MIN_BALANCE) {
-      alert(`Your balance must be above GHS ${MIN_BALANCE} to invest. Please deposit first.`);
       return;
     }
 
@@ -305,9 +292,11 @@ document.getElementById("actModalConfirm").addEventListener("click", async () =>
       date:   serverTimestamp()
     });
 
+    // ── ACTIVATION NOTIFICATION ────────────────
     const aN = Notifs.planActivated(INV_ACT_TIER);
     await createNotification(INV_USER.uid, aN.type, aN.title, aN.message);
 
+    // ── PREMIUM REFERRAL CREDIT ON ACTIVATION ──
     await handlePremiumReferralCredit(INV_ACT_TIER, fee);
 
     document.getElementById("actModalOk").style.display = "flex";
@@ -368,15 +357,9 @@ document.getElementById("invModalConfirm").addEventListener("click", async () =>
   const ico   = document.getElementById("invModalBtnIco");
   errEl.textContent = "";
 
-  if (!amt || isNaN(amt))  { errEl.textContent = "Please enter an amount."; return; }
-  if (amt < cfg.minDep)    { errEl.textContent = `Minimum is GHS ${cfg.minDep.toLocaleString()}.`; return; }
-  if (amt > INV_BALANCE)   { errEl.textContent = "Insufficient balance. Please deposit first."; return; }
-
-  // ── Minimum balance check ──────────────────
-  if ((INV_BALANCE - amt) < MIN_BALANCE) {
-    errEl.textContent = `You must keep at least GHS ${MIN_BALANCE} in your account. Maximum you can invest is ${fmtGHS(INV_BALANCE - MIN_BALANCE)}.`;
-    return;
-  }
+  if (!amt || isNaN(amt)) { errEl.textContent = "Please enter an amount."; return; }
+  if (amt < cfg.minDep)   { errEl.textContent = `Minimum is GHS ${cfg.minDep.toLocaleString()}.`; return; }
+  if (amt > INV_BALANCE)  { errEl.textContent = "Insufficient balance. Please deposit first."; return; }
 
   btn.disabled = true;
   invSetEl("invModalBtnTxt", "Processing...");
@@ -420,6 +403,7 @@ document.getElementById("invModalConfirm").addEventListener("click", async () =>
       date:   serverTimestamp()
     });
 
+    // ── INVESTMENT NOTIFICATION ────────────────
     const iN = Notifs.investmentActive(INV_PLAN, amt);
     await createNotification(INV_USER.uid, iN.type, iN.title, iN.message);
 
@@ -447,7 +431,9 @@ if (refCopyBtn) {
     if (!code || code === "—") return;
     navigator.clipboard.writeText(code).then(() => {
       refCopyBtn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
-      setTimeout(() => { refCopyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy Code'; }, 2000);
+      setTimeout(() => {
+        refCopyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy Code';
+      }, 2000);
     });
   });
 }
@@ -571,7 +557,7 @@ Purpose:       ${purpose}
 
   btn.disabled = false;
   document.getElementById("loanModalBtnTxt").innerHTML =
-    '<i class="fa-solid fa-paper-plane"></i> Get Instant Loan Now';
+    '<i class="fa-solid fa-paper-plane"></i> Submit Application';
 });
 
 // ══════════════════════════════════════════════
@@ -582,7 +568,10 @@ async function invLoadHistory() {
   tbody.innerHTML = `<tr><td colspan="6" class="inv-table-msg"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>`;
 
   try {
-    const q    = query(collection(db, "users", INV_USER.uid, "investments"), orderBy("startDate", "desc"));
+    const q    = query(
+      collection(db, "users", INV_USER.uid, "investments"),
+      orderBy("startDate", "desc")
+    );
     const snap = await getDocs(q);
 
     if (snap.empty) {
@@ -704,9 +693,11 @@ async function handlePremiumReferralCredit(tier, fee) {
     const premReferredBy = uData.premiumReferredBy;
     if (!premReferredBy) return;
 
+    // Check if already rewarded for this specific tier
     const rewardedKey = tier === "standard" ? "premStdRefRewarded" : "premPremRefRewarded";
     if (uData[rewardedKey]) return;
 
+    // Find referrer by their premium code
     const q    = query(collection(db, "users"), where("premiumReferralCode", "==", premReferredBy));
     const snap = await getDocs(q);
     if (snap.empty) return;
@@ -715,16 +706,18 @@ async function handlePremiumReferralCredit(tier, fee) {
     const referrerId   = referrerDoc.id;
     const referrerData = referrerDoc.data();
 
-    if (referrerId === INV_USER.uid) return;
+    if (referrerId === INV_USER.uid) return; // no self-referral
 
-    const reward = parseFloat((fee * 0.10).toFixed(2));
+    const reward = parseFloat((fee * 0.10).toFixed(2)); // 10% of activation fee
 
+    // Credit referrer balance and stats
     await updateDoc(doc(db, "users", referrerId), {
       balance:                 (referrerData.balance                 || 0) + reward,
       premiumReferralEarnings: (referrerData.premiumReferralEarnings || 0) + reward,
       premiumReferralCount:    (referrerData.premiumReferralCount    || 0) + 1
     });
 
+    // Log transaction for referrer
     await addDoc(collection(db, "users", referrerId, "transactions"), {
       type:   "referral_reward",
       amount: reward,
@@ -733,12 +726,15 @@ async function handlePremiumReferralCredit(tier, fee) {
       date:   serverTimestamp()
     });
 
+    // Notify referrer
     await createNotification(
-      referrerId, "referral_reward",
+      referrerId,
+      "referral_reward",
       "Premium Referral Reward 🎉",
       `${uData.name || "Someone you referred"} activated their ${tier} plan. You earned GHS ${reward.toFixed(2)}.`
     );
 
+    // Mark this tier as rewarded on the new user so it never fires again
     await updateDoc(uRef, { [rewardedKey]: true });
 
   } catch (err) {

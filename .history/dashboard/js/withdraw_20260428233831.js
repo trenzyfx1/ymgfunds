@@ -87,8 +87,8 @@ onAuthStateChanged(auth, async (user) => {
     if (emailEl && !emailEl.value) emailEl.value = d.email || user.email || "";
     if (phoneEl && !phoneEl.value) phoneEl.value = d.phone || "";
 
-    // checkVerification();
-    // await checkDepositCooldown();
+    checkVerification();
+    await checkDepositCooldown();
     checkMinBalance();
 
     WDR_ACCT_LOCKED = d.withdrawalAccountLocked || false;

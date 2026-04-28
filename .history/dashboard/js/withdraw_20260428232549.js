@@ -16,8 +16,8 @@ const FORMSPREE_URL      = "https://formspree.io/f/mnjlrbgn";
 const WITHDRAW_FEE_RATE  = 0.03;  // 3%
 const WITHDRAW_FEE_MIN   = 3;     // minimum GHS 3
 const WITHDRAW_MIN       = 10;
-const WITHDRAW_MAX       = 10000; // max per day across ALL transactions
-const MIN_BALANCE        = 50;
+const WITHDRAW_MAX       = 10000;
+const MIN_BALANCE        = 50;    // GHS 50 must remain
 const COOLDOWN_DAYS      = 3;
 
 let WDR_USER        = null;
@@ -30,32 +30,6 @@ let WDR_ACCT_LOCKED = false;
 // ── FEE CALCULATOR ─────────────────────────────
 function calcFee(amount) {
   return Math.max(WITHDRAW_FEE_MIN, parseFloat((amount * WITHDRAW_FEE_RATE).toFixed(2)));
-}
-
-// ── GET TODAY'S TOTAL WITHDRAWN ────────────────
-async function getDailyWithdrawalTotal() {
-  try {
-    const q    = query(collection(db, "users", WDR_USER.uid, "transactions"), orderBy("date", "desc"));
-    const snap = await getDocs(q);
-
-    const todayStr = new Date().toLocaleDateString("en-GB");
-    let total = 0;
-
-    snap.forEach(ds => {
-      const tx = ds.data();
-      if (tx.type !== "withdrawal") return;
-      if (!tx.date?.seconds) return;
-      const txDateStr = new Date(tx.date.seconds * 1000).toLocaleDateString("en-GB");
-      if (txDateStr === todayStr) {
-        total += tx.gross || tx.amount || 0;
-      }
-    });
-
-    return total;
-  } catch (err) {
-    console.error("Daily withdrawal check error:", err);
-    return 0;
-  }
 }
 
 // ── AUTH ───────────────────────────────────────
@@ -87,10 +61,14 @@ onAuthStateChanged(auth, async (user) => {
     if (emailEl && !emailEl.value) emailEl.value = d.email || user.email || "";
     if (phoneEl && !phoneEl.value) phoneEl.value = d.phone || "";
 
+    // Original checks
     // checkVerification();
     // await checkDepositCooldown();
+
+    // Min balance check
     checkMinBalance();
 
+    // Locked account
     WDR_ACCT_LOCKED = d.withdrawalAccountLocked || false;
     if (WDR_ACCT_LOCKED && d.savedWithdrawalAccount) {
       loadLockedAccount(d.savedWithdrawalAccount);
@@ -217,23 +195,16 @@ function loadLockedAccount(saved) {
     showMethodFields(saved.method);
   }
 
-  if (saved.momoNumber) {
-    setAndLock("wdrMomoNumber", saved.momoNumber);
-    setAndLock("wdrMomoName",   saved.momoName || "");
-  }
-  if (saved.bankName) {
-    setAndLock("wdrBankName",        saved.bankName);
-    setAndLock("wdrBankAccount",     saved.bankAccount || "");
-    setAndLock("wdrBankAccountName", saved.bankAccountName || "");
-  }
+  if (saved.momoNumber) { setAndLock("wdrMomoNumber", saved.momoNumber); setAndLock("wdrMomoName", saved.momoName || ""); }
+  if (saved.bankName)   { setAndLock("wdrBankName", saved.bankName); setAndLock("wdrBankAccount", saved.bankAccount || ""); setAndLock("wdrBankAccountName", saved.bankAccountName || ""); }
   if (saved.otherDetails) setAndLock("wdrOtherDetails", saved.otherDetails);
 }
 
 function setAndLock(id, val) {
   const el = document.getElementById(id);
   if (!el) return;
-  el.value             = val;
-  el.disabled          = true;
+  el.value          = val;
+  el.disabled       = true;
   el.style.background  = "var(--hover-bg)";
   el.style.borderColor = "rgba(201,168,76,0.3)";
   el.style.color       = "var(--text-muted)";
@@ -250,7 +221,7 @@ document.getElementById("wdrMethod").addEventListener("change", () => {
   if (!WDR_ACCT_LOCKED) showMethodFields(document.getElementById("wdrMethod").value);
 });
 
-// ── AMOUNT INPUT — live summary ────────────────
+// ── AMOUNT INPUT ───────────────────────────────
 document.getElementById("wdrAmount").addEventListener("input", () => {
   const amount  = parseFloat(document.getElementById("wdrAmount").value);
   const summary = document.getElementById("wdrSummary");
@@ -278,10 +249,7 @@ document.getElementById("wdrAmount").addEventListener("input", () => {
 document.getElementById("wdrIdFile").addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (!file) return;
-  if (file.size > 5 * 1024 * 1024) {
-    document.getElementById("wdrError").textContent = "File too large. Maximum size is 5MB.";
-    return;
-  }
+  if (file.size > 5 * 1024 * 1024) { document.getElementById("wdrError").textContent = "File too large. Maximum size is 5MB."; return; }
   WDR_ID_FILE = file;
   document.getElementById("wdrIdFileName").textContent    = file.name;
   document.getElementById("wdrIdUploadBox").style.display = "none";
@@ -297,7 +265,7 @@ document.getElementById("wdrIdRemove").addEventListener("click", () => {
 });
 
 // ── SUBMIT → opens password modal ─────────────
-document.getElementById("wdrSubmitBtn").addEventListener("click", async () => {
+document.getElementById("wdrSubmitBtn").addEventListener("click", () => {
   const name   = document.getElementById("wdrName").value.trim();
   const email  = document.getElementById("wdrEmail").value.trim();
   const phone  = document.getElementById("wdrPhone").value.trim();
@@ -326,23 +294,11 @@ document.getElementById("wdrSubmitBtn").addEventListener("click", async () => {
 
   if (!amount || isNaN(amount)) { errEl.textContent = "Please enter a withdrawal amount."; return; }
   if (amount < WITHDRAW_MIN)    { errEl.textContent = `Minimum withdrawal is GHS ${WITHDRAW_MIN}.`; return; }
-  if (amount > WITHDRAW_MAX)    { errEl.textContent = `Single withdrawal cannot exceed GHS ${WITHDRAW_MAX.toLocaleString()}.`; return; }
+  if (amount > WITHDRAW_MAX)    { errEl.textContent = `Maximum withdrawal per day is GHS ${WITHDRAW_MAX.toLocaleString()}.`; return; }
   if (amount > WDR_BALANCE)     { errEl.textContent = "Insufficient balance."; return; }
 
   if ((WDR_BALANCE - amount) < MIN_BALANCE) {
     errEl.textContent = `You must maintain a minimum balance of GHS ${MIN_BALANCE}. Maximum you can withdraw is ${fmtGHS(WDR_BALANCE - MIN_BALANCE)}.`;
-    return;
-  }
-
-  // ── Daily limit check (across all transactions today) ──
-  const todayTotal = await getDailyWithdrawalTotal();
-  if (todayTotal >= WITHDRAW_MAX) {
-    errEl.textContent = `You have reached the daily withdrawal limit of GHS ${WITHDRAW_MAX.toLocaleString()}. You have already withdrawn ${fmtGHS(todayTotal)} today. Please try again tomorrow.`;
-    return;
-  }
-  if (todayTotal + amount > WITHDRAW_MAX) {
-    const remaining = WITHDRAW_MAX - todayTotal;
-    errEl.textContent = `Daily limit of GHS ${WITHDRAW_MAX.toLocaleString()} would be exceeded. You have already withdrawn ${fmtGHS(todayTotal)} today. Maximum you can withdraw now is ${fmtGHS(remaining)}.`;
     return;
   }
 
@@ -383,8 +339,8 @@ document.getElementById("wdrPwModal")?.addEventListener("click", (e) => {
   if (e.target.id === "wdrPwModal") document.getElementById("wdrPwModal").classList.remove("inv-modal-active");
 });
 document.getElementById("wdrPwEye")?.addEventListener("click", () => {
-  const inp    = document.getElementById("wdrPwInput");
-  const ico    = document.getElementById("wdrPwEyeIco");
+  const inp = document.getElementById("wdrPwInput");
+  const ico = document.getElementById("wdrPwEyeIco");
   const hidden = inp.type === "password";
   inp.type      = hidden ? "text" : "password";
   ico.className = hidden ? "fa-solid fa-eye-slash" : "fa-solid fa-eye";
