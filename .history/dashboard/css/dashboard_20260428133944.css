@@ -20,7 +20,7 @@
   --text-muted:    #7a8f80;
   --text-light:    #a8bcb0;
   --sidebar-w:     240px;
-  --topbar-h:      100px;
+  --topbar-h:      68px;
   --radius:        12px;
   --radius-sm:     8px;
   --shadow:        0 2px 12px rgba(0,0,0,0.07);
@@ -615,123 +615,12 @@ button { cursor: pointer; font-family: 'Inter', sans-serif; }
   z-index: 199;
 }
 
-/* ═══════════════════════════════════════════════
-   PASTE AT BOTTOM OF dash-page.css
-═══════════════════════════════════════════════ */
-
-/* ── Eye Toggle Button ────────────────────────── */
-.dash-eye-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: rgba(255,255,255,0.6);
-  font-size: 0.82rem;
-  padding: 4px;
-  transition: color 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dash-eye-btn:hover { color: #c9a84c; }
-
-/* For non-primary cards */
-.dash-bal-card:not(.dash-bal-primary) .dash-eye-btn {
-  color: var(--text-muted);
-}
-
-.dash-bal-card:not(.dash-bal-primary) .dash-eye-btn:hover {
-  color: #c9a84c;
-}
-
-/* ── Chart Filter Buttons ─────────────────────── */
-.dash-chart-filter {
-  padding: 4px 10px;
-  font-size: 0.74rem;
-  font-weight: 700;
-  border: 1.5px solid var(--border);
-  border-radius: 6px;
-  background: var(--card);
-  color: var(--text-muted);
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  transition: all 0.2s;
-}
-
-.dash-chart-filter:hover {
-  border-color: #c9a84c;
-  color: #c9a84c;
-}
-
-.dash-chart-filter.active {
-  background: #081c10;
-  color: #c9a84c;
-  border-color: #081c10;
-}
-
-/* ── Currency Rate Cards ──────────────────────── */
-.dash-rate-card {
-  background: var(--input-bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: background 0.3s, border-color 0.3s;
-}
-
-.dash-rate-flag {
-  font-size: 1.6rem;
-  flex-shrink: 0;
-}
-
-.dash-rate-info span {
-  display: block;
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  margin-bottom: 3px;
-  font-weight: 500;
-}
-
-.dash-rate-info strong {
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--text-main);
-}
-
-/* ── Dark Mode Overrides ──────────────────────── */
-[data-theme="dark"] .dash-chart-filter        { background: var(--card); }
-[data-theme="dark"] .dash-chart-filter.active { background: #0d2418; }
-[data-theme="dark"] .dash-rate-card           { background: var(--hover-bg); }
-
-@media (max-width: 700px) {
-  .dash-rates-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-
-  .dash-conv-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .dash-conv-grid button#convSwap {
-    width: 36px;
-    margin: 0 auto;
-    transform: rotate(90deg);
-  }
-
-  .dash-conv-grid button#convConvert {
-    width: 100%;
-    padding: 11px;
-  }
-}
-
 .sidebar-overlay.visible { display: block; }
 
 /* ─── DASH PAGE COMPONENTS ───────────────────── */
 
 /* Balance Grid */
-.dash-balance-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 18px; }
+.dash-balance-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 16px; margin-bottom: 18px; }
 
 .dash-bal-card {
   background: var(--card);
@@ -1023,15 +912,15 @@ button { cursor: pointer; font-family: 'Inter', sans-serif; }
   .notif-dropdown { width: 300px; }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 600px) {
   .balance-cards      { grid-template-columns: 1fr; }
   .quick-stats        { grid-template-columns: repeat(2, 1fr); }
   .content            { padding: 18px; gap: 18px; }
   .topbar             { padding: 0 18px; }
-  .dash-balance-grid  { grid-template-columns: repeat(1, 1fr); }
+  .dash-balance-grid  { grid-template-columns: 1fr 1fr; }
   .dash-stats-row     { grid-template-columns: 1fr 1fr; }
   .dash-actions-grid  { grid-template-columns: repeat(3, 1fr); }
   .dash-verify-alert  { flex-direction: column; }
   .dash-verify-btn    { margin-left: 0; }
-  /* .notif-dropdown     { width: calc(100vw - 20px); right: -10px; } */
+  .notif-dropdown     { width: calc(100vw - 20px); right: -10px; }
 }

@@ -20,7 +20,7 @@
   --text-muted:    #7a8f80;
   --text-light:    #a8bcb0;
   --sidebar-w:     240px;
-  --topbar-h:      100px;
+  --topbar-h:      68px;
   --radius:        12px;
   --radius-sm:     8px;
   --shadow:        0 2px 12px rgba(0,0,0,0.07);
@@ -1028,7 +1028,7 @@ button { cursor: pointer; font-family: 'Inter', sans-serif; }
   .quick-stats        { grid-template-columns: repeat(2, 1fr); }
   .content            { padding: 18px; gap: 18px; }
   .topbar             { padding: 0 18px; }
-  .dash-balance-grid  { grid-template-columns: repeat(1, 1fr); }
+  .dash-balance-grid  { grid-template-rows: 1fr 4fr; }
   .dash-stats-row     { grid-template-columns: 1fr 1fr; }
   .dash-actions-grid  { grid-template-columns: repeat(3, 1fr); }
   .dash-verify-alert  { flex-direction: column; }

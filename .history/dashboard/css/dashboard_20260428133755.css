@@ -20,7 +20,7 @@
   --text-muted:    #7a8f80;
   --text-light:    #a8bcb0;
   --sidebar-w:     240px;
-  --topbar-h:      100px;
+  --topbar-h:      68px;
   --radius:        12px;
   --radius-sm:     8px;
   --shadow:        0 2px 12px rgba(0,0,0,0.07);
@@ -705,33 +705,14 @@ button { cursor: pointer; font-family: 'Inter', sans-serif; }
 [data-theme="dark"] .dash-chart-filter.active { background: #0d2418; }
 [data-theme="dark"] .dash-rate-card           { background: var(--hover-bg); }
 
-@media (max-width: 700px) {
-  .dash-rates-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
 
-  .dash-conv-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .dash-conv-grid button#convSwap {
-    width: 36px;
-    margin: 0 auto;
-    transform: rotate(90deg);
-  }
-
-  .dash-conv-grid button#convConvert {
-    width: 100%;
-    padding: 11px;
-  }
-}
 
 .sidebar-overlay.visible { display: block; }
 
 /* ─── DASH PAGE COMPONENTS ───────────────────── */
 
 /* Balance Grid */
-.dash-balance-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 18px; }
+.dash-balance-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 18px; }
 
 .dash-bal-card {
   background: var(--card);
@@ -1023,15 +1004,15 @@ button { cursor: pointer; font-family: 'Inter', sans-serif; }
   .notif-dropdown { width: 300px; }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 600px) {
   .balance-cards      { grid-template-columns: 1fr; }
   .quick-stats        { grid-template-columns: repeat(2, 1fr); }
   .content            { padding: 18px; gap: 18px; }
   .topbar             { padding: 0 18px; }
-  .dash-balance-grid  { grid-template-columns: repeat(1, 1fr); }
+  .dash-balance-grid  { grid-template-columns: 1fr 1fr; }
   .dash-stats-row     { grid-template-columns: 1fr 1fr; }
   .dash-actions-grid  { grid-template-columns: repeat(3, 1fr); }
   .dash-verify-alert  { flex-direction: column; }
   .dash-verify-btn    { margin-left: 0; }
-  /* .notif-dropdown     { width: calc(100vw - 20px); right: -10px; } */
+  .notif-dropdown     { width: calc(100vw - 20px); right: -10px; }
 }
