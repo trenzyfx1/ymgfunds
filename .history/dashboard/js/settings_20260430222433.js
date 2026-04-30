@@ -1,3 +1,4 @@
+// DEVELOPED BY TRENZY TECH |+2347047889687 | COPYRIGHT © 2026 YMG IQ. ALL RIGHTS RESERVED.
 import "./init.js";
 import { createNotification } from "./notify-helper.js";
 import { auth, db } from "../../js/firebase.js";
@@ -21,8 +22,10 @@ let lastEmailSent = 0;
 let generatedOtp  = null;
 let otpExpiry     = null;
 
+// ── INIT EMAILJS ──────────────────────────────
 emailjs.init(EMAILJS_PUBLIC_KEY);
 
+// ── AUTH STATE ────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = "../pages/login.html"; return; }
   STT_USER = user;
@@ -52,10 +55,10 @@ onAuthStateChanged(auth, async (user) => {
   const emailEl   = document.getElementById("settingsEmail");
   const phoneEl   = document.getElementById("settingsPhone");
   const countryEl = document.getElementById("settingsCountry");
-  if (nameEl)                  nameEl.value    = d.name    || "";
-  if (emailEl)                 emailEl.value   = d.email   || user.email || "";
-  if (phoneEl)                 phoneEl.value   = d.phone   || "";
-  if (countryEl && d.country)  countryEl.value = d.country;
+  if (nameEl)              nameEl.value    = d.name    || "";
+  if (emailEl)             emailEl.value   = d.email   || user.email || "";
+  if (phoneEl)             phoneEl.value   = d.phone   || "";
+  if (countryEl && d.country) countryEl.value = d.country;
 
   verifiedPhone = d.phoneVerified ? (d.phone || null) : null;
 
@@ -64,6 +67,7 @@ onAuthStateChanged(auth, async (user) => {
   updateSecurityOverview(user.emailVerified, d.phoneVerified || false);
 });
 
+// ── LOGOUT ────────────────────────────────────
 document.querySelectorAll("#logoutBtn, #logoutBtn2, #logoutAllBtn").forEach(btn => {
   if (btn) btn.addEventListener("click", async (e) => {
     e.preventDefault();
@@ -72,6 +76,7 @@ document.querySelectorAll("#logoutBtn, #logoutBtn2, #logoutAllBtn").forEach(btn 
   });
 });
 
+// ── EXPORT DATA ───────────────────────────────
 document.getElementById("exportDataBtn")?.addEventListener("click", async () => {
   if (!STT_USER) return;
   const snap = await getDoc(doc(db, "users", STT_USER.uid));
@@ -87,6 +92,7 @@ document.getElementById("exportDataBtn")?.addEventListener("click", async () => 
   showToast("Data exported successfully.", "success");
 });
 
+// ── EMAIL STATUS ──────────────────────────────
 function updateEmailStatus(verified) {
   const statusEl = document.getElementById("emailStatus");
   const btnEl    = document.getElementById("verifyEmailBtn");
@@ -102,6 +108,7 @@ function updateEmailStatus(verified) {
   }
 }
 
+// ── PHONE STATUS ──────────────────────────────
 function updatePhoneStatus(verified) {
   const statusEl = document.getElementById("phoneStatus");
   const btnEl    = document.getElementById("verifyPhoneBtn");
@@ -117,6 +124,7 @@ function updatePhoneStatus(verified) {
   }
 }
 
+// ── SECURITY OVERVIEW ─────────────────────────
 function updateSecurityOverview(emailOk, phoneOk) {
   const secEmailIcon = document.getElementById("secEmailIcon");
   const secEmailText = document.getElementById("secEmailText");
@@ -128,6 +136,7 @@ function updateSecurityOverview(emailOk, phoneOk) {
   if (secPhoneText) secPhoneText.textContent = phoneOk ? "Phone verified" : "Phone not verified yet";
 }
 
+// ── PHONE INPUT CHANGE ────────────────────────
 document.getElementById("settingsPhone")?.addEventListener("input", () => {
   const val = document.getElementById("settingsPhone").value.trim();
   if (verifiedPhone && val !== verifiedPhone) {
@@ -138,6 +147,7 @@ document.getElementById("settingsPhone")?.addEventListener("input", () => {
   }
 });
 
+// ── SAVE PROFILE ──────────────────────────────
 document.getElementById("saveProfileBtn")?.addEventListener("click", async () => {
   const name    = document.getElementById("settingsName").value.trim();
   const phone   = document.getElementById("settingsPhone").value.trim();
@@ -178,6 +188,7 @@ document.getElementById("saveProfileBtn")?.addEventListener("click", async () =>
   btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Profile';
 });
 
+// ── VERIFY EMAIL ──────────────────────────────
 document.getElementById("verifyEmailBtn")?.addEventListener("click", async () => {
   const btn = document.getElementById("verifyEmailBtn");
   const now = Date.now();
@@ -215,6 +226,7 @@ document.getElementById("verifyEmailBtn")?.addEventListener("click", async () =>
   }
 });
 
+// ── PASSWORD TOGGLES ──────────────────────────
 [
   ["currentPw", "eyeBtn1", "eyeIco1"],
   ["newPw",     "eyeBtn2", "eyeIco2"],
@@ -231,6 +243,7 @@ document.getElementById("verifyEmailBtn")?.addEventListener("click", async () =>
   });
 });
 
+// ── CHANGE PASSWORD ───────────────────────────
 document.getElementById("changePwBtn")?.addEventListener("click", async () => {
   const currentPw = document.getElementById("currentPw").value;
   const newPw     = document.getElementById("newPw").value;
@@ -274,6 +287,7 @@ document.getElementById("changePwBtn")?.addEventListener("click", async () => {
   btn.innerHTML = '<i class="fa-solid fa-key"></i> Update Password';
 });
 
+// ── FORGOT PASSWORD ───────────────────────────
 document.getElementById("forgotPwBtn")?.addEventListener("click", async () => {
   const btn = document.getElementById("forgotPwBtn");
   if (!STT_USER?.email) return;
@@ -292,6 +306,10 @@ document.getElementById("forgotPwBtn")?.addEventListener("click", async () => {
   btn.disabled  = false;
   btn.innerHTML = '<i class="fa-solid fa-envelope"></i> Forgot Password? Send Reset Email';
 });
+
+// ══════════════════════════════════════════════
+// PHONE OTP — VIA EMAILJS
+// ══════════════════════════════════════════════
 
 document.getElementById("verifyPhoneBtn")?.addEventListener("click", async () => {
   const phone = document.getElementById("settingsPhone").value.trim();
@@ -341,6 +359,7 @@ document.getElementById("verifyPhoneBtn")?.addEventListener("click", async () =>
   btn.innerHTML = "Verify Phone";
 });
 
+// ── OTP MODAL ─────────────────────────────────
 function openOtpModal(phone) {
   setEl("otpPhoneDisplay", phone);
   document.getElementById("otpModal").classList.add("stt-modal-active");
@@ -359,6 +378,7 @@ document.getElementById("otpModal")?.addEventListener("click", e => {
   if (e.target.id === "otpModal") closeOtpModal();
 });
 
+// ── OTP BOX INPUTS ────────────────────────────
 document.querySelectorAll(".stt-otp-box").forEach((box, i, boxes) => {
   box.addEventListener("input", () => {
     box.value = box.value.replace(/\D/g, "").slice(0, 1);
@@ -369,6 +389,7 @@ document.querySelectorAll(".stt-otp-box").forEach((box, i, boxes) => {
   });
 });
 
+// ── RESEND TIMER ──────────────────────────────
 let resendInterval;
 function startResendTimer() {
   let seconds     = 90;
@@ -388,10 +409,12 @@ function startResendTimer() {
   }, 1000);
 }
 
+// ── RESEND OTP ────────────────────────────────
 document.getElementById("resendOtpBtn")?.addEventListener("click", () => {
   document.getElementById("verifyPhoneBtn")?.click();
 });
 
+// ── CONFIRM OTP ───────────────────────────────
 document.getElementById("confirmOtpBtn")?.addEventListener("click", async () => {
   const otp   = Array.from(document.querySelectorAll(".stt-otp-box")).map(b => b.value).join("");
   const phone = document.getElementById("settingsPhone").value.trim();
@@ -435,6 +458,7 @@ document.getElementById("confirmOtpBtn")?.addEventListener("click", async () => 
   btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Code';
 });
 
+// ── HELPERS ───────────────────────────────────
 function setEl(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val;
@@ -455,6 +479,7 @@ function showToast(message, type = "success") {
   setTimeout(() => toast.classList.remove("visible"), 4000);
 }
 
+// ── NOTIFICATION PREFS ────────────────────────
 const NOTIF_KEYS = [
   "notifDeposit", "notifWithdraw", "notifProfit",
   "notifReferral", "notifPremReferral", "notifMaturity",
@@ -509,6 +534,7 @@ document.getElementById("notifAllOffBtn")?.addEventListener("click", () => {
   showToast("All notifications turned off. Click Save to apply.", "success");
 });
 
+// ── PRIVACY SETTINGS ──────────────────────────
 const PRIVACY_KEYS = ["privProfile", "privInsights", "privTracking", "privMarketing"];
 
 async function loadPrivacySettings(uid) {
@@ -549,6 +575,7 @@ document.getElementById("savePrivacyBtn")?.addEventListener("click", async () =>
   btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Privacy Settings';
 });
 
+// ── DISPLAY SETTINGS ──────────────────────────
 async function loadDisplaySettings(uid) {
   try {
     const snap = await getDoc(doc(db, "users", uid));
@@ -614,6 +641,7 @@ document.getElementById("saveDisplayBtn")?.addEventListener("click", async () =>
   btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Display Settings';
 });
 
+// ── TRANSACTION PREFS ─────────────────────────
 async function loadTxPrefs(uid) {
   try {
     const snap = await getDoc(doc(db, "users", uid));
@@ -647,7 +675,7 @@ document.getElementById("saveTxBtn")?.addEventListener("click", async () => {
     lowBalAlert:  document.getElementById("txLowBalAlert")?.value   || "0",
     prefWithdraw: document.getElementById("txPrefWithdraw")?.value  || "",
   };
-
+A
   try {
     await updateDoc(doc(db, "users", STT_USER.uid), { txPrefs: prefs });
     showSuccess("txSuccess");
