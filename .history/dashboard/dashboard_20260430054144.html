@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Dashboard | YMG IQ Account Overview</title>
+  <meta name="description" content="Access your YMG IQ dashboard to manage your account, track investments, and monitor transactions securely." />
+  <meta name="author" content="YMG IQ" />
+  <meta name="robots" content="noindex, follow" />
+
+  <meta property="og:title" content="YMG IQ Dashboard" />
+  <meta property="og:description" content="Manage your account, investments, and transactions on YMG IQ." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="../images/logo-2.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="YMG IQ Dashboard" />
+  <meta name="twitter:description" content="Access your YMG IQ account dashboard securely." />
+  <meta name="twitter:image" content="../images/logo-2.png" />
+
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="css/dashboard.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/logo.jpeg" alt="YMG IQ" class="sidebar-logo-img">
+      <span>YMG<strong>IQ</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item active"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i
+          class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+      <a href="help.html" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>Help</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="#" class="nav-item logout" id="logoutBtn">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-wrapper">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting">
+          <h2>Hi, <span id="userName"></span> 👋</h2>
+          <p id="dashGreetingSub"></p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button class="notif-btn" id="notifBtn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-badge" id="notifCount" style="display:none;">0</span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <div class="dash-balance-grid">
+
+        <div class="dash-bal-card dash-bal-primary">
+          <div class="dash-bal-top">
+            <span>Total Balance</span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="dash-eye-btn" data-target="totalBalance" title="Toggle visibility">
+                <i class="fa-solid fa-eye" id="eyeIco-totalBalance"></i>
+              </button>
+              <div class="dash-bal-icon"><i class="fa-solid fa-wallet"></i></div>
+            </div>
+          </div>
+          <h3 id="totalBalance">GHS 0.00</h3>
+          <div class="dash-bal-bottom">
+            <a href="deposit.html" class="dash-quick-action"><i class="fa-solid fa-plus"></i> Deposit</a>
+            <a href="withdraw.html" class="dash-quick-action"><i class="fa-solid fa-arrow-up"></i> Withdraw</a>
+          </div>
+        </div>
+
+        <div class="dash-bal-card">
+          <div class="dash-bal-top">
+            <span>Invested Amount</span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="dash-eye-btn" data-target="investedBalance" title="Toggle visibility">
+                <i class="fa-solid fa-eye" id="eyeIco-investedBalance"></i>
+              </button>
+              <div class="dash-bal-icon gold"><i class="fa-solid fa-piggy-bank"></i></div>
+            </div>
+          </div>
+          <h3 id="investedBalance">GHS 0.00</h3>
+          <p class="dash-bal-note"><i class="fa-solid fa-chart-line"></i><span id="activePlansNote">0 active
+              plans</span></p>
+        </div>
+
+        <div class="dash-bal-card">
+          <div class="dash-bal-top">
+            <span>Total Profit</span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="dash-eye-btn" data-target="profitBalance" title="Toggle visibility">
+                <i class="fa-solid fa-eye" id="eyeIco-profitBalance"></i>
+              </button>
+              <div class="dash-bal-icon green"><i class="fa-solid fa-arrow-trend-up"></i></div>
+            </div>
+          </div>
+          <h3 id="profitBalance" class="dash-profit-green">GHS 0.00</h3>
+          <p class="dash-bal-note"><i class="fa-solid fa-circle-check"></i> All time earnings</p>
+        </div>
+
+        <div class="dash-bal-card">
+          <div class="dash-bal-top">
+            <span>Referral Earnings</span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="dash-eye-btn" data-target="referralEarnings" title="Toggle visibility">
+                <i class="fa-solid fa-eye" id="eyeIco-referralEarnings"></i>
+              </button>
+              <div class="dash-bal-icon purple"><i class="fa-solid fa-gift"></i></div>
+            </div>
+          </div>
+          <h3 id="referralEarnings">GHS 0.00</h3>
+          <p class="dash-bal-note"><i class="fa-solid fa-users"></i><span id="referralNote">0 referrals</span></p>
+        </div>
+
+      </div>
+
+      <div class="dash-stats-row">
+        <div class="dash-stat">
+          <div class="dash-stat-icon deposit-c"><i class="fa-solid fa-download"></i></div>
+          <div>
+            <span>Total Deposited</span>
+            <strong id="totalDeposits">GHS 0.00</strong>
+          </div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon withdraw-c"><i class="fa-solid fa-arrow-up"></i></div>
+          <div>
+            <span>Total Withdrawn</span>
+            <strong id="totalWithdrawals">GHS 0.00</strong>
+          </div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon invest-c"><i class="fa-solid fa-chart-pie"></i></div>
+          <div>
+            <span>Active Investments</span>
+            <strong id="activeInvestments">0</strong>
+          </div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon referral-c"><i class="fa-solid fa-users"></i></div>
+          <div>
+            <span>Total Referrals</span>
+            <strong id="totalReferrals">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-verify-alert" id="dashVerifyAlert" style="display:none;">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div>
+          <strong>Action Required</strong>
+          <p id="dashVerifyMsg">Please verify your email and phone number to unlock all features.</p>
+        </div>
+        <a href="settings.html" class="dash-verify-btn">Verify Now <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="dash-main-grid">
+
+        <div class="dash-card">
+          <div class="dash-card-head">
+            <h4><i class="fa-solid fa-chart-line"></i> Account Growth</h4>
+            <div style="display:flex;gap:6px;">
+              <button class="dash-chart-filter active" data-range="7d">7D</button>
+              <button class="dash-chart-filter" data-range="30d">30D</button>
+              <button class="dash-chart-filter" data-range="8m">8M</button>
+              <button class="dash-chart-filter" data-range="1y">1Y</button>
+            </div>
+          </div>
+          <div style="padding:16px 20px 20px;">
+            <canvas id="growthChart" height="180"></canvas>
+          </div>
+        </div>
+
+        <div class="dash-card">
+          <div class="dash-card-head">
+            <h4><i class="fa-solid fa-bolt"></i> Quick Actions</h4>
+          </div>
+          <div class="dash-actions-grid">
+            <a href="deposit.html" class="dash-action-btn">
+              <div class="dash-action-icon"><i class="fa-solid fa-download"></i></div>
+              <span>Deposit</span>
+            </a>
+            <a href="withdraw.html" class="dash-action-btn">
+              <div class="dash-action-icon"><i class="fa-solid fa-arrow-up"></i></div>
+              <span>Withdraw</span>
+            </a>
+            <a href="investments.html" class="dash-action-btn">
+              <div class="dash-action-icon"><i class="fa-solid fa-chart-line"></i></div>
+              <span>Invest</span>
+            </a>
+            <a href="referrals.html" class="dash-action-btn">
+              <div class="dash-action-icon"><i class="fa-solid fa-users"></i></div>
+              <span>Refer</span>
+            </a>
+            <a href="transactions.html" class="dash-action-btn">
+              <div class="dash-action-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+              <span>History</span>
+            </a>
+            <a href="settings.html" class="dash-action-btn">
+              <div class="dash-action-icon"><i class="fa-solid fa-gear"></i></div>
+              <span>Settings</span>
+            </a>
+          </div>
+          <div class="dash-ref-box">
+            <p class="dash-ref-label">Your Referral Code</p>
+            <div class="dash-ref-row">
+              <span id="dashRefCode">—</span>
+              <button id="dashCopyRef"><i class="fa-solid fa-copy"></i></button>
+            </div>
+            <p class="dash-ref-sub">Earn GHS 10 for every friend who deposits</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-card-head">
+          <h4><i class="fa-solid fa-chart-line"></i> Active Investments</h4>
+          <a href="investments.html" class="dash-card-link">View all</a>
+        </div>
+        <div id="dashPlansList">
+          <div class="dash-empty-state">
+            <i class="fa-solid fa-seedling"></i>
+            <p>No active investments yet.</p>
+            <a href="investments.html" class="dash-empty-btn">Start Investing</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-card-head">
+          <h4><i class="fa-solid fa-money-bill-transfer"></i> Live Currency Rates</h4>
+          <span style="font-size:0.72rem;color:var(--text-muted);" id="ratesUpdated">Updating...</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 0 20px;"
+          class="dash-rates-grid"></div>
+        <div class="dash-rate-card">
+          <div class="dash-rate-flag">🇬🇭</div>
+          <div class="dash-rate-info">
+            <span>GHS → USD</span>
+            <strong id="rateGHS">—</strong>
+          </div>
+        </div>
+        <div class="dash-rate-card">
+          <div class="dash-rate-flag">🇳🇬</div>
+          <div class="dash-rate-info">
+            <span>NGN → USD</span>
+            <strong id="rateNGN">—</strong>
+          </div>
+        </div>
+        <div class="dash-rate-card">
+          <div class="dash-rate-flag">🇰🇪</div>
+          <div class="dash-rate-info">
+            <span>KES → USD</span>
+            <strong id="rateKES">—</strong>
+          </div>
+        </div>
+        <div class="dash-rate-card">
+          <div class="dash-rate-flag">🇿🇦</div>
+          <div class="dash-rate-info">
+            <span>ZAR → USD</span>
+            <strong id="rateZAR">—</strong>
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid var(--border);padding-top:18px;">
+        <p style="font-size:0.82rem;font-weight:700;color:var(--text-main);margin-bottom:12px;">
+          <i class="fa-solid fa-calculator" style="color:#c9a84c;"></i> Currency Converter
+        </p>
+
+        <div
+          style="display:flex;border:1.5px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;">
+          <select id="convFrom"
+            style="border:none;outline:none;background:var(--input-bg);color:var(--text-main);padding:9px 10px;font-family:'Inter',sans-serif;font-size:0.83rem;font-weight:600;flex-shrink:0;">
+            <option value="GHS">🇬🇭 GHS</option>
+            <option value="NGN">🇳🇬 NGN</option>
+            <option value="KES">🇰🇪 KES</option>
+            <option value="ZAR">🇿🇦 ZAR</option>
+            <option value="USD">🇺🇸 USD</option>
+            <option value="GBP">🇬🇧 GBP</option>
+            <option value="EUR">🇪🇺 EUR</option>
+          </select>
+          <input type="number" id="convAmount" placeholder="Enter amount" min="0"
+            style="flex:1;border:none;outline:none;background:var(--card);color:var(--text-main);padding:9px 12px;font-family:'Inter',sans-serif;font-size:0.86rem;min-width:0;" />
+        </div>
+
+        <div style="display:flex;justify-content:center;margin-bottom:10px;">
+          <button id="convSwap"
+            style="width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);background:var(--card);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.85rem;transition:all 0.2s;"
+            onmouseover="this.style.background='#c9a84c';this.style.color='#081c10';"
+            onmouseout="this.style.background='var(--card)';this.style.color='var(--text-muted)';">
+            <i class="fa-solid fa-arrow-right-arrow-left" style="transform:rotate(90deg);"></i>
+          </button>
+        </div>
+
+        <div
+          style="display:flex;border:1.5px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;">
+          <select id="convTo"
+            style="border:none;outline:none;background:var(--input-bg);color:var(--text-main);padding:9px 10px;font-family:'Inter',sans-serif;font-size:0.83rem;font-weight:600;flex-shrink:0;">
+            <option value="USD">🇺🇸 USD</option>
+            <option value="GHS">🇬🇭 GHS</option>
+            <option value="NGN">🇳🇬 NGN</option>
+            <option value="KES">🇰🇪 KES</option>
+            <option value="ZAR">🇿🇦 ZAR</option>
+            <option value="GBP">🇬🇧 GBP</option>
+            <option value="EUR">🇪🇺 EUR</option>
+          </select>
+          <input type="text" id="convResult" readonly placeholder="Result"
+            style="flex:1;border:none;outline:none;background:var(--card);color:#c9a84c;padding:9px 12px;font-family:'Inter',sans-serif;font-size:0.86rem;font-weight:700;min-width:0;" />
+        </div>
+
+        <button id="convConvert"
+          style="width:100%;padding:11px;background:#081c10;color:#c9a84c;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;transition:background 0.2s;"
+          onmouseover="this.style.background='#c9a84c';this.style.color='#081c10';"
+          onmouseout="this.style.background='#081c10';this.style.color='#c9a84c';">
+          <i class="fa-solid fa-calculator"></i> Convert
+        </button>
+
+        <p style="font-size:0.72rem;color:var(--text-muted);margin-top:8px;" id="convRate">Enter an amount and click
+          Convert</p>
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-card-head">
+          <h4><i class="fa-solid fa-clock-rotate-left"></i> Recent Transactions</h4>
+          <a href="transactions.html" class="dash-card-link">View all</a>
+        </div>
+        <div class="dash-tx-wrap">
+          <table class="dash-tx-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="transactionTable">
+              <tr>
+                <td colspan="5" class="dash-tx-msg"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <script type="module" src="./js/sidebar.js"></script>
+  <script type="module" src="./js/dashboard.js"></script>
+</body>
+
+</html>

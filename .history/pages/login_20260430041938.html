@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Login | YMG IQ Secure Account Access</title>
+  <meta name="description" content="Login to your YMG IQ account securely. Access your dashboard, manage your account, and continue your experience." />
+  <meta name="author" content="YMG IQ" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:title" content="Login | YMG IQ" />
+  <meta property="og:description" content="Securely access your YMG IQ account." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="../images/logo-2.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Login | YMG IQ" />
+  <meta name="twitter:description" content="Login to your YMG IQ account securely." />
+  <meta name="twitter:image" content="../images/logo-2.png" />
+
+  <link rel="icon" href="../images/logo-2.png" type="image/x-icon">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/login.css">
+</head>
+<body class="auth-body">
+
+  <div class="auth-wrapper">
+
+    <!-- LEFT — Brand Side -->
+    <div class="auth-left">
+      <div class="auth-left-content">
+
+        <div class="auth-left-badge">
+          <i class="fa-solid fa-shield-halved"></i>
+          🇬🇭 Registered Business in Ghana
+        </div>
+
+        <h1>Welcome Back to YMG IQ</h1>
+        <p>Access your account and continue managing your financial growth with a registered Ghanaian savings and growth platform.</p>
+
+        <ul class="auth-benefits">
+          <li>
+            <div class="benefit-icon"><i class="fa-solid fa-lock"></i></div>
+            <div>
+              <strong>Secure Login System</strong>
+              <span>Your account is protected with strong authentication</span>
+            </div>
+          </li>
+          <li>
+            <div class="benefit-icon"><i class="fa-solid fa-gauge-high"></i></div>
+            <div>
+              <strong>Real-Time Account Access</strong>
+              <span>Instant access to your balance, plans, and history</span>
+            </div>
+          </li>
+          <li>
+            <div class="benefit-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <div>
+              <strong>Transparent Financial Tracking</strong>
+              <span>See every movement in your account clearly</span>
+            </div>
+          </li>
+          <li>
+            <div class="benefit-icon">🇬🇭</div>
+            <div>
+              <strong>Registered in Ghana</strong>
+              <span>A legally registered Ghanaian business you can trust</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <a href="../index.html"
+        style="position:fixed;bottom:80px;left:24px;background:#081c10;color:#c9a84c;border:2px solid #c9a84c;border-radius:50px;padding:10px 20px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:9999;transition:all 0.2s;"
+        onmouseover="this.style.background='#c9a84c';this.style.color='#081c10';"
+        onmouseout="this.style.background='#081c10';this.style.color='#c9a84c';">
+        <i class="fa-solid fa-house"></i>
+      </a>
+
+      <div class="auth-left-footer">
+        <span>© 2026 YMG IQ</span>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+    </div>
+
+    <!-- RIGHT — Form Side -->
+    <div class="auth-right">
+      <div class="auth-form-wrapper">
+
+        <div class="auth-form-header">
+          <h2>Login to Your Account</h2>
+          <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+        </div>
+
+        <div class="auth-form" id="loginForm">
+
+          <div class="form-group">
+            <label for="email">Email Address or Account ID</label>
+            <div class="input-wrapper">
+<input type="text" id="email" placeholder="e.g. kwame@email.com or O6JNRYEP" autocomplete="email" />
+            </div>
+            <span class="field-error" id="emailError"></span>
+          </div>
+
+          <div class="form-group">
+            <div class="label-row">
+              <label for="password">Password</label>
+              <a href="./forgot-password.html" class="forgot-link" id="forgotPwBtn">Forgot password?</a>
+            </div>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock input-icon"></i>
+              <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" />
+              <button type="button" class="toggle-password" id="togglePassword" aria-label="Show password">
+                <i class="fa-solid fa-eye" id="eyeIcon"></i>
+              </button>
+            </div>
+            <span class="field-error" id="passwordError"></span>
+          </div>
+
+          <div class="form-checkbox">
+            <label class="checkbox-label">
+              <input type="checkbox" id="rememberMe" />
+              <span class="custom-checkbox"></span>
+              <span>Keep me logged in</span>
+            </label>
+          </div>
+
+          <button class="btn-create" id="loginBtn">
+            <span id="btnText">Login to Account</span>
+            <i class="fa-solid fa-arrow-right" id="btnIcon"></i>
+          </button>
+
+          <div class="form-success" id="loginSuccess">
+            <i class="fa-solid fa-circle-check"></i>
+            <div>
+              <strong>Login successful!</strong>
+              <span>Redirecting you to your dashboard...</span>
+            </div>
+          </div>
+
+          <div class="form-divider"><span>OR</span></div>
+
+          <button id="googleBtn" class="google-btn">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+            <span>Continue with Google</span>
+          </button>
+        </div>
+
+        <div class="auth-trust">
+          <div class="auth-trust-item">
+            <i class="fa-solid fa-lock"></i>
+            Secure Login
+          </div>
+          <div class="auth-trust-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            Account Protection
+          </div>
+          <div class="auth-trust-item">
+            🇬🇭 Registered in Ghana
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="../js/login.js"></script>
+</body>
+</html>

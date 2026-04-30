@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Create Account | YMG IQ Sign Up</title>
+  <meta name="description" content="Create your YMG IQ account to get started. Sign up securely and access your dashboard and investment plans." />
+  <meta name="author" content="YMG IQ" />
+  <meta name="robots" content="noindex, follow" />
+
+  <meta property="og:title" content="Create Account | YMG IQ" />
+  <meta property="og:description" content="Sign up for YMG IQ and get started today." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="../images/logo-2.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Create Account | YMG IQ" />
+  <meta name="twitter:description" content="Join YMG IQ and start your journey." />
+  <meta name="twitter:image" content="../images/logo-2.png" />
+
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/signup.css">
+</head>
+<body class="auth-body">
+
+  <div class="auth-wrapper">
+
+    <!-- LEFT — Brand Side -->
+    <div class="auth-left">
+      <div class="auth-left-content">
+
+        <div class="auth-left-badge">
+          <i class="fa-solid fa-shield-halved"></i>
+          🇬🇭 Registered Business in Ghana
+        </div>
+
+        <h1>Start Your Financial Growth Journey</h1>
+        <p>Join YMG IQ — a registered Ghanaian savings and growth platform — and take control of your savings with a secure and transparent system designed for steady, honest growth.</p>
+
+        <ul class="auth-benefits">
+          <li>
+            <div class="benefit-icon"><i class="fa-solid fa-lock"></i></div>
+            <div>
+              <strong>Secure Account System</strong>
+              <span>Your account and funds are protected at every level</span>
+            </div>
+          </li>
+          <li>
+            <div class="benefit-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
+            <div>
+              <strong>Easy Deposits & Withdrawals</strong>
+              <span>Move money in and out with a simple, clear process</span>
+            </div>
+          </li>
+          <li>
+            <div class="benefit-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <div>
+              <strong>Transparent Growth Tracking</strong>
+              <span>See exactly how your money is growing in real time</span>
+            </div>
+          </li>
+          <li>
+            <div class="benefit-icon">🇬🇭</div>
+            <div>
+              <strong>Registered in Ghana</strong>
+              <span>A legally registered Ghanaian business you can trust</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <a href="../index.html"
+        style="position:fixed;bottom:80px;left:24px;background:#081c10;color:#c9a84c;border:2px solid #c9a84c;border-radius:50px;padding:10px 20px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:9999;transition:all 0.2s;"
+        onmouseover="this.style.background='#c9a84c';this.style.color='#081c10';"
+        onmouseout="this.style.background='#081c10';this.style.color='#c9a84c';">
+        <i class="fa-solid fa-house"></i>
+      </a>
+
+      <div class="auth-left-footer">
+        <span>© 2026 YMG IQ</span>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+    </div>
+
+    <!-- RIGHT — Form Side -->
+    <div class="auth-right">
+      <div class="auth-form-wrapper">
+
+        <div class="auth-form-header">
+          <h2>Create Your Account</h2>
+          <p>Already have an account? <a href="login.html">Login here</a></p>
+        </div>
+
+        <div class="auth-form" id="signupForm">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fullName">Full Name</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-user input-icon"></i>
+                <input type="text" id="fullName" placeholder="e.g. Kwame Mensah" autocomplete="name" />
+              </div>
+              <span class="field-error" id="nameError"></span>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-envelope input-icon"></i>
+                <input type="email" id="email" placeholder="e.g. kwame@email.com" autocomplete="email" />
+              </div>
+              <span class="field-error" id="emailError"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-phone input-icon"></i>
+                <input type="tel" id="phone" placeholder="e.g. +233 24 000 0000" autocomplete="tel" />
+              </div>
+              <span class="field-error" id="phoneError"></span>
+            </div>
+            <div class="form-group">
+              <label for="country">Country</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-earth-africa input-icon"></i>
+                <select id="country">
+                  <option value="GH" selected>🇬🇭 Ghana</option>
+                  <option value="NG">🇳🇬 Nigeria</option>
+                  <option value="KE">🇰🇪 Kenya</option>
+                  <option value="ZA">🇿🇦 South Africa</option>
+                  <option value="OTHER">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock input-icon"></i>
+              <input type="password" id="password" placeholder="Create a strong password" autocomplete="new-password" />
+              <button type="button" class="toggle-password" id="togglePassword" aria-label="Show password">
+                <i class="fa-solid fa-eye" id="eyeIcon"></i>
+              </button>
+            </div>
+            <div class="password-strength" id="passwordStrength">
+              <div class="strength-bars">
+                <span class="bar" id="bar1"></span>
+                <span class="bar" id="bar2"></span>
+                <span class="bar" id="bar3"></span>
+                <span class="bar" id="bar4"></span>
+              </div>
+              <span class="strength-label" id="strengthLabel">Enter a password</span>
+            </div>
+            <div class="password-hints">
+              <span class="hint" id="hintLength"><i class="fa-solid fa-circle"></i> At least 8 characters</span>
+              <span class="hint" id="hintLetter"><i class="fa-solid fa-circle"></i> Contains letters</span>
+              <span class="hint" id="hintNumber"><i class="fa-solid fa-circle"></i> Contains numbers</span>
+            </div>
+            <span class="field-error" id="passwordError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock input-icon"></i>
+              <input type="password" id="confirmPassword" placeholder="Re-enter your password" autocomplete="new-password" />
+              <button type="button" class="toggle-password" id="toggleConfirm" aria-label="Show confirm password">
+                <i class="fa-solid fa-eye" id="eyeIconConfirm"></i>
+              </button>
+            </div>
+            <span class="field-error" id="confirmError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="referral">Referral Code <span class="optional-tag">Optional</span></label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-tag input-icon"></i>
+              <input type="text" id="referral" placeholder="Enter referral code if you have one" />
+            </div>
+            <span class="field-error" id="referralError"></span>
+          </div>
+
+          <div class="form-checkbox">
+            <label class="checkbox-label">
+              <input type="checkbox" id="agreeTerms" />
+              <span class="custom-checkbox"></span>
+              <span>I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></span>
+            </label>
+            <span class="field-error" id="termsError"></span>
+          </div>
+
+          <button class="btn-create" id="createBtn">
+            <span id="btnText">Create Account</span>
+            <i class="fa-solid fa-arrow-right" id="btnIcon"></i>
+          </button>
+
+          <div class="form-divider"><span>OR</span></div>
+
+          <button id="googleBtn" class="google-btn">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+            <span>Sign up with Google</span>
+          </button>
+
+          <div class="form-success" id="formSuccess">
+            <i class="fa-solid fa-circle-check"></i>
+            <div>
+              <strong>Account created successfully!</strong>
+              <span>Welcome to YMG IQ. You can now log in to your account.</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="auth-trust">
+          <div class="auth-trust-item">
+            <i class="fa-solid fa-lock"></i>
+            Secure Signup
+          </div>
+          <div class="auth-trust-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            Data Protection
+          </div>
+          <div class="auth-trust-item">
+            🇬🇭 Registered in Ghana
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="../js/firebase.js"></script>
+  <script type="module" src="../js/signup.js"></script>
+</body>
+</html>

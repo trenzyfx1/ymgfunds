@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Settings | YMG IQ Account Preferences</title>
+  <meta name="description" content="Manage your YMG IQ account settings, update your profile, security preferences, and account details." />
+  <meta name="author" content="YMG IQ" />
+  <meta name="robots" content="noindex, follow" />
+
+  <meta property="og:title" content="YMG IQ Settings" />
+  <meta property="og:description" content="Update your account preferences and security settings on YMG IQ." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="../images/logo-2.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="YMG IQ Settings" />
+  <meta name="twitter:description" content="Manage your YMG IQ account settings and preferences." />
+  <meta name="twitter:image" content="../images/logo-2.png" />
+
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/settings-page.css">
+</head>
+
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/logo.jpeg" alt="YMG IQ" class="sidebar-logo-img">
+      <span>YMG<strong>IQ</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i
+          class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item active"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+      <a href="help.html" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>Help</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="#" class="nav-item logout" id="logoutBtn">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span>
+      </a>
+    </div>
+    <a href="../index.html"
+      style="position:fixed;bottom:80px;left:24px;background:#081c10;color:#c9a84c;border:2px solid #c9a84c;border-radius:50px;padding:10px 20px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:9999;transition:all 0.2s;"
+      onmouseover="this.style.background='#c9a84c';this.style.color='#081c10';"
+      onmouseout="this.style.background='#081c10';this.style.color='#c9a84c';">
+      <i class="fa-solid fa-house"></i>
+    </a>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting">
+          <h2>Settings</h2>
+          <p>Manage your account and preferences</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button class="notif-btn" id="notifBtn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-badge" id="notifCount" style="display:none;">0</span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <div class="stt-profile-header">
+        <div class="stt-avatar-wrap">
+          <div class="stt-avatar" id="settingsAvatar"></div>
+          <div class="stt-avatar-info">
+            <h3 id="userName">—</h3>
+            <p id="userEmail">—</p>
+            <div class="stt-badges">
+              <span class="stt-badge" id="emailBadge"><i class="fa-solid fa-envelope"></i> Email Unverified</span>
+              <span class="stt-badge" id="phoneBadge"><i class="fa-solid fa-phone"></i> Phone Unverified</span>
+            </div>
+          </div>
+        </div>
+        <div class="stt-account-stats">
+          <div class="stt-stat"><span>Member Since</span><strong id="memberSince">—</strong></div>
+          <div class="stt-stat"><span>Account Status</span><strong class="stt-active">Active</strong></div>
+          <div class="stt-stat"><span>Account ID</span><strong id="accountId">—</strong></div>
+        </div>
+      </div>
+
+      <div class="stt-grid">
+
+        <!-- LEFT COLUMN -->
+        <div class="stt-col">
+
+          <!-- Profile Info -->
+          <div class="stt-card">
+            <div class="stt-card-head">
+              <i class="fa-solid fa-user"></i>
+              <h4>Profile Information</h4>
+            </div>
+            <div class="stt-field">
+              <label>Full Name</label>
+              <div class="stt-input-wrap">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="settingsName" placeholder="Your full name" autocomplete="off" />
+              </div>
+            </div>
+            <div class="stt-field">
+              <label>Email Address</label>
+              <div class="stt-input-wrap">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" id="settingsEmail" disabled />
+              </div>
+              <div class="stt-verify-row">
+                <span class="stt-verify-tag unverified" id="emailStatus"><i class="fa-solid fa-circle-xmark"></i> Not
+                  Verified</span>
+                <button class="stt-verify-btn" id="verifyEmailBtn">Send Verification Email</button>
+              </div>
+            </div>
+            <div class="stt-field">
+              <label>Phone Number</label>
+              <div class="stt-input-wrap">
+                <i class="fa-solid fa-phone"></i>
+                <input type="tel" id="settingsPhone" placeholder="+233 24 000 0000" autocomplete="off" />
+              </div>
+              <div class="stt-verify-row">
+                <span class="stt-verify-tag unverified" id="phoneStatus"><i class="fa-solid fa-circle-xmark"></i> Not
+                  Verified</span>
+                <button class="stt-verify-btn" id="verifyPhoneBtn">Verify Phone</button>
+              </div>
+            </div>
+            <div class="stt-field-row">
+              <div class="stt-field">
+                <label>Country</label>
+                <div class="stt-input-wrap">
+                  <i class="fa-solid fa-earth-africa"></i>
+                  <select id="settingsCountry">
+                    <option value="Ghana">🇬🇭 Ghana</option>
+                    <option value="Nigeria">🇳🇬 Nigeria</option>
+                    <option value="Kenya">🇰🇪 Kenya</option>
+                    <option value="South Africa">🇿🇦 South Africa</option>
+                    <option value="Other">🌍 Other</option>
+                  </select>
+                </div>
+              </div>
+              <div class="stt-field">
+                <label>Currency</label>
+                <div class="stt-input-wrap">
+                  <i class="fa-solid fa-coins"></i>
+                  <select id="settingsCurrency" disabled>
+                    <option value="GHS">GHS — Ghana Cedi</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <p class="stt-err" id="profileErr"></p>
+            <button class="stt-save-btn" id="saveProfileBtn">
+              <i class="fa-solid fa-floppy-disk"></i> Save Profile
+            </button>
+            <div class="stt-success" id="profileSuccess">
+              <i class="fa-solid fa-circle-check"></i> Profile updated successfully.
+            </div>
+          </div>
+
+          <!-- Notification Preferences -->
+          <div class="stt-card">
+            <div class="stt-card-head">
+              <i class="fa-solid fa-bell"></i>
+              <h4>Notification Preferences</h4>
+            </div>
+
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info"><strong>Deposit Alerts</strong><span>Get notified on every successful
+                  deposit</span></div>
+              <label class="stt-toggle"><input type="checkbox" id="notifDeposit" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info"><strong>Withdrawal Updates</strong><span>Track your withdrawal status
+                  changes</span></div>
+              <label class="stt-toggle"><input type="checkbox" id="notifWithdraw" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info"><strong>Profit Alerts</strong><span>Know when profit is credited to your
+                  account</span></div>
+              <label class="stt-toggle"><input type="checkbox" id="notifProfit" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info"><strong>Referral Rewards</strong><span>Notify when you earn a referral
+                  reward</span></div>
+              <label class="stt-toggle"><input type="checkbox" id="notifReferral" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info"><strong>Premium Referral Rewards</strong><span>Notify when your premium
+                  referral earns</span></div>
+              <label class="stt-toggle"><input type="checkbox" id="notifPremReferral" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info"><strong>Investment Maturity</strong><span>Alert when an investment plan
+                  matures</span></div>
+              <label class="stt-toggle"><input type="checkbox" id="notifMaturity" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info"><strong>Plan Activation</strong><span>Confirm when a plan tier is
+                  activated</span></div>
+              <label class="stt-toggle"><input type="checkbox" id="notifActivation" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info"><strong>Login Alerts</strong><span>Notify when your account is signed
+                  into</span></div>
+              <label class="stt-toggle"><input type="checkbox" id="notifLogin" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info"><strong>Loan Application Updates</strong><span>Track your loan application
+                  status</span></div>
+              <label class="stt-toggle"><input type="checkbox" id="notifLoan" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info"><strong>Security Alerts</strong><span>Password changes and account security
+                  events</span></div>
+              <label class="stt-toggle"><input type="checkbox" id="notifSecurity" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info"><strong>Promotional Updates</strong><span>New plans, features and YMG IQ
+                  news</span></div>
+              <label class="stt-toggle"><input type="checkbox" id="notifPromo" /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+
+            <div style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px;display:flex;gap:10px;">
+              <button class="stt-save-btn" id="saveNotifBtn" style="flex:1;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Preferences
+              </button>
+              <button class="stt-forgot-btn" id="notifAllOffBtn" style="flex:1;margin:0;">
+                <i class="fa-solid fa-bell-slash"></i> Turn All Off
+              </button>
+            </div>
+            <div class="stt-success" id="notifSuccess">
+              <i class="fa-solid fa-circle-check"></i> Notification preferences saved.
+            </div>
+          </div>
+
+          <div class="stt-card">
+            <div class="stt-card-head">
+              <i class="fa-solid fa-sliders"></i>
+              <h4>Transaction Preferences</h4>
+            </div>
+
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info">
+                <strong>Password Before Withdrawal</strong>
+                <span>Always require password to confirm withdrawals</span>
+              </div>
+              <label class="stt-toggle"><input type="checkbox" id="txPwWithdraw" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info">
+                <strong>Password Before Investment</strong>
+                <span>Require password confirmation to invest</span>
+              </div>
+              <label class="stt-toggle"><input type="checkbox" id="txPwInvest" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info">
+                <strong>Show Transaction Fees</strong>
+                <span>Always show processing fees before confirming</span>
+              </div>
+              <label class="stt-toggle"><input type="checkbox" id="txShowFees" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info">
+                <strong>Auto-reinvest Profits</strong>
+                <span>Automatically reinvest credited profits (coming soon)</span>
+              </div>
+              <label class="stt-toggle"><input type="checkbox" id="txAutoReinvest" disabled /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+
+            <div class="stt-field" style="margin-top:14px;">
+              <label>Low Balance Alert Threshold</label>
+              <div class="stt-input-wrap">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <select id="txLowBalAlert">
+                  <option value="0">Disabled</option>
+                  <option value="50">Below GHS 50</option>
+                  <option value="100" selected>Below GHS 100</option>
+                  <option value="200">Below GHS 200</option>
+                  <option value="500">Below GHS 500</option>
+                  <option value="1000">Below GHS 1,000</option>
+                </select>
+              </div>
+              <small style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;display:block;">You will receive a
+                notification when your balance falls below this amount.</small>
+            </div>
+
+            <div class="stt-field">
+              <label>Preferred Withdrawal Method</label>
+              <div class="stt-input-wrap">
+                <i class="fa-solid fa-money-bill-transfer"></i>
+                <select id="txPrefWithdraw">
+                  <option value="">No preference</option>
+                  <option value="MTN Mobile Money">MTN Mobile Money</option>
+                  <option value="Vodafone Cash">Vodafone Cash</option>
+                  <option value="AirtelTigo Money">AirtelTigo Money</option>
+                  <option value="Bank Transfer">Bank Transfer</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px;">
+              <button class="stt-save-btn" id="saveTxBtn">
+                <i class="fa-solid fa-floppy-disk"></i> Save Transaction Settings
+              </button>
+              <div class="stt-success" id="txSuccess">
+                <i class="fa-solid fa-circle-check"></i> Transaction preferences saved.
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="stt-col">
+
+          <!-- Change Password -->
+          <div class="stt-card">
+            <div class="stt-card-head">
+              <i class="fa-solid fa-lock"></i>
+              <h4>Change Password</h4>
+            </div>
+            <div class="stt-field">
+              <label>Current Password</label>
+              <div class="stt-pw-wrap">
+                <i class="fa-solid fa-lock stt-pw-icon"></i>
+                <input type="password" id="currentPw" placeholder="Enter current password" />
+                <button type="button" class="stt-eye" id="eyeBtn1"><i class="fa-solid fa-eye" id="eyeIco1"></i></button>
+              </div>
+            </div>
+            <div class="stt-field">
+              <label>New Password</label>
+              <div class="stt-pw-wrap">
+                <i class="fa-solid fa-lock stt-pw-icon"></i>
+                <input type="password" id="newPw" placeholder="Min. 8 characters" />
+                <button type="button" class="stt-eye" id="eyeBtn2"><i class="fa-solid fa-eye" id="eyeIco2"></i></button>
+              </div>
+            </div>
+            <div class="stt-field">
+              <label>Confirm New Password</label>
+              <div class="stt-pw-wrap">
+                <i class="fa-solid fa-lock stt-pw-icon"></i>
+                <input type="password" id="confirmPw" placeholder="Re-enter new password" />
+                <button type="button" class="stt-eye" id="eyeBtn3"><i class="fa-solid fa-eye" id="eyeIco3"></i></button>
+              </div>
+            </div>
+            <p class="stt-err" id="pwErr"></p>
+            <button class="stt-save-btn" id="changePwBtn"><i class="fa-solid fa-key"></i> Update Password</button>
+            <button class="stt-forgot-btn" id="forgotPwBtn"><i class="fa-solid fa-envelope"></i> Forgot Password? Send
+              Reset Email</button>
+            <div class="stt-success" id="pwSuccess"><i class="fa-solid fa-circle-check"></i> Password updated
+              successfully.</div>
+          </div>
+
+          <!-- Security Info -->
+          <div class="stt-card">
+            <div class="stt-card-head">
+              <i class="fa-solid fa-shield-halved"></i>
+              <h4>Security Overview</h4>
+            </div>
+            <div class="stt-security-list">
+              <div class="stt-security-item">
+                <div class="stt-sec-icon green"><i class="fa-solid fa-check"></i></div>
+                <div><strong>Password Set</strong><span>Your account has a secure password</span></div>
+              </div>
+              <div class="stt-security-item">
+                <div class="stt-sec-icon" id="secEmailIcon"><i class="fa-solid fa-xmark"></i></div>
+                <div><strong>Email Verification</strong><span id="secEmailText">Email not verified yet</span></div>
+              </div>
+              <div class="stt-security-item">
+                <div class="stt-sec-icon" id="secPhoneIcon"><i class="fa-solid fa-xmark"></i></div>
+                <div><strong>Phone Verification</strong><span id="secPhoneText">Phone not verified yet</span></div>
+              </div>
+              <div class="stt-security-item">
+                <div class="stt-sec-icon green"><i class="fa-solid fa-lock"></i></div>
+                <div><strong>Encrypted Connection</strong><span>All data is SSL encrypted</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══════════════════════════════════════════════════════
+     PASTE THESE THREE CARDS inside the LEFT COLUMN stt-col
+     Add them after the Notification Preferences card
+═══════════════════════════════════════════════════════ -->
+
+          <!-- Privacy & Data -->
+          <div class="stt-card">
+            <div class="stt-card-head">
+              <i class="fa-solid fa-user-shield"></i>
+              <h4>Privacy & Data</h4>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info">
+                <strong>Profile Visibility</strong>
+                <span>Allow your name to appear in referral records</span>
+              </div>
+              <label class="stt-toggle"><input type="checkbox" id="privProfile" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info">
+                <strong>Personalised Insights</strong>
+                <span>Let YMG use your data to improve recommendations</span>
+              </div>
+              <label class="stt-toggle"><input type="checkbox" id="privInsights" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info">
+                <strong>Activity Tracking</strong>
+                <span>Track investment activity for performance reports</span>
+              </div>
+              <label class="stt-toggle"><input type="checkbox" id="privTracking" checked /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info">
+                <strong>Two-Factor Authentication</strong>
+                <span>Require extra verification on login (coming soon)</span>
+              </div>
+              <label class="stt-toggle"><input type="checkbox" id="privTwoFactor" disabled /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info">
+                <strong>Marketing Communications</strong>
+                <span>Receive promotional emails from YMG IQ</span>
+              </div>
+              <label class="stt-toggle"><input type="checkbox" id="privMarketing" /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+            <div style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px;">
+              <button class="stt-save-btn" id="savePrivacyBtn">
+                <i class="fa-solid fa-floppy-disk"></i> Save Privacy Settings
+              </button>
+              <div class="stt-success" id="privacySuccess">
+                <i class="fa-solid fa-circle-check"></i> Privacy settings saved.
+              </div>
+            </div>
+          </div>
+
+          <!-- Display & Appearance -->
+          <div class="stt-card">
+            <div class="stt-card-head">
+              <i class="fa-solid fa-palette"></i>
+              <h4>Display & Appearance</h4>
+            </div>
+
+            <div class="stt-field">
+              <label>Currency Display Format</label>
+              <div class="stt-input-wrap">
+                <i class="fa-solid fa-coins"></i>
+                <select id="dispCurrency">
+                  <option value="symbol">GHS 1,000.00</option>
+                  <option value="code">GHS1000.00</option>
+                  <option value="plain">1,000.00 GHS</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="stt-field">
+              <label>Date Format</label>
+              <div class="stt-input-wrap">
+                <i class="fa-solid fa-calendar"></i>
+                <select id="dispDate">
+                  <option value="dd/mm/yyyy">DD/MM/YYYY (e.g. 28/04/2026)</option>
+                  <option value="mm/dd/yyyy">MM/DD/YYYY (e.g. 04/28/2026)</option>
+                  <option value="month">28 Apr 2026</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="stt-field">
+              <label>Default Page After Login</label>
+              <div class="stt-input-wrap">
+                <i class="fa-solid fa-house"></i>
+                <select id="dispDefaultPage">
+                  <option value="dashboard.html">Dashboard</option>
+                  <option value="investments.html">Investments</option>
+                  <option value="transactions.html">Transactions</option>
+                  <option value="deposit.html">Deposit</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="stt-toggle-row" style="margin-top:6px;">
+              <div class="stt-toggle-info">
+                <strong>Hide Balance on Dashboard</strong>
+                <span>Blur your balance for privacy in public</span>
+              </div>
+              <label class="stt-toggle"><input type="checkbox" id="dispHideBalance" /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+
+            <div class="stt-toggle-row">
+              <div class="stt-toggle-info">
+                <strong>Compact View</strong>
+                <span>Show more information with less spacing</span>
+              </div>
+              <label class="stt-toggle"><input type="checkbox" id="dispCompact" /><span
+                  class="stt-toggle-slider"></span></label>
+            </div>
+
+            <div style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px;">
+              <button class="stt-save-btn" id="saveDisplayBtn">
+                <i class="fa-solid fa-floppy-disk"></i> Save Display Settings
+              </button>
+              <div class="stt-success" id="displaySuccess">
+                <i class="fa-solid fa-circle-check"></i> Display settings saved.
+              </div>
+            </div>
+          </div>
+
+
+          <!-- ═══════════════════════════════════════════════════════
+     PASTE THIS CARD inside the RIGHT COLUMN stt-col
+     Add it after the Security Overview card,
+     BEFORE the Danger Zone card
+═══════════════════════════════════════════════════════ -->
+
+          <!-- Transaction Preferences -->
+
+          <!-- Danger Zone -->
+          <div class="stt-card stt-danger-card">
+            <div class="stt-card-head">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <h4>Account Actions</h4>
+            </div>
+            <div class="stt-danger-item">
+              <div>
+                <strong>Sign Out of All Devices</strong>
+                <span>This will log you out everywhere</span>
+              </div>
+              <button class="stt-danger-btn" id="logoutAllBtn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+              </button>
+            </div>
+            <div class="stt-danger-item">
+              <div>
+                <strong>Download My Data</strong>
+                <span>Export your account information</span>
+              </div>
+              <button class="stt-danger-btn" id="exportDataBtn">
+                <i class="fa-solid fa-download"></i> Export
+              </button>
+            </div>
+
+            <!-- ── DELETE ACCOUNT ── -->
+            <div class="stt-danger-item stt-delete-item">
+              <div>
+                <strong style="color:#dc2626;">Delete Account</strong>
+                <span>Permanently delete your account and all data</span>
+              </div>
+              <button class="stt-danger-btn stt-delete-btn" id="deleteAccountBtn">
+                <i class="fa-solid fa-trash"></i> Delete
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- OTP Modal -->
+  <div class="stt-modal-wrap" id="otpModal">
+    <div class="stt-modal-box">
+      <div class="stt-modal-head">
+        <h3>Verify Phone Number</h3>
+        <button class="stt-modal-x" id="otpModalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="stt-otp-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+      <p class="stt-otp-desc">A 6-digit code has been sent to<br><strong id="otpPhoneDisplay"></strong></p>
+      <div class="stt-otp-boxes">
+        <input type="text" class="stt-otp-box" maxlength="1" inputmode="numeric" />
+        <input type="text" class="stt-otp-box" maxlength="1" inputmode="numeric" />
+        <input type="text" class="stt-otp-box" maxlength="1" inputmode="numeric" />
+        <input type="text" class="stt-otp-box" maxlength="1" inputmode="numeric" />
+        <input type="text" class="stt-otp-box" maxlength="1" inputmode="numeric" />
+        <input type="text" class="stt-otp-box" maxlength="1" inputmode="numeric" />
+      </div>
+      <p class="stt-otp-err" id="otpError"></p>
+      <div class="stt-otp-resend">
+        <button id="resendOtpBtn" disabled>Resend Code</button>
+        <span id="resendTimer"></span>
+      </div>
+      <button class="stt-save-btn" id="confirmOtpBtn">
+        <i class="fa-solid fa-check"></i> Confirm Code
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       DELETE ACCOUNT MODAL — MULTI STEP
+  ══════════════════════════════════════════ -->
+  <div class="stt-modal-wrap" id="deleteModal">
+    <div class="stt-modal-box" style="max-width:440px;">
+
+      <!-- STEP 1: Warning -->
+      <div id="delStep1">
+        <div class="stt-modal-head">
+          <h3 style="color:#dc2626;"><i class="fa-solid fa-skull"></i> Delete Account</h3>
+          <button class="stt-modal-x" id="delModalClose"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:16px;margin-bottom:18px;">
+          <p style="font-size:0.85rem;font-weight:700;color:#dc2626;margin-bottom:8px;"><i
+              class="fa-solid fa-triangle-exclamation"></i> This action is permanent and cannot be undone.</p>
+          <p style="font-size:0.8rem;color:#555;line-height:1.6;margin:0;">Deleting your account will permanently
+            remove:</p>
+          <ul style="font-size:0.78rem;color:#555;margin:8px 0 0 16px;line-height:1.8;">
+            <li>Your account balance and all funds</li>
+            <li>All investment plans and profits</li>
+            <li>All transaction history</li>
+            <li>All referral records and earnings</li>
+            <li>All notifications and personal data</li>
+          </ul>
+        </div>
+        <p style="font-size:0.82rem;color:#555;margin-bottom:18px;">If you have a remaining balance, please withdraw it
+          before deleting your account.</p>
+        <button class="stt-save-btn" id="delStep1Btn" style="background:#dc2626;">
+          I Understand — Continue <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <button class="stt-forgot-btn" id="delStep1Cancel" style="margin-top:8px;">Cancel</button>
+      </div>
+
+      <!-- STEP 2: Type DELETE -->
+      <div id="delStep2" style="display:none;">
+        <div class="stt-modal-head">
+          <h3 style="color:#dc2626;"><i class="fa-solid fa-keyboard"></i> Confirm Deletion</h3>
+        </div>
+        <p style="font-size:0.84rem;color:var(--text-muted);margin-bottom:6px;">To confirm, type <strong
+            style="color:#dc2626;letter-spacing:2px;">DELETE</strong> in the box below:</p>
+        <div class="stt-input-wrap" style="margin-bottom:6px;">
+          <i class="fa-solid fa-type"></i>
+          <input type="text" id="delConfirmInput" placeholder='Type "DELETE" here' autocomplete="off"
+            style="letter-spacing:2px;font-weight:700;" />
+        </div>
+        <p style="font-size:0.75rem;color:#dc2626;min-height:16px;margin-bottom:14px;" id="delTypeErr"></p>
+        <button class="stt-save-btn" id="delStep2Btn" style="background:#dc2626;" disabled>
+          Continue <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <button class="stt-forgot-btn" id="delStep2Cancel" style="margin-top:8px;">Cancel</button>
+      </div>
+
+      <!-- STEP 3: Password -->
+      <div id="delStep3" style="display:none;">
+        <div class="stt-modal-head">
+          <h3 style="color:#dc2626;"><i class="fa-solid fa-lock"></i> Enter Password</h3>
+        </div>
+        <p style="font-size:0.84rem;color:var(--text-muted);margin-bottom:14px;">Enter your account password to verify
+          your identity.</p>
+        <div class="stt-pw-wrap" style="margin-bottom:6px;">
+          <i class="fa-solid fa-lock stt-pw-icon"></i>
+          <input type="password" id="delPasswordInput" placeholder="Your account password" />
+          <button type="button" class="stt-eye" id="delEyeBtn">
+            <i class="fa-solid fa-eye" id="delEyeIco"></i>
+          </button>
+        </div>
+        <p style="font-size:0.75rem;color:#dc2626;min-height:16px;margin-bottom:14px;" id="delPwErr"></p>
+        <button class="stt-save-btn" id="delStep3Btn" style="background:#dc2626;">
+          <i class="fa-solid fa-spinner fa-spin" id="delPwSpinner" style="display:none;"></i>
+          Verify Password <i class="fa-solid fa-arrow-right" id="delPwArrow"></i>
+        </button>
+        <button class="stt-forgot-btn" id="delStep3Cancel" style="margin-top:8px;">Cancel</button>
+      </div>
+
+      <!-- STEP 4: Final countdown -->
+      <div id="delStep4" style="display:none;">
+        <div class="stt-modal-head">
+          <h3 style="color:#dc2626;"><i class="fa-solid fa-bomb"></i> Final Step</h3>
+        </div>
+        <div style="text-align:center;padding:20px 0;">
+          <div style="font-size:3rem;margin-bottom:10px;">⚠️</div>
+          <p style="font-size:0.9rem;font-weight:700;color:#dc2626;margin-bottom:6px;">This is your last chance to
+            cancel.</p>
+          <p style="font-size:0.8rem;color:var(--text-muted);">Your account and all data will be permanently deleted.
+          </p>
+        </div>
+        <button class="stt-save-btn" id="delFinalBtn" style="background:#dc2626;" disabled>
+          <span id="delFinalTxt">Delete My Account (<span id="delCountdown">5</span>)</span>
+        </button>
+        <button class="stt-forgot-btn" id="delStep4Cancel" style="margin-top:8px;">No, Keep My Account</button>
+        <p style="font-size:0.75rem;color:#dc2626;min-height:16px;margin-top:8px;text-align:center;" id="delFinalErr">
+        </p>
+      </div>
+
+      <!-- STEP 5: Deleting -->
+      <div id="delStep5" style="display:none;text-align:center;padding:30px 20px;">
+        <i class="fa-solid fa-spinner fa-spin"
+          style="font-size:2rem;color:#dc2626;margin-bottom:16px;display:block;"></i>
+        <p style="font-size:0.9rem;font-weight:700;color:var(--text-main);">Deleting your account...</p>
+        <p style="font-size:0.8rem;color:var(--text-muted);">Please wait, do not close this window.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="stt-toast" id="sttToast"></div>
+  <div id="recaptcha-container"></div>
+
+  <script type="module" src="./js/settings.js"></script>
+  <script type="module" src="./js/delete-account.js"></script>
+  <script type="module" src="./js/sidebar.js"></script>
+</body>
+
+</html>

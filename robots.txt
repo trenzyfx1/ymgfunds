@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /pages/login.html
+Disallow: /pages/signup.html
+Disallow: /pages/forgot-password.html
+
+Sitemap: https://ymgiq.com/sitemap.xml

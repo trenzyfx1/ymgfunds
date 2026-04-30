@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications — YMG Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="icon" href="../images/logo-2.png" type="image/x-icon">
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/logo.jpeg" alt="YMG Funds" class="sidebar-logo-img">
+      <span>YMG<strong></strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+      <a href="help.html" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>Help</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="#" class="nav-item logout" id="logoutBtn">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span>
+      </a>
+    </div>
+    <a href="../index.html"
+      style="position:fixed;bottom:24px;left:80px;background:#081c10;color:#c9a84c;border:2px solid #c9a84c;border-radius:50px;padding:10px 20px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:9999;transition:all 0.2s;"
+      onmouseover="this.style.background='#c9a84c';this.style.color='#081c10';"
+      onmouseout="this.style.background='#081c10';this.style.color='#c9a84c';">
+      <i class="fa-solid fa-house"></i>
+    </a>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting">
+          <h2>Notifications</h2>
+          <p>All your account activity and alerts</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Summary + Actions -->
+      <div class="nf-top-bar">
+        <div class="nf-summary">
+          <span id="nfUnreadCount" class="nf-unread-badge">0 unread</span>
+          <span id="nfTotalCount" class="nf-total">0 total</span>
+        </div>
+        <div class="nf-actions">
+          <button class="nf-action-btn" id="nfMarkAllBtn">
+            <i class="fa-solid fa-check-double"></i> Mark all as read
+          </button>
+          <button class="nf-action-btn nf-danger-btn" id="nfClearAllBtn">
+            <i class="fa-solid fa-trash"></i> Clear all
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Chips -->
+      <div class="nf-filter-wrap">
+        <button class="nf-chip active" data-filter="all">
+          <i class="fa-solid fa-list"></i> All
+        </button>
+        <button class="nf-chip" data-filter="unread">
+          <i class="fa-solid fa-circle"></i> Unread
+        </button>
+        <button class="nf-chip" data-filter="deposit">
+          <i class="fa-solid fa-arrow-down"></i> Deposits
+        </button>
+        <button class="nf-chip" data-filter="withdrawal">
+          <i class="fa-solid fa-arrow-up"></i> Withdrawals
+        </button>
+        <button class="nf-chip" data-filter="profit">
+          <i class="fa-solid fa-coins"></i> Profits
+        </button>
+        <button class="nf-chip" data-filter="investment">
+          <i class="fa-solid fa-chart-line"></i> Investments
+        </button>
+        <button class="nf-chip" data-filter="referral_reward">
+          <i class="fa-solid fa-gift"></i> Referrals
+        </button>
+      </div>
+
+      <!-- Notifications List -->
+      <div class="nf-list-card">
+        <div id="nfList">
+          <div class="nf-loading">
+            <i class="fa-solid fa-spinner fa-spin"></i> Loading notifications...
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <script type="module" src="./js/sidebar.js"></script>
+  <script type="module" src="./js/notifications-page.js"></script>
+</body>
+</html>

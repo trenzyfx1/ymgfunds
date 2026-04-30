@@ -1,3 +1,4 @@
+//DEVELOPED BY TRENZY TECH |+2347047889687 | COPYRIGHT © 2026 YMG FUNDS. ALL RIGHTS RESERVED.
 const sections = document.querySelectorAll('.legal-section');
 const sidebarLinks = document.querySelectorAll('.sidebar-link');
 

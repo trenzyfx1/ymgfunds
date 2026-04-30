@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Transactions — YMG Funds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="icon" href="../images/logo-2.png" type="image/x-icon">
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/logo.jpeg" alt="YMG Funds" class="sidebar-logo-img">
+      <span>YMG<strong>IQ</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item active"><i class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+      <a href="help.html" class="nav-item"><i class="fa-solid fa-circle-question"></i><span>Help</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="../pages/login.html" class="nav-item logout">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span>
+      </a>
+    </div>
+    <a href="../index.html"
+      style="position:fixed;bottom:80px;left:24px;background:#081c10;color:#c9a84c;border:2px solid #c9a84c;border-radius:50px;padding:10px 20px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:9999;transition:all 0.2s;"
+      onmouseover="this.style.background='#c9a84c';this.style.color='#081c10';"
+      onmouseout="this.style.background='#081c10';this.style.color='#c9a84c';">
+      <i class="fa-solid fa-house"></i>
+    </a>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting">
+          <h2>Transactions</h2>
+          <p>Full history of all your account activity</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Summary Cards -->
+      <div class="tx-summary-row">
+        <div class="tx-summary-card">
+          <div class="tx-summary-icon deposit-icon"><i class="fa-solid fa-arrow-down"></i></div>
+          <div>
+            <span>Total Deposited</span>
+            <strong id="txTotalDeposit">GHS 0.00</strong>
+          </div>
+        </div>
+        <div class="tx-summary-card">
+          <div class="tx-summary-icon withdraw-icon"><i class="fa-solid fa-arrow-up"></i></div>
+          <div>
+            <span>Total Withdrawn</span>
+            <strong id="txTotalWithdraw">GHS 0.00</strong>
+          </div>
+        </div>
+        <div class="tx-summary-card">
+          <div class="tx-summary-icon profit-icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
+          <div>
+            <span>Total Profit</span>
+            <strong id="txTotalProfit">GHS 0.00</strong>
+          </div>
+        </div>
+        <div class="tx-summary-card">
+          <div class="tx-summary-icon invest-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <div>
+            <span>Total Invested</span>
+            <strong id="txTotalInvested">GHS 0.00</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Chips -->
+      <div class="tx-filter-wrap">
+        <button class="tx-chip active" data-filter="all">
+          <i class="fa-solid fa-list"></i> All
+        </button>
+        <button class="tx-chip" data-filter="deposit">
+          <i class="fa-solid fa-arrow-down"></i> Deposits
+        </button>
+        <button class="tx-chip" data-filter="withdrawal">
+          <i class="fa-solid fa-arrow-up"></i> Withdrawals
+        </button>
+        <button class="tx-chip" data-filter="investment">
+          <i class="fa-solid fa-chart-line"></i> Investments
+        </button>
+        <button class="tx-chip" data-filter="profit">
+          <i class="fa-solid fa-coins"></i> Profits
+        </button>
+        <button class="tx-chip" data-filter="referral_reward">
+          <i class="fa-solid fa-gift"></i> Referrals
+        </button>
+        <button class="tx-chip" data-filter="activation">
+          <i class="fa-solid fa-unlock"></i> Activations
+        </button>
+      </div>
+
+      <!-- Transactions Table -->
+      <div class="tx-table-card">
+        <div class="tx-table-head">
+          <h4><i class="fa-solid fa-clock-rotate-left"></i> Transaction History</h4>
+          <span class="tx-count-badge" id="txCount">0 records</span>
+        </div>
+        <div class="tx-table-wrap">
+          <table class="tx-table">
+            <thead>
+              <tr>
+                <th>Reference</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="txTableBody">
+              <tr>
+                <td colspan="6" class="tx-table-msg">
+                  <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <script type="module" src="./js/globaluser.js"></script>
+  <script type="module" src="./js/transactions.js"></script>
+  <script type="module" src="./js/sidebar.js"></script>
+</body>
+</html>

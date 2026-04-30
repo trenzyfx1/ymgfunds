@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Help & Support | YMG IQ Assistance Center</title>
+  <meta name="description" content="Get help and support for your YMG IQ account. Find answers, guides, and assistance for deposits, withdrawals, and investments." />
+  <meta name="author" content="YMG IQ" />
+  <meta name="robots" content="noindex, follow" />
+
+  <meta property="og:title" content="YMG IQ Help & Support" />
+  <meta property="og:description" content="Find answers and support for your YMG IQ account and services." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="../images/logo-2.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="YMG IQ Help & Support" />
+  <meta name="twitter:description" content="Access support and assistance for YMG IQ users." />
+  <meta name="twitter:image" content="../images/logo-2.png" />
+
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/logo.jpeg" alt="YMG IQ" class="sidebar-logo-img">
+      <span>YMG<strong>IQ</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+      <a href="deposit.html" class="nav-item"><i class="fa-solid fa-download"></i><span>Deposit</span></a>
+      <a href="investments.html" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Investments</span></a>
+      <a href="withdraw.html" class="nav-item"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></a>
+      <a href="transactions.html" class="nav-item"><i
+          class="fa-solid fa-clock-rotate-left"></i><span>Transactions</span></a>
+      <a href="referrals.html" class="nav-item"><i class="fa-solid fa-users"></i><span>Referrals</span></a>
+      <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+      <a href="help.html" class="nav-item active"><i class="fa-solid fa-circle-question"></i><span>Help</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="#" class="nav-item logout" id="logoutBtn">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span>
+      </a>
+    </div>
+    <a href="../index.html"
+      style="position:fixed;bottom:80px;left:24px;background:#081c10;color:#c9a84c;border:2px solid #c9a84c;border-radius:50px;padding:10px 20px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:9999;transition:all 0.2s;"
+      onmouseover="this.style.background='#c9a84c';this.style.color='#081c10';"
+      onmouseout="this.style.background='#081c10';this.style.color='#c9a84c';">
+      <i class="fa-solid fa-house"></i>
+    </a>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-greeting">
+          <h2>Help & Support</h2>
+          <p>We're here to help you</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button class="notif-btn" id="notifBtn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-badge" id="notifCount" style="display:none;">0</span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-avatar" id="profileAvatar"></div>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="settings.html"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-logout" id="logoutBtn2">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="hlp-info-row">
+        <div class="hlp-info-card">
+          <div class="hlp-info-icon"><i class="fa-solid fa-envelope"></i></div>
+          <div>
+            <strong>Email Support</strong>
+            <p>support@ymgiq.com</p>
+          </div>
+        </div>
+        <div class="hlp-info-card">
+          <div class="hlp-info-icon"
+            style="background:rgba(37,211,102,0.1);border-color:rgba(37,211,102,0.2);color:#25d366;">
+            <i class="fa-brands fa-whatsapp"></i>
+          </div>
+          <div>
+            <strong>WhatsApp Support</strong>
+            <p>+233 53 611 5032</p>
+          </div>
+        </div>
+        <div class="hlp-info-card">
+          <div class="hlp-info-icon"><i class="fa-solid fa-clock"></i></div>
+          <div>
+            <strong>Response Time</strong>
+            <p>Within 24–48 hours</p>
+          </div>
+        </div>
+        <div class="hlp-info-card">
+          <div class="hlp-info-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div>
+            <strong>Secure & Private</strong>
+            <p>Your message is confidential</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hlp-grid">
+
+        <!-- Contact Form -->
+        <div class="hlp-form-card">
+          <div class="hlp-form-title">
+            <i class="fa-solid fa-paper-plane"></i>
+            <h3>Send a Message</h3>
+          </div>
+
+          <div class="hlp-field">
+            <label>Full Name</label>
+            <div class="hlp-input-wrap">
+              <i class="fa-solid fa-user"></i>
+              <input type="text" id="hlpName" placeholder="Your full name" autocomplete="off" />
+            </div>
+          </div>
+
+          <div class="hlp-field">
+            <label>Email Address</label>
+            <div class="hlp-input-wrap">
+              <i class="fa-solid fa-envelope"></i>
+              <input type="email" id="hlpEmail" placeholder="Your email address" autocomplete="off" />
+            </div>
+          </div>
+
+          <div class="hlp-field">
+            <label>Subject</label>
+            <div class="hlp-input-wrap">
+              <i class="fa-solid fa-tag"></i>
+              <select id="hlpSubject">
+                <option value="">Select a subject</option>
+                <option value="Deposit Issue">💳 Deposit Issue</option>
+                <option value="Withdrawal Issue">💸 Withdrawal Issue</option>
+                <option value="Investment Question">📈 Investment Question</option>
+                <option value="Account Problem">👤 Account Problem</option>
+                <option value="Referral Issue">🎁 Referral Issue</option>
+                <option value="Technical Problem">🔧 Technical Problem</option>
+                <option value="Other">💬 Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="hlp-field">
+            <label>Message</label>
+            <textarea id="hlpMessage" placeholder="Describe your issue or question in detail..." rows="5"></textarea>
+          </div>
+
+          <p class="hlp-err" id="hlpErr"></p>
+
+          <button class="hlp-submit-btn" id="hlpSubmitBtn">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span id="hlpBtnTxt">Send Message</span>
+          </button>
+
+          <div class="hlp-success" id="hlpSuccess">
+            <i class="fa-solid fa-circle-check"></i>
+            <div>
+              <strong>Message Sent!</strong>
+              <p>Our team will review your message and respond to your email within 24–48 hours.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: FAQ + Info -->
+        <div class="hlp-right-col">
+
+          <!-- FAQ -->
+          <div class="hlp-faq-card">
+            <div class="hlp-section-head">
+              <i class="fa-solid fa-circle-question"></i>
+              <h4>Frequently Asked Questions</h4>
+            </div>
+
+            <div class="hlp-faq-item">
+              <button class="hlp-faq-q" data-faq="1">
+                <span>How long does a deposit take to reflect?</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="hlp-faq-a" id="faq1">
+                Deposits via Paystack reflect instantly once the payment is confirmed. If your balance hasn't updated
+                after 5 minutes, please contact support with your payment reference.
+              </div>
+            </div>
+
+            <div class="hlp-faq-item">
+              <button class="hlp-faq-q" data-faq="2">
+                <span>How long do withdrawals take?</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="hlp-faq-a" id="faq2">
+                Withdrawals are processed within 2–3 working days after submission. You will receive the funds directly
+                to your provided account. Weekends and public holidays are not counted as working days.
+              </div>
+            </div>
+
+            <div class="hlp-faq-item">
+              <button class="hlp-faq-q" data-faq="3">
+                <span>Why can't I withdraw yet?</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="hlp-faq-a" id="faq3">
+                You must verify both your email address and phone number before you can withdraw. Also, you must wait
+                2–3 working days after your last deposit before making a withdrawal.
+              </div>
+            </div>
+
+            <div class="hlp-faq-item">
+              <button class="hlp-faq-q" data-faq="4">
+                <span>How does the referral program work?</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="hlp-faq-a" id="faq4">
+                Share your unique referral code or link with friends. When they sign up and make their first deposit,
+                you automatically earn GHS 10.00 credited to your wallet. There is no limit to how many people you can
+                refer.
+              </div>
+            </div>
+
+            <div class="hlp-faq-item">
+              <button class="hlp-faq-q" data-faq="5">
+                <span>When is profit credited to my account?</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="hlp-faq-a" id="faq5">
+                Profit is calculated and credited automatically based on your investment plan. Weekly plans credit every
+                7 days, while fixed plans accrue daily and pay out at the end of their cycle.
+              </div>
+            </div>
+
+            <div class="hlp-faq-item">
+              <button class="hlp-faq-q" data-faq="6">
+                <span>How do I activate an investment plan?</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="hlp-faq-a" id="faq6">
+                Go to the Investments page. Standard plans require a one-time GHS 500 activation fee, and Premium plans
+                require GHS 1,000. After activation, all plans in that tier are unlocked permanently.
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Quick Links -->
+          <div class="hlp-links-card">
+            <div class="hlp-section-head">
+              <i class="fa-solid fa-bolt"></i>
+              <h4>Quick Links</h4>
+            </div>
+            <div class="hlp-links-grid">
+              <a href="deposit.html" class="hlp-link-btn">
+                <i class="fa-solid fa-download"></i> Deposit
+              </a>
+              <a href="withdraw.html" class="hlp-link-btn">
+                <i class="fa-solid fa-arrow-up"></i> Withdraw
+              </a>
+              <a href="investments.html" class="hlp-link-btn">
+                <i class="fa-solid fa-chart-line"></i> Invest
+              </a>
+              <a href="settings.html" class="hlp-link-btn">
+                <i class="fa-solid fa-gear"></i> Settings
+              </a>
+              <a href="transactions.html" class="hlp-link-btn">
+                <i class="fa-solid fa-clock-rotate-left"></i> Transactions
+              </a>
+              <a href="referrals.html" class="hlp-link-btn">
+                <i class="fa-solid fa-users"></i> Referrals
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <script type="module" src="./js/help.js"></script>
+  <script type="module" src="./js/sidebar.js"></script>
+</body>
+
+</html>
