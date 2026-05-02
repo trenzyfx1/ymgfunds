@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loans — YMG IQ Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/admin.css">
+  <link rel="icon" href="../images/logo-2.png" type="image/x-icon">
+</head>
+<body>
+
+  <div class="adm-wrapper">
+
+    <aside class="adm-sidebar" id="admSidebar">
+      <div class="adm-sidebar-logo">
+        <img src="../images/logo.jpeg" alt="YMG IQ" class="adm-logo-img">
+        <div>
+          <span class="adm-logo-name">YMG IQ</span>
+          <span class="adm-logo-role">Admin Panel</span>
+        </div>
+      </div>
+      <nav class="adm-nav">
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Main</span>
+          <a href="index.html" class="adm-nav-item"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+          <a href="users.html" class="adm-nav-item"><i class="fa-solid fa-users"></i> Users</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Finance</span>
+          <a href="deposits.html" class="adm-nav-item"><i class="fa-solid fa-download"></i> Deposits</a>
+          <a href="withdrawals.html" class="adm-nav-item"><i class="fa-solid fa-upload"></i> Withdrawals</a>
+          <a href="investments.html" class="adm-nav-item"><i class="fa-solid fa-chart-line"></i> Investments</a>
+          <a href="loans.html" class="adm-nav-item active"><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a>
+          <a href="transactions.html" class="adm-nav-item"><i class="fa-solid fa-clock-rotate-left"></i> Transactions</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Management</span>
+          <a href="kyc.html" class="adm-nav-item"><i class="fa-solid fa-id-card"></i> KYC</a>
+          <a href="referrals.html" class="adm-nav-item"><i class="fa-solid fa-gift"></i> Referrals</a>
+          <a href="notifications.html" class="adm-nav-item"><i class="fa-solid fa-bell"></i> Notifications</a>
+          <a href="reports.html" class="adm-nav-item"><i class="fa-solid fa-file-chart-column"></i> Reports</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">System</span>
+          <a href="settings.html" class="adm-nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+        </div>
+      </nav>
+      <div class="adm-sidebar-footer">
+        <div class="adm-admin-info">
+          <div class="adm-admin-avatar" id="admAvatar">AD</div>
+          <div>
+            <p class="adm-admin-name" id="admName">Admin</p>
+            <p class="adm-admin-email" id="admEmail">admin@ymgiq.com</p>
+          </div>
+        </div>
+        <button class="adm-logout-btn" id="admLogout"><i class="fa-solid fa-right-from-bracket"></i></button>
+      </div>
+    </aside>
+
+    <div class="adm-main">
+
+      <header class="adm-topbar">
+        <button class="adm-menu-toggle" id="admMenuToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="adm-topbar-left">
+          <h1 class="adm-page-title">Loan Requests</h1>
+          <p class="adm-page-sub" id="admDate"></p>
+        </div>
+        <div class="adm-topbar-right">
+          <div class="adm-live-badge"><span class="adm-live-dot"></span> Live</div>
+          <button class="adm-refresh-btn" id="admRefresh"><i class="fa-solid fa-rotate-right"></i></button>
+        </div>
+      </header>
+
+      <div class="adm-content">
+
+        <div class="adm-stats-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="adm-stat-card orange">
+            <div class="adm-stat-icon"><i class="fa-solid fa-clock"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Pending</p>
+              <h3 class="adm-stat-value" id="statPending">0</h3>
+              <p class="adm-stat-sub" id="statPendingAmt">GHS 0.00</p>
+            </div>
+          </div>
+          <div class="adm-stat-card green">
+            <div class="adm-stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Approved</p>
+              <h3 class="adm-stat-value" id="statApproved">0</h3>
+              <p class="adm-stat-sub" id="statApprovedAmt">GHS 0.00</p>
+            </div>
+          </div>
+          <div class="adm-stat-card red">
+            <div class="adm-stat-icon"><i class="fa-solid fa-circle-xmark"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Rejected</p>
+              <h3 class="adm-stat-value" id="statRejected">0</h3>
+              <p class="adm-stat-sub" id="statRejectedAmt">GHS 0.00</p>
+            </div>
+          </div>
+          <div class="adm-stat-card blue">
+            <div class="adm-stat-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Total Requested</p>
+              <h3 class="adm-stat-value" id="statTotal">GHS 0.00</h3>
+              <p class="adm-stat-sub" id="statTotalCount">0 requests</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="adm-table-card">
+          <div class="adm-table-header">
+            <h3>All Loan Requests</h3>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <select class="adm-filter-select" id="loanFilter">
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+              <input type="text" class="adm-search-input" id="loanSearch" placeholder="Search by name or email..." />
+            </div>
+          </div>
+          <div class="adm-table-wrapper">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Amount</th>
+                  <th>Purpose</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="loanTableBody">
+                <tr><td colspan="6" class="adm-table-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="adm-modal-overlay" id="loanDetailModal">
+    <div class="adm-modal">
+      <div class="adm-modal-header">
+        <h3>Loan Request Details</h3>
+        <button class="adm-modal-close" id="loanModalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="adm-modal-body" id="loanModalBody"></div>
+      <div class="adm-modal-footer" id="loanModalFooter"></div>
+    </div>
+  </div>
+
+  <div class="adm-toast" id="admToast"></div>
+
+  <script type="module" src="./js/admin-init.js"></script>
+  <script type="module" src="./js/admin-loans.js"></script>
+</body>
+</html>

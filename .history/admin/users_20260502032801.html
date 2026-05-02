@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Users — YMG IQ Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/admin.css">
+  <link rel="icon" href="../images/logo-2.png" type="image/x-icon">
+</head>
+<body>
+
+  <div class="adm-wrapper">
+
+    <aside class="adm-sidebar" id="admSidebar">
+      <div class="adm-sidebar-logo">
+        <img src="../images/logo.jpeg" alt="YMG IQ" class="adm-logo-img">
+        <div>
+          <span class="adm-logo-name">YMG IQ</span>
+          <span class="adm-logo-role">Admin Panel</span>
+        </div>
+      </div>
+      <nav class="adm-nav">
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Main</span>
+          <a href="index.html" class="adm-nav-item"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+          <a href="users.html" class="adm-nav-item active"><i class="fa-solid fa-users"></i> Users</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Finance</span>
+          <a href="deposits.html" class="adm-nav-item"><i class="fa-solid fa-download"></i> Deposits</a>
+          <a href="withdrawals.html" class="adm-nav-item"><i class="fa-solid fa-upload"></i> Withdrawals</a>
+          <a href="investments.html" class="adm-nav-item"><i class="fa-solid fa-chart-line"></i> Investments</a>
+          <a href="loans.html" class="adm-nav-item"><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a>
+          <a href="transactions.html" class="adm-nav-item"><i class="fa-solid fa-clock-rotate-left"></i> Transactions</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Management</span>
+          <a href="kyc.html" class="adm-nav-item"><i class="fa-solid fa-id-card"></i> KYC</a>
+          <a href="referrals.html" class="adm-nav-item"><i class="fa-solid fa-gift"></i> Referrals</a>
+          <a href="notifications.html" class="adm-nav-item"><i class="fa-solid fa-bell"></i> Notifications</a>
+          <a href="reports.html" class="adm-nav-item"><i class="fa-solid fa-file-chart-column"></i> Reports</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">System</span>
+          <a href="settings.html" class="adm-nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+        </div>
+      </nav>
+      <div class="adm-sidebar-footer">
+        <div class="adm-admin-info">
+          <div class="adm-admin-avatar" id="admAvatar">AD</div>
+          <div>
+            <p class="adm-admin-name" id="admName">Admin</p>
+            <p class="adm-admin-email" id="admEmail">admin@ymgiq.com</p>
+          </div>
+        </div>
+        <button class="adm-logout-btn" id="admLogout"><i class="fa-solid fa-right-from-bracket"></i></button>
+      </div>
+    </aside>
+
+    <div class="adm-main">
+
+      <header class="adm-topbar">
+        <button class="adm-menu-toggle" id="admMenuToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="adm-topbar-left">
+          <h1 class="adm-page-title">Users</h1>
+          <p class="adm-page-sub" id="admDate"></p>
+        </div>
+        <div class="adm-topbar-right">
+          <div class="adm-live-badge"><span class="adm-live-dot"></span> Live</div>
+          <button class="adm-refresh-btn" id="admRefresh"><i class="fa-solid fa-rotate-right"></i></button>
+        </div>
+      </header>
+
+      <div class="adm-content">
+
+        <div class="adm-stats-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="adm-stat-card gold">
+            <div class="adm-stat-icon"><i class="fa-solid fa-users"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Total Users</p>
+              <h3 class="adm-stat-value" id="statTotal">0</h3>
+              <p class="adm-stat-sub" id="statToday">Today: 0 new</p>
+            </div>
+          </div>
+          <div class="adm-stat-card green">
+            <div class="adm-stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Verified Users</p>
+              <h3 class="adm-stat-value" id="statVerified">0</h3>
+              <p class="adm-stat-sub" id="statVerifiedPct">0% of total</p>
+            </div>
+          </div>
+          <div class="adm-stat-card blue">
+            <div class="adm-stat-icon"><i class="fa-solid fa-crown"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Premium Activated</p>
+              <h3 class="adm-stat-value" id="statPremium">0</h3>
+              <p class="adm-stat-sub" id="statStandard">Standard: 0</p>
+            </div>
+          </div>
+          <div class="adm-stat-card purple">
+            <div class="adm-stat-icon"><i class="fa-solid fa-wallet"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Total Balance (All Users)</p>
+              <h3 class="adm-stat-value" id="statTotalBal">GHS 0.00</h3>
+              <p class="adm-stat-sub" id="statAvgBal">Avg: GHS 0.00</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="adm-table-card">
+          <div class="adm-table-header">
+            <h3>All Users</h3>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <select class="adm-filter-select" id="usersFilter">
+                <option value="all">All Users</option>
+                <option value="verified">Email Verified</option>
+                <option value="unverified">Email Unverified</option>
+                <option value="phone_verified">Phone Verified</option>
+                <option value="standard">Standard Activated</option>
+                <option value="premium">Premium Activated</option>
+                <option value="suspended">Suspended</option>
+              </select>
+              <input type="text" class="adm-search-input" id="usersSearch" placeholder="Search by name, email or Account ID..." />
+            </div>
+          </div>
+          <div class="adm-table-wrapper">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Account ID</th>
+                  <th>Phone</th>
+                  <th>Balance</th>
+                  <th>Joined</th>
+                  <th>Email</th>
+                  <th>Phone Ver.</th>
+                  <th>Plan</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr><td colspan="10" class="adm-table-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="usersPagination" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0 0;flex-wrap:wrap;gap:8px;">
+            <p id="usersPageInfo" style="font-size:0.78rem;color:var(--adm-muted);"></p>
+            <div style="display:flex;gap:6px;">
+              <button class="adm-chart-btn" id="usersPrevBtn" disabled><i class="fa-solid fa-chevron-left"></i> Prev</button>
+              <button class="adm-chart-btn" id="usersNextBtn">Next <i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="adm-modal-overlay" id="userDetailModal">
+    <div class="adm-modal" style="max-width:860px;">
+      <div class="adm-modal-header">
+        <h3>User Full Profile</h3>
+        <button class="adm-modal-close" id="userModalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="adm-modal-body" id="userModalBody"></div>
+      <div class="adm-modal-footer" id="userModalFooter"></div>
+    </div>
+  </div>
+
+  <div class="adm-toast" id="admToast"></div>
+
+  <script type="module" src="./js/admin-init.js"></script>
+  <script type="module" src="./js/admin-users.js"></script>
+</body>
+</html>

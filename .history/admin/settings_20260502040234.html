@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — YMG IQ Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/admin.css">
+  <link rel="icon" href="../images/logo-2.png" type="image/x-icon">
+</head>
+<body>
+
+  <div class="adm-wrapper">
+
+    <aside class="adm-sidebar" id="admSidebar">
+      <div class="adm-sidebar-logo">
+        <img src="../images/logo.jpeg" alt="YMG IQ" class="adm-logo-img">
+        <div>
+          <span class="adm-logo-name">YMG IQ</span>
+          <span class="adm-logo-role">Admin Panel</span>
+        </div>
+      </div>
+      <nav class="adm-nav">
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Main</span>
+          <a href="index.html" class="adm-nav-item"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+          <a href="users.html" class="adm-nav-item"><i class="fa-solid fa-users"></i> Users</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Finance</span>
+          <a href="deposits.html" class="adm-nav-item"><i class="fa-solid fa-download"></i> Deposits</a>
+          <a href="withdrawals.html" class="adm-nav-item"><i class="fa-solid fa-upload"></i> Withdrawals</a>
+          <a href="investments.html" class="adm-nav-item"><i class="fa-solid fa-chart-line"></i> Investments</a>
+          <a href="loans.html" class="adm-nav-item"><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a>
+          <a href="transactions.html" class="adm-nav-item"><i class="fa-solid fa-clock-rotate-left"></i> Transactions</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Management</span>
+          <a href="kyc.html" class="adm-nav-item"><i class="fa-solid fa-id-card"></i> KYC</a>
+          <a href="referrals.html" class="adm-nav-item"><i class="fa-solid fa-gift"></i> Referrals</a>
+          <a href="notifications.html" class="adm-nav-item"><i class="fa-solid fa-bell"></i> Notifications</a>
+          <a href="reports.html" class="adm-nav-item"><i class="fa-solid fa-file-chart-column"></i> Reports</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">System</span>
+          <a href="settings.html" class="adm-nav-item active"><i class="fa-solid fa-gear"></i> Settings</a>
+        </div>
+      </nav>
+      <div class="adm-sidebar-footer">
+        <div class="adm-admin-info">
+          <div class="adm-admin-avatar" id="admAvatar">AD</div>
+          <div>
+            <p class="adm-admin-name" id="admName">Admin</p>
+            <p class="adm-admin-email" id="admEmail">admin@ymgiq.com</p>
+          </div>
+        </div>
+        <button class="adm-logout-btn" id="admLogout"><i class="fa-solid fa-right-from-bracket"></i></button>
+      </div>
+    </aside>
+
+    <div class="adm-main">
+
+      <header class="adm-topbar">
+        <button class="adm-menu-toggle" id="admMenuToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="adm-topbar-left">
+          <h1 class="adm-page-title">Settings</h1>
+          <p class="adm-page-sub" id="admDate"></p>
+        </div>
+        <div class="adm-topbar-right">
+          <div class="adm-live-badge"><span class="adm-live-dot"></span> Live</div>
+        </div>
+      </header>
+
+      <div class="adm-content">
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+          <!-- ADMIN PROFILE -->
+          <div class="adm-table-card">
+            <div class="adm-table-header" style="margin-bottom:20px;">
+              <h3><i class="fa-solid fa-user-shield" style="color:var(--adm-gold);margin-right:8px;"></i> Admin Profile</h3>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div>
+                <label class="adm-sett-label">Display Name</label>
+                <input type="text" id="sttAdminName" class="adm-sett-input" placeholder="Admin display name" />
+              </div>
+              <div>
+                <label class="adm-sett-label">Email Address</label>
+                <input type="email" id="sttAdminEmail" class="adm-sett-input" disabled style="opacity:0.5;cursor:not-allowed;" />
+                <p style="font-size:0.7rem;color:var(--adm-muted);margin-top:4px;">Email cannot be changed here.</p>
+              </div>
+              <p id="sttProfileErr" style="font-size:0.75rem;color:var(--adm-red);min-height:16px;"></p>
+              <button class="adm-btn green" id="sttSaveProfile" style="align-self:flex-start;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Profile
+              </button>
+            </div>
+          </div>
+
+          <!-- CHANGE PASSWORD -->
+          <div class="adm-table-card">
+            <div class="adm-table-header" style="margin-bottom:20px;">
+              <h3><i class="fa-solid fa-lock" style="color:var(--adm-gold);margin-right:8px;"></i> Change Password</h3>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div>
+                <label class="adm-sett-label">Current Password</label>
+                <input type="password" id="sttCurrentPw" class="adm-sett-input" placeholder="Enter current password" autocomplete="current-password" />
+              </div>
+              <div>
+                <label class="adm-sett-label">New Password</label>
+                <input type="password" id="sttNewPw" class="adm-sett-input" placeholder="Enter new password (min 8 chars)" autocomplete="new-password" />
+              </div>
+              <div>
+                <label class="adm-sett-label">Confirm New Password</label>
+                <input type="password" id="sttConfirmPw" class="adm-sett-input" placeholder="Confirm new password" autocomplete="new-password" />
+              </div>
+              <p id="sttPwErr" style="font-size:0.75rem;color:var(--adm-red);min-height:16px;"></p>
+              <button class="adm-btn green" id="sttChangePw" style="align-self:flex-start;">
+                <i class="fa-solid fa-key"></i> Update Password
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- PLATFORM STATUS -->
+        <div class="adm-table-card" style="margin-top:0;">
+          <div class="adm-table-header" style="margin-bottom:20px;">
+            <h3><i class="fa-solid fa-toggle-on" style="color:var(--adm-gold);margin-right:8px;"></i> Platform Status</h3>
+            <p style="font-size:0.78rem;color:var(--adm-muted);">Toggle features on or off for all users instantly.</p>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+
+            <div class="adm-toggle-card" id="toggle_depositsEnabled">
+              <div>
+                <p class="adm-toggle-title">Deposits</p>
+                <p class="adm-toggle-sub">Allow users to deposit funds</p>
+              </div>
+              <label class="adm-switch">
+                <input type="checkbox" id="sw_depositsEnabled" onchange="saveToggle('depositsEnabled', this.checked)">
+                <span class="adm-slider"></span>
+              </label>
+            </div>
+
+            <div class="adm-toggle-card" id="toggle_withdrawalsEnabled">
+              <div>
+                <p class="adm-toggle-title">Withdrawals</p>
+                <p class="adm-toggle-sub">Allow users to withdraw funds</p>
+              </div>
+              <label class="adm-switch">
+                <input type="checkbox" id="sw_withdrawalsEnabled" onchange="saveToggle('withdrawalsEnabled', this.checked)">
+                <span class="adm-slider"></span>
+              </label>
+            </div>
+
+            <div class="adm-toggle-card" id="toggle_registrationsEnabled">
+              <div>
+                <p class="adm-toggle-title">New Registrations</p>
+                <p class="adm-toggle-sub">Allow new users to sign up</p>
+              </div>
+              <label class="adm-switch">
+                <input type="checkbox" id="sw_registrationsEnabled" onchange="saveToggle('registrationsEnabled', this.checked)">
+                <span class="adm-slider"></span>
+              </label>
+            </div>
+
+            <div class="adm-toggle-card" id="toggle_maintenanceMode">
+              <div>
+                <p class="adm-toggle-title">Maintenance Mode</p>
+                <p class="adm-toggle-sub">Show maintenance page to users</p>
+              </div>
+              <label class="adm-switch">
+                <input type="checkbox" id="sw_maintenanceMode" onchange="saveToggle('maintenanceMode', this.checked)">
+                <span class="adm-slider"></span>
+              </label>
+            </div>
+
+            <div class="adm-toggle-card" id="toggle_investmentsEnabled">
+              <div>
+                <p class="adm-toggle-title">Investments</p>
+                <p class="adm-toggle-sub">Allow users to create plans</p>
+              </div>
+              <label class="adm-switch">
+                <input type="checkbox" id="sw_investmentsEnabled" onchange="saveToggle('investmentsEnabled', this.checked)">
+                <span class="adm-slider"></span>
+              </label>
+            </div>
+
+            <div class="adm-toggle-card" id="toggle_loansEnabled">
+              <div>
+                <p class="adm-toggle-title">Loan Applications</p>
+                <p class="adm-toggle-sub">Allow users to apply for loans</p>
+              </div>
+              <label class="adm-switch">
+                <input type="checkbox" id="sw_loansEnabled" onchange="saveToggle('loansEnabled', this.checked)">
+                <span class="adm-slider"></span>
+              </label>
+            </div>
+
+            <div class="adm-toggle-card" id="toggle_referralsEnabled">
+              <div>
+                <p class="adm-toggle-title">Referral System</p>
+                <p class="adm-toggle-sub">Pay referral bonuses</p>
+              </div>
+              <label class="adm-switch">
+                <input type="checkbox" id="sw_referralsEnabled" onchange="saveToggle('referralsEnabled', this.checked)">
+                <span class="adm-slider"></span>
+              </label>
+            </div>
+
+            <div class="adm-toggle-card" id="toggle_kycRequired">
+              <div>
+                <p class="adm-toggle-title">KYC Required</p>
+                <p class="adm-toggle-sub">Require verification to withdraw</p>
+              </div>
+              <label class="adm-switch">
+                <input type="checkbox" id="sw_kycRequired" onchange="saveToggle('kycRequired', this.checked)">
+                <span class="adm-slider"></span>
+              </label>
+            </div>
+
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+          <!-- DEPOSIT SETTINGS -->
+          <div class="adm-table-card">
+            <div class="adm-table-header" style="margin-bottom:20px;">
+              <h3><i class="fa-solid fa-download" style="color:var(--adm-green);margin-right:8px;"></i> Deposit Settings</h3>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div>
+                <label class="adm-sett-label">Minimum Deposit (GHS)</label>
+                <input type="number" id="stt_minDeposit" class="adm-sett-input" placeholder="e.g. 50" min="1" />
+                <p class="adm-sett-hint">Users cannot deposit below this amount.</p>
+              </div>
+              <div>
+                <label class="adm-sett-label">Deposit Fee (%)</label>
+                <input type="number" id="stt_depositFeeRate" class="adm-sett-input" placeholder="e.g. 0 (free)" min="0" max="100" step="0.1" />
+                <p class="adm-sett-hint">Set to 0 for free deposits.</p>
+              </div>
+              <div>
+                <label class="adm-sett-label">Deposit Cooldown (working days)</label>
+                <input type="number" id="stt_depositCooldownDays" class="adm-sett-input" placeholder="e.g. 3" min="0" />
+                <p class="adm-sett-hint">Days after deposit before withdrawal is allowed.</p>
+              </div>
+              <p id="sttDepErr" style="font-size:0.75rem;color:var(--adm-red);min-height:16px;"></p>
+              <button class="adm-btn green" id="sttSaveDeposit" style="align-self:flex-start;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Deposit Settings
+              </button>
+            </div>
+          </div>
+
+          <!-- WITHDRAWAL SETTINGS -->
+          <div class="adm-table-card">
+            <div class="adm-table-header" style="margin-bottom:20px;">
+              <h3><i class="fa-solid fa-upload" style="color:var(--adm-red);margin-right:8px;"></i> Withdrawal Settings</h3>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div>
+                <label class="adm-sett-label">Withdrawal Fee (%)</label>
+                <input type="number" id="stt_withdrawFeeRate" class="adm-sett-input" placeholder="e.g. 3" min="0" max="100" step="0.1" />
+                <p class="adm-sett-hint">Percentage deducted from each withdrawal.</p>
+              </div>
+              <div>
+                <label class="adm-sett-label">Minimum Withdrawal Fee (GHS)</label>
+                <input type="number" id="stt_withdrawFeeMin" class="adm-sett-input" placeholder="e.g. 3" min="0" />
+                <p class="adm-sett-hint">Minimum fee charged even if % is lower.</p>
+              </div>
+              <div>
+                <label class="adm-sett-label">Minimum Withdrawal Amount (GHS)</label>
+                <input type="number" id="stt_withdrawMin" class="adm-sett-input" placeholder="e.g. 10" min="1" />
+              </div>
+              <div>
+                <label class="adm-sett-label">Maximum Withdrawal Per Day (GHS)</label>
+                <input type="number" id="stt_withdrawMax" class="adm-sett-input" placeholder="e.g. 10000" min="1" />
+              </div>
+              <div>
+                <label class="adm-sett-label">Minimum Account Balance (GHS)</label>
+                <input type="number" id="stt_minBalance" class="adm-sett-input" placeholder="e.g. 50" min="0" />
+                <p class="adm-sett-hint">Amount that must remain after withdrawal.</p>
+              </div>
+              <p id="sttWdrErr" style="font-size:0.75rem;color:var(--adm-red);min-height:16px;"></p>
+              <button class="adm-btn green" id="sttSaveWithdraw" style="align-self:flex-start;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Withdrawal Settings
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+          <!-- ACTIVATION FEES -->
+          <div class="adm-table-card">
+            <div class="adm-table-header" style="margin-bottom:20px;">
+              <h3><i class="fa-solid fa-unlock" style="color:var(--adm-gold);margin-right:8px;"></i> Activation Fees</h3>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div>
+                <label class="adm-sett-label">Standard Plan Activation Fee (GHS)</label>
+                <input type="number" id="stt_stdActivationFee" class="adm-sett-input" placeholder="e.g. 500" min="1" />
+                <p class="adm-sett-hint">One-time fee to unlock standard investment plans.</p>
+              </div>
+              <div>
+                <label class="adm-sett-label">Premium Plan Activation Fee (GHS)</label>
+                <input type="number" id="stt_premActivationFee" class="adm-sett-input" placeholder="e.g. 1000" min="1" />
+                <p class="adm-sett-hint">One-time fee to unlock premium investment plans.</p>
+              </div>
+              <p id="sttActErr" style="font-size:0.75rem;color:var(--adm-red);min-height:16px;"></p>
+              <button class="adm-btn green" id="sttSaveActivation" style="align-self:flex-start;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Activation Fees
+              </button>
+            </div>
+          </div>
+
+          <!-- REFERRAL REWARDS -->
+          <div class="adm-table-card">
+            <div class="adm-table-header" style="margin-bottom:20px;">
+              <h3><i class="fa-solid fa-gift" style="color:var(--adm-gold);margin-right:8px;"></i> Referral Rewards</h3>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div>
+                <label class="adm-sett-label">Normal Referral Bonus (GHS)</label>
+                <input type="number" id="stt_referralBonus" class="adm-sett-input" placeholder="e.g. 10" min="0" />
+                <p class="adm-sett-hint">Paid when referred user makes their first deposit.</p>
+              </div>
+              <div>
+                <label class="adm-sett-label">Standard Activation Referral Bonus (GHS)</label>
+                <input type="number" id="stt_premStdBonus" class="adm-sett-input" placeholder="e.g. 50" min="0" />
+                <p class="adm-sett-hint">Paid when referred user activates standard plan.</p>
+              </div>
+              <div>
+                <label class="adm-sett-label">Premium Activation Referral Bonus (GHS)</label>
+                <input type="number" id="stt_premPremBonus" class="adm-sett-input" placeholder="e.g. 100" min="0" />
+                <p class="adm-sett-hint">Paid when referred user activates premium plan.</p>
+              </div>
+              <p id="sttRefErr" style="font-size:0.75rem;color:var(--adm-red);min-height:16px;"></p>
+              <button class="adm-btn green" id="sttSaveReferral" style="align-self:flex-start;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Referral Rewards
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- SECURITY LOG -->
+        <div class="adm-table-card">
+          <div class="adm-table-header" style="margin-bottom:20px;">
+            <h3><i class="fa-solid fa-shield-halved" style="color:var(--adm-gold);margin-right:8px;"></i> Admin Security Log</h3>
+            <p style="font-size:0.78rem;color:var(--adm-muted);">Recent admin login activity</p>
+          </div>
+          <div class="adm-table-wrapper">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Device / Browser</th>
+                  <th>Date & Time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="sttSecurityLog">
+                <tr><td colspan="4" class="adm-table-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="adm-toast" id="admToast"></div>
+
+  <style>
+    .adm-sett-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--adm-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    .adm-sett-input {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--adm-bg);
+      border: 1px solid var(--adm-border);
+      border-radius: 8px;
+      color: var(--adm-text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .adm-sett-input:focus { border-color: var(--adm-gold); }
+    .adm-sett-hint {
+      font-size: 0.7rem;
+      color: var(--adm-muted);
+      margin-top: 4px;
+    }
+    .adm-toggle-card {
+      background: var(--adm-bg);
+      border: 1px solid var(--adm-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: border-color 0.2s;
+    }
+    .adm-toggle-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--adm-text);
+      margin: 0 0 3px 0;
+    }
+    .adm-toggle-sub {
+      font-size: 0.72rem;
+      color: var(--adm-muted);
+      margin: 0;
+    }
+    .adm-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .adm-switch input { opacity: 0; width: 0; height: 0; }
+    .adm-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: rgba(255,255,255,0.1);
+      border-radius: 24px;
+      transition: 0.3s;
+    }
+    .adm-slider:before {
+      content: "";
+      position: absolute;
+      width: 18px; height: 18px;
+      left: 3px; bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+    .adm-switch input:checked + .adm-slider { background: var(--adm-green); }
+    .adm-switch input:checked + .adm-slider:before { transform: translateX(20px); }
+  </style>
+
+  <script type="module" src="./js/admin-init.js"></script>
+  <script type="module" src="./js/admin-settings.js"></script>
+</body>
+</html>

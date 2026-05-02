@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications — YMG IQ Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/admin.css">
+  <link rel="icon" href="../images/logo-2.png" type="image/x-icon">
+</head>
+<body>
+
+  <div class="adm-wrapper">
+
+    <aside class="adm-sidebar" id="admSidebar">
+      <div class="adm-sidebar-logo">
+        <img src="../images/logo.jpeg" alt="YMG IQ" class="adm-logo-img">
+        <div>
+          <span class="adm-logo-name">YMG IQ</span>
+          <span class="adm-logo-role">Admin Panel</span>
+        </div>
+      </div>
+      <nav class="adm-nav">
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Main</span>
+          <a href="index.html" class="adm-nav-item"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+          <a href="users.html" class="adm-nav-item"><i class="fa-solid fa-users"></i> Users</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Finance</span>
+          <a href="deposits.html" class="adm-nav-item"><i class="fa-solid fa-download"></i> Deposits</a>
+          <a href="withdrawals.html" class="adm-nav-item"><i class="fa-solid fa-upload"></i> Withdrawals</a>
+          <a href="investments.html" class="adm-nav-item"><i class="fa-solid fa-chart-line"></i> Investments</a>
+          <a href="loans.html" class="adm-nav-item"><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a>
+          <a href="transactions.html" class="adm-nav-item"><i class="fa-solid fa-clock-rotate-left"></i> Transactions</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Management</span>
+          <a href="kyc.html" class="adm-nav-item"><i class="fa-solid fa-id-card"></i> KYC</a>
+          <a href="referrals.html" class="adm-nav-item"><i class="fa-solid fa-gift"></i> Referrals</a>
+          <a href="notifications.html" class="adm-nav-item active"><i class="fa-solid fa-bell"></i> Notifications</a>
+          <a href="reports.html" class="adm-nav-item"><i class="fa-solid fa-file-chart-column"></i> Reports</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">System</span>
+          <a href="settings.html" class="adm-nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+        </div>
+      </nav>
+      <div class="adm-sidebar-footer">
+        <div class="adm-admin-info">
+          <div class="adm-admin-avatar" id="admAvatar">AD</div>
+          <div>
+            <p class="adm-admin-name" id="admName">Admin</p>
+            <p class="adm-admin-email" id="admEmail">admin@ymgiq.com</p>
+          </div>
+        </div>
+        <button class="adm-logout-btn" id="admLogout"><i class="fa-solid fa-right-from-bracket"></i></button>
+      </div>
+    </aside>
+
+    <div class="adm-main">
+
+      <header class="adm-topbar">
+        <button class="adm-menu-toggle" id="admMenuToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="adm-topbar-left">
+          <h1 class="adm-page-title">Notifications</h1>
+          <p class="adm-page-sub" id="admDate"></p>
+        </div>
+        <div class="adm-topbar-right">
+          <div class="adm-live-badge"><span class="adm-live-dot"></span> Live</div>
+        </div>
+      </header>
+
+      <div class="adm-content">
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+          <div class="adm-table-card">
+            <div class="adm-table-header" style="margin-bottom:20px;">
+              <h3><i class="fa-solid fa-paper-plane" style="color:var(--adm-gold);margin-right:8px;"></i> Send Notification</h3>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:16px;">
+
+              <div>
+                <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--adm-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:7px;">Send To</label>
+                <select id="notifTarget" class="adm-filter-select" style="width:100%;padding:10px 14px;">
+                  <option value="all">📢 All Users</option>
+                  <option value="verified">✓ Verified Users Only</option>
+                  <option value="standard">🥈 Standard Plan Users</option>
+                  <option value="premium">👑 Premium Plan Users</option>
+                  <option value="single">👤 Specific User</option>
+                </select>
+              </div>
+
+              <div id="singleUserWrap" style="display:none;">
+                <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--adm-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:7px;">Search User</label>
+                <input type="text" id="singleUserSearch" class="adm-search-input" style="width:100%;" placeholder="Type name or email to search..." />
+                <div id="singleUserResults" style="margin-top:8px;display:flex;flex-direction:column;gap:4px;max-height:180px;overflow-y:auto;"></div>
+                <p id="selectedUserTag" style="display:none;font-size:0.78rem;font-weight:600;color:var(--adm-gold);margin-top:6px;"></p>
+              </div>
+
+              <div>
+                <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--adm-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:7px;">Notification Type</label>
+                <select id="notifType" class="adm-filter-select" style="width:100%;padding:10px 14px;">
+                  <option value="announcement">📣 Announcement</option>
+                  <option value="promo">🎁 Promotion</option>
+                  <option value="security">🔒 Security Alert</option>
+                  <option value="activation">✅ Account Update</option>
+                  <option value="deposit">💰 Deposit Update</option>
+                  <option value="withdrawal">💸 Withdrawal Update</option>
+                  <option value="profit">📈 Profit Update</option>
+                </select>
+              </div>
+
+              <div>
+                <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--adm-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:7px;">Title</label>
+                <input type="text" id="notifTitle" class="adm-search-input" style="width:100%;" placeholder="Notification title..." maxlength="80" />
+              </div>
+
+              <div>
+                <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--adm-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:7px;">Message</label>
+                <textarea id="notifMessage" style="width:100%;padding:10px 14px;background:var(--adm-bg);border:1px solid var(--adm-border);border-radius:8px;color:var(--adm-text);font-family:'DM Sans',sans-serif;font-size:0.85rem;resize:vertical;min-height:100px;outline:none;" placeholder="Write your notification message..." maxlength="500"></textarea>
+                <p id="notifCharCount" style="font-size:0.7rem;color:var(--adm-muted);text-align:right;margin-top:4px;">0 / 500</p>
+              </div>
+
+              <p id="notifErr" style="font-size:0.78rem;color:var(--adm-red);min-height:16px;"></p>
+
+              <button class="adm-btn green" id="sendNotifBtn" style="width:100%;justify-content:center;padding:12px;">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span id="sendNotifTxt">Send Notification</span>
+              </button>
+
+            </div>
+          </div>
+
+          <div class="adm-table-card">
+            <div class="adm-table-header" style="margin-bottom:20px;">
+              <h3><i class="fa-solid fa-clock-rotate-left" style="color:var(--adm-gold);margin-right:8px;"></i> Recently Sent</h3>
+              <span id="sentCount" style="font-size:0.78rem;color:var(--adm-muted);"></span>
+            </div>
+            <div id="recentNotifsList" style="display:flex;flex-direction:column;gap:12px;max-height:540px;overflow-y:auto;">
+              <p style="text-align:center;color:var(--adm-muted);font-size:0.82rem;padding:20px 0;">No notifications sent yet.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="adm-toast" id="admToast"></div>
+
+  <script type="module" src="./js/admin-init.js"></script>
+  <script type="module" src="./js/admin-notifications.js"></script>
+</body>
+</html>
