@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — YMG IQ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="./css/admin.css">
+  <link rel="icon" href="../images/logo-2.png" type="image/x-icon">
+  <style>
+    .adm-fraud-banner {
+      background: linear-gradient(135deg, rgba(239,68,68,0.12), rgba(239,68,68,0.05));
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 0;
+      display: none;
+    }
+    .adm-fraud-banner.visible { display: block; }
+    .adm-fraud-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .adm-fraud-head i { color: #ef4444; font-size: 1rem; }
+    .adm-fraud-head strong { font-size: 0.88rem; color: #ef4444; font-family: 'Syne', sans-serif; }
+    .adm-fraud-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+    .adm-fraud-item {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.15);
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .adm-fraud-item-left { display: flex; align-items: center; gap: 10px; }
+    .adm-fraud-item p { font-size: 0.78rem; color: var(--adm-text); margin: 0; }
+    .adm-fraud-item span { font-size: 0.7rem; color: var(--adm-muted); }
+    .adm-fraud-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: rgba(239,68,68,0.15);
+      color: #ef4444;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .adm-liquidity-warn {
+      background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.04));
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: 12px;
+      display: none;
+    }
+    .adm-liquidity-warn.visible { display: block; }
+    .adm-liquidity-warn p { font-size: 0.78rem; color: #ef4444; font-weight: 600; margin: 0 0 4px 0; }
+    .adm-liquidity-warn span { font-size: 0.72rem; color: var(--adm-muted); }
+    .adm-growth-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="adm-wrapper">
+
+    <aside class="adm-sidebar" id="admSidebar">
+      <div class="adm-sidebar-logo">
+        <img src="../images/logo.jpeg" alt="YMG IQ" class="adm-logo-img">
+        <div>
+          <span class="adm-logo-name">YMG IQ</span>
+          <span class="adm-logo-role">Admin Panel</span>
+        </div>
+      </div>
+      <nav class="adm-nav">
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Main</span>
+          <a href="index.html" class="adm-nav-item active"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+          <a href="users.html" class="adm-nav-item"><i class="fa-solid fa-users"></i> Users</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Finance</span>
+          <a href="deposits.html" class="adm-nav-item"><i class="fa-solid fa-download"></i> Deposits</a>
+          <a href="withdrawals.html" class="adm-nav-item"><i class="fa-solid fa-upload"></i> Withdrawals <span class="adm-nav-badge" id="pendingWdrBadge">0</span></a>
+          <a href="investments.html" class="adm-nav-item"><i class="fa-solid fa-chart-line"></i> Investments</a>
+          <a href="loans.html" class="adm-nav-item"><i class="fa-solid fa-hand-holding-dollar"></i> Loans <span class="adm-nav-badge" id="pendingLoanBadge">0</span></a>
+          <a href="transactions.html" class="adm-nav-item"><i class="fa-solid fa-clock-rotate-left"></i> Transactions</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">Management</span>
+          <a href="kyc.html" class="adm-nav-item"><i class="fa-solid fa-id-card"></i> KYC <span class="adm-nav-badge" id="pendingKycBadge">0</span></a>
+          <a href="referrals.html" class="adm-nav-item"><i class="fa-solid fa-gift"></i> Referrals</a>
+          <a href="notifications.html" class="adm-nav-item"><i class="fa-solid fa-bell"></i> Notifications</a>
+          <a href="reports.html" class="adm-nav-item"><i class="fa-solid fa-file-chart-column"></i> Reports</a>
+        </div>
+        <div class="adm-nav-group">
+          <span class="adm-nav-label">System</span>
+          <a href="settings.html" class="adm-nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+        </div>
+      </nav>
+      <div class="adm-sidebar-footer">
+        <div class="adm-admin-info">
+          <div class="adm-admin-avatar" id="admAvatar">AD</div>
+          <div>
+            <p class="adm-admin-name" id="admName">Admin</p>
+            <p class="adm-admin-email" id="admEmail">admin@ymgiq.com</p>
+          </div>
+        </div>
+        <button class="adm-logout-btn" id="admLogout"><i class="fa-solid fa-right-from-bracket"></i></button>
+      </div>
+    </aside>
+
+    <div class="adm-main">
+
+      <header class="adm-topbar">
+        <button class="adm-menu-toggle" id="admMenuToggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="adm-topbar-left">
+          <h1 class="adm-page-title">Dashboard Overview</h1>
+          <p class="adm-page-sub" id="admDate">Loading...</p>
+        </div>
+        <div class="adm-topbar-right">
+          <div class="adm-live-badge"><span class="adm-live-dot"></span> Live</div>
+          <button class="adm-refresh-btn" id="admRefresh" title="Refresh data"><i class="fa-solid fa-rotate-right"></i></button>
+        </div>
+      </header>
+
+      <div class="adm-content">
+
+        <!-- FRAUD ALERT BANNER -->
+        <div class="adm-fraud-banner" id="fraudBanner">
+          <div class="adm-fraud-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <strong>⚠ Suspicious Activity Detected</strong>
+            <span style="font-size:0.72rem;color:var(--adm-muted);margin-left:auto;" id="fraudCount"></span>
+          </div>
+          <div class="adm-fraud-list" id="fraudList"></div>
+        </div>
+
+        <!-- STAT CARDS -->
+        <div class="adm-stats-grid">
+          <div class="adm-stat-card green">
+            <div class="adm-stat-icon"><i class="fa-solid fa-download"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Total Deposits</p>
+              <h3 class="adm-stat-value" id="statTotalDeposits">GHS 0.00</h3>
+              <p class="adm-stat-sub" id="statDepositsToday">Today: GHS 0.00</p>
+            </div>
+          </div>
+          <div class="adm-stat-card red">
+            <div class="adm-stat-icon"><i class="fa-solid fa-upload"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Total Withdrawals</p>
+              <h3 class="adm-stat-value" id="statTotalWithdrawals">GHS 0.00</h3>
+              <p class="adm-stat-sub" id="statWithdrawalsToday">Today: GHS 0.00</p>
+            </div>
+          </div>
+          <div class="adm-stat-card blue">
+            <div class="adm-stat-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Active Investments</p>
+              <h3 class="adm-stat-value" id="statActiveInvestments">GHS 0.00</h3>
+              <p class="adm-stat-sub" id="statActivePlans">0 active plans</p>
+            </div>
+          </div>
+          <div class="adm-stat-card gold">
+            <div class="adm-stat-icon"><i class="fa-solid fa-users"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Total Users</p>
+              <h3 class="adm-stat-value" id="statTotalUsers">0</h3>
+              <p class="adm-stat-sub" id="statUsersToday">Today: 0 new</p>
+            </div>
+          </div>
+          <div class="adm-stat-card orange">
+            <div class="adm-stat-icon"><i class="fa-solid fa-clock"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Pending Withdrawals</p>
+              <h3 class="adm-stat-value" id="statPendingWdr">GHS 0.00</h3>
+              <p class="adm-stat-sub" id="statPendingWdrCount">0 requests</p>
+            </div>
+          </div>
+          <div class="adm-stat-card purple">
+            <div class="adm-stat-icon"><i class="fa-solid fa-coins"></i></div>
+            <div class="adm-stat-body">
+              <p class="adm-stat-label">Total Profits Paid</p>
+              <h3 class="adm-stat-value" id="statTotalProfits">GHS 0.00</h3>
+              <p class="adm-stat-sub" id="statProfitsMonth">This month: GHS 0.00</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHARTS ROW -->
+        <div class="adm-charts-row">
+          <div class="adm-chart-card wide">
+            <div class="adm-chart-header">
+              <h3>Deposits vs Withdrawals</h3>
+              <div class="adm-chart-filters">
+                <button class="adm-chart-btn active" data-range="7">7D</button>
+                <button class="adm-chart-btn" data-range="30">30D</button>
+                <button class="adm-chart-btn" data-range="90">3M</button>
+              </div>
+            </div>
+            <canvas id="depWdrChart" height="100"></canvas>
+          </div>
+          <div class="adm-chart-card">
+            <div class="adm-chart-header">
+              <h3>Plan Distribution</h3>
+            </div>
+            <canvas id="planChart" height="00"></canvas>
+            <div class="adm-plan-legend" id="planLegend"></div>
+          </div>
+        </div>
+
+        <!-- USER GROWTH CHART + PROFIT DISTRIBUTION + LIQUIDITY -->
+        <div class="adm-growth-row">
+          <div class="adm-chart-card" style="grid-column:span 2;">
+            <div class="adm-chart-header">
+              <h3>User Growth</h3>
+              <div class="adm-chart-filters">
+                <button class="adm-chart-btn active" id="growthBtn7">7D</button>
+                <button class="adm-chart-btn" id="growthBtn30">30D</button>
+              </div>
+            </div>
+            <canvas id="userGrowthChart" height="100"></canvas>
+          </div>
+          <div class="adm-chart-card">
+            <div class="adm-chart-header">
+              <h3>Profit by Plan</h3>
+            </div>
+            <canvas id="profitChart" height="200"></canvas>
+            <div class="adm-plan-legend" id="profitLegend"></div>
+          </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="adm-quick-actions">
+          <h3 class="adm-section-title">Quick Actions</h3>
+          <div class="adm-actions-grid">
+            <a href="withdrawals.html" class="adm-action-btn green"><i class="fa-solid fa-circle-check"></i><span>Approve Withdrawals</span></a>
+            <a href="deposits.html"    class="adm-action-btn blue"><i class="fa-solid fa-download"></i><span>Review Deposits</span></a>
+            <a href="users.html"       class="adm-action-btn gold"><i class="fa-solid fa-user-plus"></i><span>Manage Users</span></a>
+            <a href="kyc.html"         class="adm-action-btn purple"><i class="fa-solid fa-id-card"></i><span>KYC Verification</span></a>
+            <a href="notifications.html" class="adm-action-btn orange"><i class="fa-solid fa-bell"></i><span>Send Notification</span></a>
+            <a href="reports.html"     class="adm-action-btn red"><i class="fa-solid fa-file-export"></i><span>Export Report</span></a>
+            <a href="investments.html" class="adm-action-btn blue"><i class="fa-solid fa-coins"></i><span>Release Profits</span></a>
+            <a href="loans.html"       class="adm-action-btn orange"><i class="fa-solid fa-hand-holding-dollar"></i><span>Review Loans</span></a>
+          </div>
+        </div>
+
+        <!-- RECENT DEPOSITS + PENDING WITHDRAWALS -->
+        <div class="adm-tables-row">
+          <div class="adm-table-card">
+            <div class="adm-table-header">
+              <h3>Recent Deposits</h3>
+              <a href="deposits.html" class="adm-view-all">View All</a>
+            </div>
+            <div class="adm-table-wrapper">
+              <table class="adm-table">
+                <thead><tr><th>User</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead>
+                <tbody id="recentDepositsBody">
+                  <tr><td colspan="4" class="adm-table-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="adm-table-card">
+            <div class="adm-table-header">
+              <h3>Pending Withdrawals</h3>
+              <a href="withdrawals.html" class="adm-view-all">View All</a>
+            </div>
+            <div class="adm-table-wrapper">
+              <table class="adm-table">
+                <thead><tr><th>User</th><th>Amount</th><th>Method</th><th>Action</th></tr></thead>
+                <tbody id="pendingWithdrawalsBody">
+                  <tr><td colspan="4" class="adm-table-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECENT USERS + PLATFORM HEALTH -->
+        <div class="adm-bottom-row">
+          <div class="adm-table-card">
+            <div class="adm-table-header">
+              <h3>Recently Joined Users</h3>
+              <a href="users.html" class="adm-view-all">View All</a>
+            </div>
+            <div class="adm-table-wrapper">
+              <table class="adm-table">
+                <thead><tr><th>User</th><th>Email</th><th>Balance</th><th>Joined</th><th>Status</th></tr></thead>
+                <tbody id="recentUsersBody">
+                  <tr><td colspan="5" class="adm-table-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="adm-liquidity-card">
+            <h3>Platform Health</h3>
+            <div class="adm-health-item">
+              <p>Total Platform Balance</p>
+              <strong id="healthTotalBal">GHS 0.00</strong>
+            </div>
+            <div class="adm-health-divider"></div>
+            <div class="adm-health-item">
+              <p>Total Owed to Users</p>
+              <strong id="healthOwed" class="red">GHS 0.00</strong>
+            </div>
+            <div class="adm-health-divider"></div>
+            <div class="adm-health-item">
+              <p>Available Liquidity</p>
+              <strong id="healthLiquidity">GHS 0.00</strong>
+            </div>
+            <div class="adm-health-divider"></div>
+            <div class="adm-health-item">
+              <p>Verified Users</p>
+              <strong id="healthVerified">0 / 0</strong>
+            </div>
+            <div class="adm-health-divider"></div>
+            <div class="adm-health-item">
+              <p>Standard Activated</p>
+              <strong id="healthStandard">0 users</strong>
+            </div>
+            <div class="adm-health-divider"></div>
+            <div class="adm-health-item">
+              <p>Premium Activated</p>
+              <strong id="healthPremium">0 users</strong>
+            </div>
+            <div class="adm-health-divider"></div>
+            <div class="adm-health-item">
+              <p>Pending Withdrawals</p>
+              <strong id="healthPendingWdr" class="orange">0 requests</strong>
+            </div>
+            <div class="adm-health-divider"></div>
+            <div class="adm-health-item">
+              <p>Pending Loans</p>
+              <strong id="healthPendingLoans" class="orange">0 requests</strong>
+            </div>
+            <div class="adm-health-divider"></div>
+            <div class="adm-health-item">
+              <p>Pending KYC</p>
+              <strong id="healthPendingKyc" class="orange">0 users</strong>
+            </div>
+            <div class="adm-liquidity-warn" id="liquidityWarn">
+              <p><i class="fa-solid fa-triangle-exclamation" style="margin-right:6px;"></i> Liquidity Warning</p>
+              <span>Available liquidity is critically low. Review withdrawals carefully.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./js/admin-init.js"></script>
+  <script type="module" src="./js/admin-dashboard.js"></script>
+</body>
+</html>
