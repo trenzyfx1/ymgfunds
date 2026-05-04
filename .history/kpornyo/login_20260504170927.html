@@ -120,6 +120,270 @@
       transition: border-color 0.2s;
     }
 
+    .adm-input-wrap input:focus {
+      border-color: #c9a84c;
+    }
+
+    .adm-input-wrap input::placeholder {
+      color: #334155;
+    }
+
+    .adm-eye-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #475569;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .adm-eye-btn:hover {
+      color: #c9a84c;
+    }
+
+    .adm-login-err {
+      font-size: 0.78rem;
+      color: #ef4444;
+      min-height: 18px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .adm-login-btn {
+      width: 100%;
+      background: #c9a84c;
+      color: #081c10;
+      border: none;
+      border-radius: 10px;
+      padding: 13px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .adm-login-btn:hover:not(:disabled) {
+      background: #b8942e;
+      transform: translateY(-1px);
+    }
+
+    .adm-login-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .adm-login-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.75rem;
+      color: #334155;
+    }
+
+    .adm-login-footer a {
+      color: #c9a84c;
+      text-decoration: none;
+    }
+
+    .adm-access-denied {
+      display: none;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      font-size: 0.82rem;
+      color: #ef4444;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="adm-login-wrap">
+
+    <div class="adm-login-logo">
+      <img src="../images/logo.jpeg" alt="YMG IQ">
+      <div class="adm-login-logo-text">
+        <strong>YMG IQ</strong>
+        <span>Admin Portal</span>
+      </div>
+    </div>
+
+    <div class="adm-login-card">
+      <h1 class="adm-login-title">Admin Access</h1>
+      <p class="adm-login-sub">Enter your credentials to access the admin dashboard.</p>
+
+      <div class="adm-access-denied" id="accessDenied">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span id="accessDeniedMsg">Access denied. You do not have admin privileges.</span>
+      </div>
+
+      <div class="adm-field">
+        <label>Email Address</label>
+        <div class="adm-input-wrap">
+          <i class="fa-solid fa-envelope adm-input-icon"></i>
+          <input type="email" id="adminEmail" placeholder="admin@ymgiq.com" autocomplete="email" />
+        </div>
+      </div>
+
+      <div class="adm-field">
+        <label>Password</label>
+        <div class="adm-input-wrap">
+          <i class="fa-solid fa-lock adm-input-icon"></i>
+          <input type="password" id="adminPassword" placeholder="Enter your password" autocomplete="current-password" />
+          <button class="adm-eye-btn" id="admEyeBtn" type="button">
+            <i class="fa-solid fa-eye" id="admEyeIco"></i>
+          </button>
+        </div>
+      </div>
+
+      <span class="adm-login-err" id="adminErr"></span>
+
+      <button class="adm-login-btn" id="adminLoginBtn">
+        <i class="fa-solid fa-arrow-right-to-bracket" id="adminBtnIcon"></i>
+        <span id="adminBtnText">Login to Admin Panel</span>
+      </button>
+    </div>
+
+    <div class="adm-login-footer">
+      <a href="../index.html"><i class="fa-solid fa-arrow-left"></i> Back to main site</a>
+    </div>
+
+  </div>
+
+  <script type="module" src="./js/admin-login.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login — YMG IQ</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" href="../images/logo-2.png" type="image/x-icon">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #080e1a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .adm-login-wrap {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .adm-login-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .adm-login-logo img {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .adm-login-logo-text strong {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #c9a84c;
+    }
+
+    .adm-login-logo-text span {
+      display: block;
+      font-size: 0.7rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+    }
+
+    .adm-login-card {
+      background: #0c1425;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px;
+      padding: 36px 32px;
+    }
+
+    .adm-login-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #e2e8f0;
+      margin-bottom: 6px;
+    }
+
+    .adm-login-sub {
+      font-size: 0.82rem;
+      color: #64748b;
+      margin-bottom: 28px;
+    }
+
+    .adm-field {
+      margin-bottom: 18px;
+    }
+
+    .adm-field label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #94a3b8;
+      margin-bottom: 7px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .adm-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .adm-input-icon {
+      position: absolute;
+      left: 14px;
+      color: #475569;
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    .adm-input-wrap input {
+      width: 100%;
+      background: #080e1a;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 12px 14px 12px 40px;
+      color: #e2e8f0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
     .adm-input-wrap input:focus { border-color: #c9a84c; }
     .adm-input-wrap input::placeholder { color: #334155; }
 

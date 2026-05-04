@@ -8,11 +8,6 @@ import {
   addDoc, updateDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Force re-login on every page refresh
-if (performance.navigation?.type === 1 || performance.getEntriesByType?.("navigation")[0]?.type === "reload") {
-  sessionStorage.removeItem("admin_login_time");
-}
-
 const INACTIVITY_LIMIT = 30 * 60 * 1000;
 let inactivityTimer    = null;
 

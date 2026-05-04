@@ -3,8 +3,7 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-  sendPasswordResetEmail,
-  fetchSignInMethodsForEmail
+  sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   doc, getDoc, setDoc, addDoc,
@@ -30,13 +29,20 @@ function showError(inputId, errorId, message) {
 }
 
 function showSuspendedError() {
+  // Show a prominent red suspended message on the login page
   const emailInput = document.getElementById('email');
-  const errorEl    = document.getElementById('emailError');
+  const errorEl   = document.getElementById('emailError');
+
   if (emailInput) emailInput.classList.add('error');
 
+  // Try to show in a dedicated suspended banner if it exists
   const suspendedBanner = document.getElementById('suspendedBanner');
-  if (suspendedBanner) { suspendedBanner.style.display = "flex"; return; }
+  if (suspendedBanner) {
+    suspendedBanner.style.display = "flex";
+    return;
+  }
 
+  // Otherwise inject one dynamically
   const form = document.querySelector('.auth-form') ||
                document.querySelector('form') ||
                document.querySelector('.login-card') ||
@@ -67,7 +73,9 @@ function showSuspendedError() {
     `;
     form.insertBefore(banner, form.firstChild);
   } else if (errorEl) {
-    errorEl.innerHTML = `Account suspended. <a href="help.html" style="color:#dc2626;font-weight:700;text-decoration:underline;">Contact Support →</a>`;
+    errorEl.innerHTML = `
+      Account suspended. <a href="help.html" style="color:#dc2626;font-weight:700;text-decoration:underline;">Contact Support →</a>
+    `;
   }
 }
 
@@ -92,17 +100,17 @@ function getDeviceInfo() {
   const isLinux = /Linux/i.test(ua);
 
   let browser = "Unknown Browser";
-  if (/Chrome/i.test(ua) && !/Edg/i.test(ua)) browser = "Chrome";
-  else if (/Firefox/i.test(ua))               browser = "Firefox";
-  else if (/Safari/i.test(ua))                browser = "Safari";
-  else if (/Edg/i.test(ua))                   browser = "Edge";
+  if (/Chrome/i.test(ua) && !/Edg/i.test(ua))  browser = "Chrome";
+  else if (/Firefox/i.test(ua))                 browser = "Firefox";
+  else if (/Safari/i.test(ua))                  browser = "Safari";
+  else if (/Edg/i.test(ua))                     browser = "Edge";
 
   let os = "Unknown OS";
-  if (isPhone && /iPhone/i.test(ua)) os = "iPhone";
-  else if (isPhone)                  os = "Android";
-  else if (isMac)                    os = "Mac";
-  else if (isWin)                    os = "Windows";
-  else if (isLinux)                  os = "Linux";
+  if (isPhone && /iPhone/i.test(ua))  os = "iPhone";
+  else if (isPhone)                   os = "Android";
+  else if (isMac)                     os = "Mac";
+  else if (isWin)                     os = "Windows";
+  else if (isLinux)                   os = "Linux";
 
   return `${browser} on ${os}`;
 }
@@ -120,15 +128,15 @@ async function syncEmailVerified(user) {
 
 async function recordLoginAndNotify(user) {
   try {
-    const deviceInfo = getDeviceInfo();
-    const now        = new Date();
-    const timeString = now.toLocaleString("en-GB", {
+    const deviceInfo  = getDeviceInfo();
+    const now         = new Date();
+    const timeString  = now.toLocaleString("en-GB", {
       day: "2-digit", month: "short", year: "numeric",
       hour: "2-digit", minute: "2-digit"
     });
 
-    const snap        = await getDoc(doc(db, "users", user.uid));
-    const lastDevice  = snap.data()?.lastLoginDevice || null;
+    const snap       = await getDoc(doc(db, "users", user.uid));
+    const lastDevice = snap.data()?.lastLoginDevice || null;
     const isNewDevice = lastDevice && lastDevice !== deviceInfo;
 
     await addDoc(collection(db, "users", user.uid, "notifications"), {
@@ -229,10 +237,12 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
     const userCredential = await signInWithEmailAndPassword(auth, emailToUse, password);
     const user           = userCredential.user;
 
+    // ── SUSPENDED CHECK ─────────────────────────────────────────
     const userSnap = await getDoc(doc(db, "users", user.uid));
     const userData = userSnap.data();
 
     if (userData?.suspended === true) {
+      // Sign them out immediately
       await auth.signOut();
       btn.disabled     = false;
       text.textContent = 'Login to Account';
@@ -240,6 +250,7 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
       showSuspendedError();
       return;
     }
+    // ────────────────────────────────────────────────────────────
 
     sessionStorage.setItem("ymg_session", user.uid);
     await syncEmailVerified(user);
@@ -256,20 +267,10 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
     icon.className   = 'fa-solid fa-arrow-right';
 
     if (
-      error.code === "auth/user-not-found"     ||
-      error.code === "auth/wrong-password"     ||
+      error.code === "auth/user-not-found"    ||
+      error.code === "auth/wrong-password"    ||
       error.code === "auth/invalid-credential"
     ) {
-      try {
-        const emailForCheck = document.getElementById('email').value.trim();
-        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailForCheck)) {
-          const methods = await fetchSignInMethodsForEmail(auth, emailForCheck);
-          if (methods.includes("google.com") && !methods.includes("password")) {
-            showError('email', 'emailError', 'This account was created with Google. Please use the "Continue with Google" button to log in.');
-            return;
-          }
-        }
-      } catch { }
       showError('email',    'emailError',    'Incorrect Account ID/email or password.');
       showError('password', 'passwordError', '');
     } else if (error.code === "auth/too-many-requests") {
@@ -300,7 +301,6 @@ googleBtn.addEventListener("click", async () => {
         name:      user.displayName,
         email:     user.email,
         balance:   0,
-        provider:  "google",
         createdAt: new Date()
       });
     }
@@ -312,7 +312,6 @@ googleBtn.addEventListener("click", async () => {
 
   } catch (error) {
     console.error("Google login error:", error);
-    if (error.code === "auth/popup-closed-by-user") return;
     alert(error.message);
   }
 });

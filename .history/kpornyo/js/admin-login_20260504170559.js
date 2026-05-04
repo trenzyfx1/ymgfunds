@@ -10,17 +10,17 @@ import {
   doc, getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Only redirect if fully authenticated (session + PIN both done)
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
-  const loginTime = sessionStorage.getItem("admin_login_time");
-  if (loginTime) {
-    const snap = await getDoc(doc(db, "users", user.uid));
-    if (snap.exists() && snap.data().isAdmin) {
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (snap.exists() && snap.data().isAdmin) {
+    if (sessionStorage.getItem("admin_login_time")) {
       window.location.href = "./index.html";
     } else {
       await signOut(auth);
     }
+  } else {
+    await signOut(auth);
   }
 });
 
@@ -36,8 +36,7 @@ document.getElementById("adminPassword")?.addEventListener("keydown", (e) => {
   if (e.key === "Enter") document.getElementById("adminLoginBtn")?.click();
 });
 
-// Stored after password verified — used by PIN step
-let cachedAdminPin = null;
+let verifiedAdminUser = null;
 
 document.getElementById("adminLoginBtn")?.addEventListener("click", async () => {
   const email    = document.getElementById("adminEmail").value.trim();
@@ -60,6 +59,7 @@ document.getElementById("adminLoginBtn")?.addEventListener("click", async () => 
 
   try {
     await setPersistence(auth, browserSessionPersistence);
+
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user           = userCredential.user;
     const snap           = await getDoc(doc(db, "users", user.uid));
@@ -84,12 +84,11 @@ document.getElementById("adminLoginBtn")?.addEventListener("click", async () => 
       return;
     }
 
-    // Cache PIN for comparison — no need to re-authenticate
-    cachedAdminPin = adminPin;
+    verifiedAdminUser = user;
+    await signOut(auth);
 
-    // Stay signed in — just show PIN form
-    document.getElementById("adminLoginForm").style.display = "none";
-    document.getElementById("adminPinForm").style.display   = "block";
+    document.getElementById("adminLoginForm").style.display  = "none";
+    document.getElementById("adminPinForm").style.display    = "block";
     document.querySelectorAll(".adm-pin-box")[0]?.focus();
 
   } catch (err) {
@@ -121,7 +120,6 @@ document.querySelectorAll(".adm-pin-box").forEach((box, i, boxes) => {
   });
   box.addEventListener("keydown", e => {
     if (e.key === "Backspace" && !box.value && i > 0) boxes[i - 1].focus();
-    if (e.key === "Enter") document.getElementById("adminPinBtn")?.click();
   });
 });
 
@@ -133,25 +131,41 @@ document.getElementById("adminPinBtn")?.addEventListener("click", async () => {
   errEl.textContent = "";
 
   if (pin.length < 6) { errEl.textContent = "Please enter the full 6-digit PIN."; return; }
-  if (!cachedAdminPin) { errEl.textContent = "Session expired. Please log in again."; showLoginForm(); return; }
+  if (!verifiedAdminUser) { errEl.textContent = "Session expired. Please log in again."; showLoginForm(); return; }
 
-  btn.disabled         = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying...';
+  btn.disabled   = true;
+  btn.textContent = "Verifying PIN...";
 
-  if (pin !== cachedAdminPin) {
-    await signOut(auth);
-    cachedAdminPin = null;
-    errEl.textContent = "Incorrect PIN. Please try again.";
-    document.querySelectorAll(".adm-pin-box").forEach(b => b.value = "");
-    document.querySelectorAll(".adm-pin-box")[0]?.focus();
-    btn.disabled  = false;
-    btn.innerHTML = '<i class="fa-solid fa-shield-check"></i> Verify PIN';
-    return;
+  try {
+    await setPersistence(auth, browserSessionPersistence);
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      document.getElementById("adminEmail").value.trim(),
+      document.getElementById("adminPassword").value
+    );
+    const user = userCredential.user;
+    const snap = await getDoc(doc(db, "users", user.uid));
+    const storedPin = snap.data()?.adminPin;
+
+    if (!storedPin || pin !== storedPin) {
+      await signOut(auth);
+      errEl.textContent = "Incorrect PIN. Please try again.";
+      document.querySelectorAll(".adm-pin-box").forEach(b => b.value = "");
+      document.querySelectorAll(".adm-pin-box")[0]?.focus();
+      btn.disabled    = false;
+      btn.textContent = "Verify PIN";
+      return;
+    }
+
+    sessionStorage.setItem("admin_login_time", Date.now().toString());
+    window.location.href = "./index.html";
+
+  } catch (err) {
+    console.error("PIN verify error:", err);
+    errEl.textContent = "Verification failed. Please try again.";
+    btn.disabled    = false;
+    btn.textContent = "Verify PIN";
   }
-
-  // PIN correct — set session and redirect
-  sessionStorage.setItem("admin_login_time", Date.now().toString());
-  window.location.href = "./index.html";
 });
 
 document.getElementById("adminPinBack")?.addEventListener("click", () => {
@@ -159,8 +173,7 @@ document.getElementById("adminPinBack")?.addEventListener("click", () => {
 });
 
 function showLoginForm() {
-  cachedAdminPin = null;
-  signOut(auth).catch(() => {});
+  verifiedAdminUser = null;
   document.getElementById("adminLoginForm").style.display = "block";
   document.getElementById("adminPinForm").style.display   = "none";
   document.querySelectorAll(".adm-pin-box").forEach(b => b.value = "");

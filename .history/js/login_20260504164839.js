@@ -260,6 +260,7 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
       error.code === "auth/wrong-password"     ||
       error.code === "auth/invalid-credential"
     ) {
+      // Check if this is a Google-only account trying to use email/password
       try {
         const emailForCheck = document.getElementById('email').value.trim();
         if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailForCheck)) {

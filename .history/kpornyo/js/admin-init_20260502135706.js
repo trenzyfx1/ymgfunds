@@ -8,11 +8,6 @@ import {
   addDoc, updateDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Force re-login on every page refresh
-if (performance.navigation?.type === 1 || performance.getEntriesByType?.("navigation")[0]?.type === "reload") {
-  sessionStorage.removeItem("admin_login_time");
-}
-
 const INACTIVITY_LIMIT = 30 * 60 * 1000;
 let inactivityTimer    = null;
 
@@ -37,37 +32,6 @@ function startInactivityWatcher() {
   });
   resetInactivityTimer();
 }
-
-// ── SECURITY: Disable right-click, F12, Ctrl+Shift+I/J/C, Ctrl+U ─
-document.addEventListener("contextmenu", e => e.preventDefault());
-document.addEventListener("keydown", e => {
-  if (e.key === "F12") { e.preventDefault(); return false; }
-  if (e.ctrlKey && e.shiftKey && ["I","i","J","j","C","c"].includes(e.key)) { e.preventDefault(); return false; }
-  if (e.ctrlKey && ["U","u"].includes(e.key)) { e.preventDefault(); return false; }
-  if (e.ctrlKey && e.shiftKey && e.key === "Delete") { e.preventDefault(); return false; }
-});
-
-// ── SECURITY: DevTools detection — logs out if DevTools opens ─────
-(function detectDevTools() {
-  let devToolsOpen = false;
-  const threshold  = 160;
-
-  setInterval(() => {
-    const widthDiff  = window.outerWidth  - window.innerWidth;
-    const heightDiff = window.outerHeight - window.innerHeight;
-    const isOpen     = widthDiff > threshold || heightDiff > threshold;
-
-    if (isOpen && !devToolsOpen) {
-      devToolsOpen = true;
-      sessionStorage.removeItem("admin_login_time");
-      signOut(auth).then(() => {
-        window.location.href = "./login.html";
-      });
-    }
-
-    if (!isOpen) devToolsOpen = false;
-  }, 1000);
-})();
 
 const loginTime = sessionStorage.getItem("admin_login_time");
 if (!loginTime) {
@@ -120,12 +84,17 @@ function buildAdminNotifBell() {
           cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;
         ">Mark all read</button>
       </div>
-      <div id="admNotifList" style="max-height:360px;overflow-y:auto;">
+      <div id="admNotifList" style="
+        max-height:360px;overflow-y:auto;
+      ">
         <div style="text-align:center;padding:24px;color:var(--adm-muted);font-size:0.82rem;">
           <i class="fa-solid fa-spinner fa-spin" style="margin-right:6px;"></i> Loading...
         </div>
       </div>
-      <div style="padding:10px 16px;border-top:1px solid var(--adm-border);text-align:center;">
+      <div style="
+        padding:10px 16px;border-top:1px solid var(--adm-border);
+        text-align:center;
+      ">
         <span style="font-size:0.72rem;color:var(--adm-muted);">
           Alerts refresh automatically every 5 minutes
         </span>
@@ -133,8 +102,10 @@ function buildAdminNotifBell() {
     </div>
   `;
 
+  // Insert before the first child (before live badge)
   topbarRight.insertBefore(wrap, topbarRight.firstChild);
 
+  // Toggle dropdown
   document.getElementById("admNotifBtn")?.addEventListener("click", (e) => {
     e.stopPropagation();
     const dd = document.getElementById("admNotifDropdown");
@@ -164,10 +135,13 @@ async function loadAdminNotifications() {
     const user = auth.currentUser;
     if (!user) return;
 
+    // First run the scan to generate any new alerts
     await scanPlatformForAlerts();
 
+    // Fetch all alerts — no orderBy to avoid needing a Firestore index
     const snap = await getDocs(collection(db, "adminNotifications"));
     let notifs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    // Sort client-side newest first
     notifs.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     notifs = notifs.slice(0, 40);
 
@@ -213,7 +187,10 @@ function renderAdminNotifList(notifs) {
       system:     { icon: "fa-solid fa-gear",                 color: "#64748b" },
     };
     const { icon, color } = iconMap[n.type] || { icon: "fa-solid fa-bell", color: "#c9a84c" };
-    const timeStr = n.createdAt?.seconds ? timeAgo(n.createdAt.seconds) : "Just now";
+
+    const timeStr = n.createdAt?.seconds
+      ? timeAgo(n.createdAt.seconds)
+      : "Just now";
 
     return `
       <div onclick="markAdminNotifRead('${n.id}')" style="
@@ -248,7 +225,7 @@ window.markAdminNotifRead = async function(id) {
 
 async function markAllAdminNotifsRead() {
   try {
-    const snap    = await getDocs(collection(db, "adminNotifications"));
+    const snap = await getDocs(collection(db, "adminNotifications"));
     const updates = snap.docs
       .filter(d => !d.data().read)
       .map(d => updateDoc(d.ref, { read: true }));
@@ -259,41 +236,70 @@ async function markAllAdminNotifsRead() {
 // ── PLATFORM SCANNER ──────────────────────────────────────────────
 async function scanPlatformForAlerts() {
   try {
+    // No orderBy — avoids needing a Firestore index
     const existingSnap = await getDocs(collection(db, "adminNotifications"));
     const existingKeys = new Set(existingSnap.docs.map(d => d.data().dedupeKey).filter(Boolean));
 
-    const alerts   = [];
+    const alerts = [];
     const todayStr = new Date().toLocaleDateString("en-GB");
 
+    // 1. Pending withdrawals waiting too long
     const pendingWdrs = await getDocs(
       query(collection(db, "withdrawalRequests"), where("status", "==", "pending"))
     );
     if (pendingWdrs.size > 0) {
       const key = `pending_wdr_${todayStr}`;
       if (!existingKeys.has(key)) {
-        alerts.push({ type: "withdrawal", title: `${pendingWdrs.size} Withdrawal${pendingWdrs.size !== 1 ? "s" : ""} Awaiting Approval`, message: `You have ${pendingWdrs.size} pending withdrawal request${pendingWdrs.size !== 1 ? "s" : ""} that need your attention.`, dedupeKey: key, read: false, createdAt: serverTimestamp() });
+        alerts.push({
+          type:       "withdrawal",
+          title:      `${pendingWdrs.size} Withdrawal${pendingWdrs.size !== 1 ? "s" : ""} Awaiting Approval`,
+          message:    `You have ${pendingWdrs.size} pending withdrawal request${pendingWdrs.size !== 1 ? "s" : ""} that need your attention.`,
+          dedupeKey:  key,
+          read:       false,
+          createdAt:  serverTimestamp()
+        });
       }
     }
 
-    const pendingLoans     = await getDocs(collection(db, "loanRequests"));
-    const pendingLoanCount = pendingLoans.docs.filter(d => { const s = d.data().status; return s === "pending" || s === "under_review"; }).length;
+    // 2. Pending loans
+    const pendingLoans = await getDocs(collection(db, "loanRequests"));
+    const pendingLoanCount = pendingLoans.docs.filter(d => {
+      const s = d.data().status;
+      return s === "pending" || s === "under_review";
+    }).length;
     if (pendingLoanCount > 0) {
       const key = `pending_loan_${todayStr}`;
       if (!existingKeys.has(key)) {
-        alerts.push({ type: "loan", title: `${pendingLoanCount} Loan Application${pendingLoanCount !== 1 ? "s" : ""} Under Review`, message: `${pendingLoanCount} loan application${pendingLoanCount !== 1 ? "s" : ""} require your review and decision.`, dedupeKey: key, read: false, createdAt: serverTimestamp() });
+        alerts.push({
+          type:      "loan",
+          title:     `${pendingLoanCount} Loan Application${pendingLoanCount !== 1 ? "s" : ""} Under Review`,
+          message:   `${pendingLoanCount} loan application${pendingLoanCount !== 1 ? "s" : ""} require your review and decision.`,
+          dedupeKey: key,
+          read:      false,
+          createdAt: serverTimestamp()
+        });
       }
     }
 
-    const usersSnap  = await getDocs(collection(db, "users"));
-    const users      = usersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    // 3. Unverified users (KYC)
+    const usersSnap = await getDocs(collection(db, "users"));
+    const users     = usersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
     const unverified = users.filter(u => !u.emailVerified && !u.authEmailVerified && !u.phoneVerified);
     if (unverified.length > 0) {
       const key = `unverified_kyc_${todayStr}`;
       if (!existingKeys.has(key)) {
-        alerts.push({ type: "kyc", title: `${unverified.length} Unverified User${unverified.length !== 1 ? "s" : ""}`, message: `${unverified.length} user${unverified.length !== 1 ? "s" : ""} have not verified their email or phone number.`, dedupeKey: key, read: false, createdAt: serverTimestamp() });
+        alerts.push({
+          type:      "kyc",
+          title:     `${unverified.length} Unverified User${unverified.length !== 1 ? "s" : ""}`,
+          message:   `${unverified.length} user${unverified.length !== 1 ? "s" : ""} have not verified their email or phone number.`,
+          dedupeKey: key,
+          read:      false,
+          createdAt: serverTimestamp()
+        });
       }
     }
 
+    // 4. Fraud detection
     const allTxs = [];
     await Promise.all(users.map(async (user) => {
       const txSnap = await getDocs(collection(db, "users", user.id, "transactions"));
@@ -304,35 +310,94 @@ async function scanPlatformForAlerts() {
       const userTxs  = allTxs.filter(t => t.userId === user.id);
       const deposits = userTxs.filter(t => t.type === "deposit");
       const wdrs     = userTxs.filter(t => t.type === "withdrawal");
+
       const totalDep = deposits.reduce((s, t) => s + (t.amount || 0), 0);
       const totalWdr = wdrs.reduce((s, t) => s + (t.gross || t.amount || 0), 0);
+
+      // Same day deposit + withdrawal
       const todayDeps = deposits.filter(t => t.date?.seconds && new Date(t.date.seconds * 1000).toLocaleDateString("en-GB") === todayStr);
       const todayWdrs = wdrs.filter(t => t.date?.seconds && new Date(t.date.seconds * 1000).toLocaleDateString("en-GB") === todayStr);
 
       if (todayDeps.length > 0 && todayWdrs.length > 0) {
         const key = `fraud_sameday_${user.id}_${todayStr}`;
-        if (!existingKeys.has(key)) alerts.push({ type: "fraud", title: `⚠ Suspicious Activity — ${user.name || "User"}`, message: `${user.name || user.email} deposited and requested a withdrawal on the same day.`, dedupeKey: key, read: false, createdAt: serverTimestamp() });
+        if (!existingKeys.has(key)) {
+          alerts.push({
+            type:      "fraud",
+            title:     `⚠ Suspicious Activity — ${user.name || "User"}`,
+            message:   `${user.name || user.email} deposited and requested a withdrawal on the same day.`,
+            dedupeKey: key,
+            read:      false,
+            createdAt: serverTimestamp()
+          });
+        }
       }
+
+      // Withdrawal exceeds deposits by 3x
       if (totalDep > 0 && totalWdr > totalDep * 3) {
         const key = `fraud_ratio_${user.id}`;
-        if (!existingKeys.has(key)) alerts.push({ type: "fraud", title: `⚠ Withdrawal Ratio Alert — ${user.name || "User"}`, message: `${user.name || user.email} has withdrawn ${totalWdr.toFixed(2)} vs deposited ${totalDep.toFixed(2)} (${Math.round(totalWdr / totalDep)}× ratio).`, dedupeKey: key, read: false, createdAt: serverTimestamp() });
+        if (!existingKeys.has(key)) {
+          alerts.push({
+            type:      "fraud",
+            title:     `⚠ Withdrawal Ratio Alert — ${user.name || "User"}`,
+            message:   `${user.name || user.email} has withdrawn ${totalWdr.toFixed(2)} vs deposited ${totalDep.toFixed(2)} (${Math.round(totalWdr / totalDep)}× ratio).`,
+            dedupeKey: key,
+            read:      false,
+            createdAt: serverTimestamp()
+          });
+        }
       }
+
+      // Multiple withdrawals today
       if (todayWdrs.length >= 3) {
         const key = `fraud_freq_${user.id}_${todayStr}`;
-        if (!existingKeys.has(key)) alerts.push({ type: "fraud", title: `⚠ High Frequency Withdrawals — ${user.name || "User"}`, message: `${user.name || user.email} made ${todayWdrs.length} withdrawal requests today.`, dedupeKey: key, read: false, createdAt: serverTimestamp() });
+        if (!existingKeys.has(key)) {
+          alerts.push({
+            type:      "fraud",
+            title:     `⚠ High Frequency Withdrawals — ${user.name || "User"}`,
+            message:   `${user.name || user.email} made ${todayWdrs.length} withdrawal requests today.`,
+            dedupeKey: key,
+            read:      false,
+            createdAt: serverTimestamp()
+          });
+        }
       }
+
+      // Referral farming
       if ((user.referralEarnings || 0) > totalDep && totalDep > 0) {
         const key = `fraud_referral_${user.id}`;
-        if (!existingKeys.has(key)) alerts.push({ type: "fraud", title: `⚠ Referral Farming — ${user.name || "User"}`, message: `${user.name || user.email} earned GHS ${(user.referralEarnings || 0).toFixed(2)} in referrals but only deposited GHS ${totalDep.toFixed(2)}.`, dedupeKey: key, read: false, createdAt: serverTimestamp() });
+        if (!existingKeys.has(key)) {
+          alerts.push({
+            type:      "fraud",
+            title:     `⚠ Referral Farming — ${user.name || "User"}`,
+            message:   `${user.name || user.email} earned GHS ${(user.referralEarnings || 0).toFixed(2)} in referrals but only deposited GHS ${totalDep.toFixed(2)}.`,
+            dedupeKey: key,
+            read:      false,
+            createdAt: serverTimestamp()
+          });
+        }
       }
     });
 
-    const newToday = users.filter(u => u.createdAt?.seconds && new Date(u.createdAt.seconds * 1000).toLocaleDateString("en-GB") === todayStr);
+    // 5. New users today
+    const newToday = users.filter(u => {
+      return u.createdAt?.seconds &&
+        new Date(u.createdAt.seconds * 1000).toLocaleDateString("en-GB") === todayStr;
+    });
     if (newToday.length > 0) {
       const key = `new_users_${todayStr}`;
-      if (!existingKeys.has(key)) alerts.push({ type: "user", title: `${newToday.length} New User${newToday.length !== 1 ? "s" : ""} Today`, message: newToday.map(u => u.name || u.email).join(", "), dedupeKey: key, read: false, createdAt: serverTimestamp() });
+      if (!existingKeys.has(key)) {
+        alerts.push({
+          type:      "user",
+          title:     `${newToday.length} New User${newToday.length !== 1 ? "s" : ""} Today`,
+          message:   newToday.map(u => u.name || u.email).join(", "),
+          dedupeKey: key,
+          read:      false,
+          createdAt: serverTimestamp()
+        });
+      }
     }
 
+    // Save all new alerts to Firestore
     if (alerts.length > 0) {
       await Promise.all(alerts.map(a => addDoc(collection(db, "adminNotifications"), a)));
     }
@@ -344,8 +409,8 @@ async function scanPlatformForAlerts() {
 
 function timeAgo(seconds) {
   const diff = Date.now() - seconds * 1000;
-  if (diff < 60000)    return "Just now";
-  if (diff < 3600000)  return `${Math.floor(diff / 60000)}m ago`;
+  if (diff < 60000)  return "Just now";
+  if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
   if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
   return `${Math.floor(diff / 86400000)}d ago`;
 }
@@ -383,6 +448,7 @@ onAuthStateChanged(auth, async (user) => {
   buildAdminNotifBell();
   await loadAdminNotifications();
 
+  // Re-scan every 5 minutes
   setInterval(async () => { await loadAdminNotifications(); }, 5 * 60 * 1000);
 });
 
