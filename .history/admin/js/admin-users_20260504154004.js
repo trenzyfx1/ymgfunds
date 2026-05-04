@@ -2,7 +2,7 @@ import { db } from "../../js/firebase.js";
 import { auth } from "../../js/firebase.js";
 import {
   collection, getDocs, doc,
-  updateDoc, query, orderBy
+  updateDoc, addDoc, serverTimestamp, query, orderBy
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import {
   reauthenticateWithCredential, EmailAuthProvider
@@ -49,8 +49,8 @@ function getProfitSoFar(inv) { return inv.profitEarned || 0; }
 function getMatSec(inv)    { return inv.maturityDate?.seconds || inv.maturityDate?._seconds || null; }
 
 function getExpectedProfit(inv) {
-  const amount = inv.amount || 0;
-  const rate   = inv.returnRate ?? inv.rate ?? 0;
+  const amount   = inv.amount || 0;
+  const rate     = inv.returnRate ?? inv.rate ?? 0;
   const rateType = inv.rateType;
   const duration = inv.duration;
   if (!rate || !amount) return 0;
@@ -254,10 +254,64 @@ function renderProfileTab(u, totalDeposited, totalWithdrawn, activePlans, totalI
     </div>`;
 }
 
+function renderActivatePlanTab(u) {
+  const stdActivated  = u.standardActivated  || false;
+  const premActivated = u.premiumActivated    || false;
+
+  const planCard = (tier, activated) => {
+    const isStd     = tier === "standard";
+    const color     = isStd ? "#22c55e" : "#c9a84c";
+    const icon      = isStd ? "fa-solid fa-lock-open" : "fa-solid fa-crown";
+    const label     = isStd ? "Standard Plan" : "Premium Plan";
+    const fee       = isStd ? "GHS 500" : "GHS 1,000";
+    const perks     = isStd
+      ? ["Starter Savings (0.5%/week)", "Fixed Deposit (9.5% in 90 days)", "Growth Plus (12.5% in 182 days)", "Standard Loan access"]
+      : ["182-Day Growth Tool (15%)", "365-Day Premium Tool (25%)", "3-Year Wealth Builder (35%/yr)", "Premium Loan access", "Premium Referral system"];
+
+    return `
+      <div style="background:var(--adm-bg);border:1px solid ${activated ? color+"44" : "var(--adm-border)"};border-radius:14px;padding:20px;flex:1;min-width:220px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:40px;height:40px;border-radius:10px;background:${color}18;color:${color};display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">
+            <i class="${icon}"></i>
+          </div>
+          <div>
+            <p style="font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:700;color:var(--adm-text);margin:0;">${label}</p>
+            <p style="font-size:0.72rem;color:var(--adm-muted);margin:0;">Normal activation fee: ${fee}</p>
+          </div>
+          ${activated ? `<span style="margin-left:auto;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:20px;background:${color}22;color:${color};">✓ Active</span>` : ""}
+        </div>
+        <ul style="list-style:none;padding:0;margin:0 0 16px 0;">
+          ${perks.map(p => `<li style="font-size:0.78rem;color:var(--adm-muted);padding:4px 0;display:flex;align-items:center;gap:7px;"><i class="fa-solid fa-check" style="color:${color};font-size:0.68rem;flex-shrink:0;"></i>${p}</li>`).join("")}
+        </ul>
+        ${activated
+          ? `<div style="background:${color}11;border:1px solid ${color}33;border-radius:8px;padding:10px 14px;font-size:0.78rem;color:${color};font-weight:600;text-align:center;">
+               <i class="fa-solid fa-circle-check" style="margin-right:6px;"></i>Already activated for this user
+             </div>`
+          : `<button class="adm-btn ${isStd?"green":"gold"}" style="width:100%;justify-content:center;" onclick="adminActivatePlan('${u.id}','${tier}')">
+               <i class="${icon}"></i> Activate ${label} for Free
+             </button>`
+        }
+      </div>`;
+  };
+
+  return `
+    <div style="margin-bottom:16px;padding:12px 16px;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:10px;">
+      <p style="font-size:0.82rem;color:var(--adm-text);margin:0;line-height:1.6;">
+        <i class="fa-solid fa-circle-info" style="color:var(--adm-gold);margin-right:6px;"></i>
+        <strong>Admin Override:</strong> Activate plans for this user without charging their balance. Password confirmation required. The user will receive a notification.
+      </p>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      ${planCard("standard", stdActivated)}
+      ${planCard("premium",  premActivated)}
+    </div>
+    <p id="activatePlanMsg" style="font-size:0.8rem;margin-top:14px;min-height:20px;"></p>`;
+}
+
 function renderInvestmentsTab(investments) {
   const rows = investments.length ? investments.map(inv => {
-    const matSec  = getMatSec(inv);
-    const days    = matSec ? Math.ceil((new Date(matSec * 1000) - new Date()) / 86400000) : null;
+    const matSec    = getMatSec(inv);
+    const days      = matSec ? Math.ceil((new Date(matSec * 1000) - new Date()) / 86400000) : null;
     const isMatured = inv.status === "matured" || (matSec && days !== null && days <= 0);
     const matDisplay = matSec ? (isMatured ? `<span style="color:var(--adm-orange);font-size:0.72rem;font-weight:700;">⚠ Matured</span>` : days <= 7 ? `<span style="color:var(--adm-orange);font-size:0.72rem;">In ${days}d</span>` : fmtDate(matSec)) : "Flexible";
     const statusColor = isMatured ? "var(--adm-orange)" : inv.status === "completed" ? "var(--adm-green)" : "var(--adm-blue,#3b82f6)";
@@ -380,8 +434,8 @@ window.viewUser = async function(uid) {
     txSnap.forEach(d => {
       const t = d.data();
       transactions.push(t);
-      if (t.type === "deposit")    { deposits.push(t);     totalDeposited += t.amount || 0; }
-      if (t.type === "withdrawal") { withdrawals.push(t);  totalWithdrawn += t.gross || t.amount || 0; }
+      if (t.type === "deposit")    { deposits.push(t);    totalDeposited += t.amount || 0; }
+      if (t.type === "withdrawal") { withdrawals.push(t); totalWithdrawn += t.gross || t.amount || 0; }
     });
 
     invSnap.forEach(d => {
@@ -392,19 +446,20 @@ window.viewUser = async function(uid) {
 
     refSnap.forEach(d => referrals.push(d.data()));
 
-    transactions.sort((a,b) => (b.date?.seconds||0) - (a.date?.seconds||0));
-    investments.sort((a,b)  => (b.startDate?.seconds||0) - (a.startDate?.seconds||0));
-    withdrawals.sort((a,b)  => (b.date?.seconds||0) - (a.date?.seconds||0));
-    deposits.sort((a,b)     => (b.date?.seconds||0) - (a.date?.seconds||0));
-    referrals.sort((a,b)    => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+    transactions.sort((a,b) => (b.date?.seconds||0)      - (a.date?.seconds||0));
+    investments.sort((a,b)  => (b.startDate?.seconds||0)  - (a.startDate?.seconds||0));
+    withdrawals.sort((a,b)  => (b.date?.seconds||0)       - (a.date?.seconds||0));
+    deposits.sort((a,b)     => (b.date?.seconds||0)       - (a.date?.seconds||0));
+    referrals.sort((a,b)    => (b.createdAt?.seconds||0)  - (a.createdAt?.seconds||0));
 
   } catch (err) { console.error(err); }
 
   const activePlans = investments.filter(i => i.status === "active" || i.status === "matured").length;
 
-  const tabs = ["profile","investments","transactions","withdrawals","deposits","referrals"];
+  const tabs = ["profile","activate","investments","transactions","withdrawals","deposits","referrals"];
   const tabLabels = {
     profile:      `<i class="fa-solid fa-user"></i> Profile`,
+    activate:     `<i class="fa-solid fa-unlock"></i> Activate Plan`,
     investments:  `<i class="fa-solid fa-chart-line"></i> Investments (${investments.length})`,
     transactions: `<i class="fa-solid fa-clock-rotate-left"></i> Transactions (${transactions.length})`,
     withdrawals:  `<i class="fa-solid fa-upload"></i> Withdrawals (${withdrawals.length})`,
@@ -428,6 +483,7 @@ window.viewUser = async function(uid) {
     const content = document.getElementById("userTabContent");
     if (!content) return;
     if (activeTab === "profile")      content.innerHTML = renderProfileTab(u, totalDeposited, totalWithdrawn, activePlans, totalInvested);
+    if (activeTab === "activate")     content.innerHTML = renderActivatePlanTab(u);
     if (activeTab === "investments")  content.innerHTML = renderInvestmentsTab(investments);
     if (activeTab === "transactions") content.innerHTML = renderTransactionsTab(transactions);
     if (activeTab === "withdrawals")  content.innerHTML = renderWithdrawalsTab(withdrawals);
@@ -473,6 +529,70 @@ window.viewUser = async function(uid) {
     </button>
     <button class="adm-btn ghost" onclick="closeUserModal()">Close</button>
   `;
+};
+
+window.adminActivatePlan = async function(uid, tier) {
+  const u = allUsers.find(x => x.id === uid);
+  if (!u) return;
+
+  const alreadyActivated = tier === "standard" ? u.standardActivated : u.premiumActivated;
+  if (alreadyActivated) {
+    showToast(`${tier === "standard" ? "Standard" : "Premium"} plan is already activated for ${u.name}.`, "error");
+    return;
+  }
+
+  const confirmed = await confirmWithPassword(`Activate ${tier} plan for ${u.name} — FREE (admin override)`);
+  if (!confirmed) return;
+
+  const msgEl = document.getElementById("activatePlanMsg");
+  if (msgEl) { msgEl.style.color = "var(--adm-muted)"; msgEl.textContent = "Activating..."; }
+
+  try {
+    const updateFields = {};
+    if (tier === "standard") updateFields.standardActivated = true;
+    if (tier === "premium")  updateFields.premiumActivated  = true;
+
+    await updateDoc(doc(db, "users", uid), updateFields);
+
+    await addDoc(collection(db, "users", uid, "transactions"), {
+      type:   "activation",
+      plan:   tier === "standard" ? "Standard Plan Activation" : "Premium Plan Activation",
+      amount: 0,
+      note:   "Activated by admin — no charge",
+      status: "completed",
+      date:   serverTimestamp()
+    });
+
+    await createNotification(
+      uid,
+      "activation",
+      tier === "standard" ? "Standard Plan Activated 🎉" : "Premium Plan Activated 👑",
+      tier === "standard"
+        ? "Your Standard investment plan has been activated by our admin team. You can now access Starter Savings, Fixed Deposit, Growth Plus, and Standard Loan plans."
+        : "Your Premium investment plan has been activated by our admin team. You can now access all premium investment plans including the 365-Day Premium Tool and 3-Year Wealth Builder."
+    );
+
+    const idx = allUsers.findIndex(x => x.id === uid);
+    if (idx !== -1) {
+      if (tier === "standard") allUsers[idx].standardActivated = true;
+      if (tier === "premium")  allUsers[idx].premiumActivated  = true;
+      u.standardActivated = allUsers[idx].standardActivated;
+      u.premiumActivated  = allUsers[idx].premiumActivated;
+    }
+
+    if (msgEl) { msgEl.style.color = "var(--adm-green)"; msgEl.textContent = `✓ ${tier === "standard" ? "Standard" : "Premium"} plan activated successfully for ${u.name}.`; }
+
+    const content = document.getElementById("userTabContent");
+    if (content) content.innerHTML = renderActivatePlanTab(u);
+
+    renderTable(getFilteredUsers());
+    showToast(`${tier === "standard" ? "Standard" : "Premium"} plan activated for ${u.name}.`, "success");
+
+  } catch (err) {
+    console.error(err);
+    if (msgEl) { msgEl.style.color = "var(--adm-red)"; msgEl.textContent = "Failed to activate plan. Please try again."; }
+    showToast("Failed to activate plan.", "error");
+  }
 };
 
 window.closeUserModal = function() {
